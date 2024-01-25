@@ -1,14 +1,29 @@
-// src/layouts/components/acl/CanViewNavLink.tsx
-import { ReactNode } from 'react'
+// ** React Imports
+import { ReactNode, useContext } from 'react'
+
+// ** Component Imports
+import { AbilityContext } from 'src/layouts/components/acl/Can'
+
+// ** Types
+import { NavLink } from 'src/@core/layouts/types'
 
 interface Props {
+  navLink?: NavLink
   children: ReactNode
 }
 
 const CanViewNavLink = (props: Props) => {
-  const { children } = props
+  // ** Props
+  const { children, navLink } = props
 
-  return <>{children}</>
+  // ** Hook
+  const ability = useContext(AbilityContext)
+
+  if (navLink && navLink.auth === false) {
+    return <>{children}</>
+  } else {
+    return ability && ability.can(navLink?.action, navLink?.subject) ? <>{children}</> : null
+  }
 }
 
 export default CanViewNavLink
