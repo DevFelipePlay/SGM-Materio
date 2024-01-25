@@ -24,6 +24,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect } from 'react'
 import { maskCelular, maskCep, maskCnpj, maskTelefone } from 'src/utils/masks/masks'
 import { unmask } from 'remask'
+import apiCep from 'src/services/apiCep'
 
 // Schema Zod
 const SchemaFormCadastroMVNO = z.object({
@@ -32,9 +33,18 @@ const SchemaFormCadastroMVNO = z.object({
   tradename: z.string().min(1, 'Nome da MVNO é obrigatório'),
   nomeparceiro: z.string().min(1, 'Nome Fantasia é obrigatório'),
   email: z.string().email('Email é obrigatório'),
-  celular: z.string().min(1, 'Celular é obrigatório'),
-  telefone: z.string().min(1, 'Telefone é obrigatório'),
-  cep: z.string().min(1, 'CEP é obrigatório'),
+  celular: z
+    .string()
+    .min(16, 'Celular é obrigatório')
+    .max(16, 'Celular é obrigatório')
+    .refine(value => {
+      const unmaskedValue = unmask(value)
+
+      return !['00000000000', '11111111111'].includes(unmaskedValue)
+    }, 'Número inválido'),
+
+  telefone: z.string().min(10, 'Telefone é obrigatório'),
+  cep: z.string().min(8, 'CEP é obrigatório'),
   endereco: z.string().min(1, 'Endereço é obrigatório'),
   numeroendereco: z.string().min(1, 'Número é obrigatório'),
   complemento: z.string(),
@@ -140,6 +150,27 @@ const StepCadastrarMVNO = ({ handleNext, handlePrev }: { [key: string]: () => vo
     setValue('telefone', maskTelefone(telefoneValue))
     setValue('cep', maskCep(cepValue))
   }, [setValue, cpnjValue, celularValue, telefoneValue, cepValue])
+
+  // Buscar CEP via API
+
+  async function getCepInfo() {
+    const formatedCep = unmask(cepValue)
+    try {
+      const data = (await apiCep.get('/' + formatedCep + '/json')).data
+      const enderecoApi = `${data.localidade}, ${data.logradouro}`
+      setValue('bairro', data.bairro)
+      setValue('endereco', enderecoApi)
+      console.log(data)
+    } catch (error: any) {
+      toast.error('Cep Inválido')
+    }
+  }
+
+  useEffect(() => {
+    if (cepValue && unmask(cepValue).length >= 8) {
+      getCepInfo()
+    }
+  }, [cepValue])
 
   return (
     <>
