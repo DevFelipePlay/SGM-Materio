@@ -109,6 +109,8 @@ mock.onPost('/jwt/register').reply(request => {
   }
 })
 
+mock.onGet('/cadastrar-novo-parceiro').reply(200, {})
+
 mock.onGet('/auth/me').reply(config => {
   // ** Get token from header
   // @ts-ignore
