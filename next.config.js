@@ -8,9 +8,6 @@ const path = require('path')
 module.exports = {
   trailingSlash: true,
   reactStrictMode: false,
-  publicRuntimeConfig: {
-    publicRoutes: ['/cadastrar-novo-parceiro']
-  },
   webpack: config => {
     config.resolve.alias = {
       ...config.resolve.alias,
