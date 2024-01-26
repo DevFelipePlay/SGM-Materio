@@ -8,9 +8,9 @@ import StepLabel from '@mui/material/StepLabel'
 import Typography from '@mui/material/Typography'
 
 // ** Step Components
-import StepPersonalInfo from './StepPersonalInfo'
 import StepTokenPlay from './StepTokenPlay'
 import StepBillingDetails from './StepBillingDetails'
+import StepCadastrarMVNO from './StepCadastrarMVNO'
 
 // ** Custom Component Import
 import StepperCustomDot from './StepperCustomDot'
@@ -24,7 +24,7 @@ const steps = [
     subtitle: 'Validação Play'
   },
   {
-    title: 'Empresa',
+    title: 'MVNO',
     subtitle: 'Dados Empresariais'
   },
   {
@@ -52,7 +52,7 @@ const RegisterMultiSteps = () => {
       case 0:
         return <StepTokenPlay handleNext={handleNext} />
       case 1:
-        return <StepPersonalInfo handleNext={handleNext} handlePrev={handlePrev} />
+        return <StepCadastrarMVNO handleNext={handleNext} handlePrev={handlePrev} />
       case 2:
         return <StepBillingDetails handlePrev={handlePrev} />
 

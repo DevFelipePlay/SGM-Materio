@@ -212,17 +212,7 @@
     source-map "^0.5.7"
     stylis "4.2.0"
 
-"@emotion/cache@11.10.8":
-  version "11.10.8"
-  resolved "https://registry.yarnpkg.com/@emotion/cache/-/cache-11.10.8.tgz#3b39b4761bea0ae2f4f07f0a425eec8b6977c03e"
-  dependencies:
-    "@emotion/memoize" "^0.8.0"
-    "@emotion/sheet" "^1.2.1"
-    "@emotion/utils" "^1.2.0"
-    "@emotion/weak-memoize" "^0.3.0"
-    stylis "4.1.4"
-
-"@emotion/cache@^11.10.8":
+"@emotion/cache@^11.10.8", "@emotion/cache@^11.11.0":
   version "11.11.0"
   resolved "https://registry.yarnpkg.com/@emotion/cache/-/cache-11.11.0.tgz#809b33ee6b1cb1a625fef7a45bc568ccd9b8f3ff"
   dependencies:
@@ -242,7 +232,7 @@
   dependencies:
     "@emotion/memoize" "^0.8.1"
 
-"@emotion/memoize@^0.8.0", "@emotion/memoize@^0.8.1":
+"@emotion/memoize@^0.8.1":
   version "0.8.1"
   resolved "https://registry.yarnpkg.com/@emotion/memoize/-/memoize-0.8.1.tgz#c1ddb040429c6d21d38cc945fe75c818cfb68e17"
 
@@ -278,7 +268,7 @@
     multipipe "^1.0.2"
     through "^2.3.8"
 
-"@emotion/sheet@^1.2.1", "@emotion/sheet@^1.2.2":
+"@emotion/sheet@^1.2.2":
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/@emotion/sheet/-/sheet-1.2.2.tgz#d58e788ee27267a14342303e1abb3d508b6d0fec"
 
@@ -502,18 +492,9 @@
   version "5.12.3"
   resolved "https://registry.yarnpkg.com/@mui/core-downloads-tracker/-/core-downloads-tracker-5.12.3.tgz#3dffe62dccc065ddd7338e97d7be4b917004287e"
 
-"@mui/lab@5.0.0-alpha.128":
-  version "5.0.0-alpha.128"
-  resolved "https://registry.yarnpkg.com/@mui/lab/-/lab-5.0.0-alpha.128.tgz#c8ccdcf39805e56b8dcc5f34725dc6d0616277e1"
-  dependencies:
-    "@babel/runtime" "^7.21.0"
-    "@mui/base" "5.0.0-alpha.127"
-    "@mui/system" "^5.12.1"
-    "@mui/types" "^7.2.4"
-    "@mui/utils" "^5.12.0"
-    clsx "^1.2.1"
-    prop-types "^15.8.1"
-    react-is "^18.2.0"
+"@mui/material-nextjs@^5.15.6":
+  version "5.15.6"
+  resolved "https://registry.yarnpkg.com/@mui/material-nextjs/-/material-nextjs-5.15.6.tgz#9a217efc551fd4bcc762fbe8cd240415c00e6922"
 
 "@mui/material@5.12.2":
   version "5.12.2"
@@ -768,6 +749,10 @@
   dependencies:
     "@types/react" "*"
     hoist-non-react-statics "^3.3.0"
+
+"@types/intl@^1.2.0":
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/@types/intl/-/intl-1.2.2.tgz#e39cd70968ad14b12cede5db14e558df24b33272"
 
 "@types/json-schema@^7.0.9":
   version "7.0.11"
@@ -3556,6 +3541,12 @@ regexp.prototype.flags@^1.4.3, regexp.prototype.flags@^1.5.0:
     call-bind "^1.0.2"
     define-properties "^1.2.0"
     functions-have-names "^1.2.3"
+
+remask@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/remask/-/remask-1.2.2.tgz#92f64bbd02923595a7a56748000a4bbd4ac694d6"
+  dependencies:
+    "@types/intl" "^1.2.0"
 
 reselect@^4.1.7, reselect@^4.1.8:
   version "4.1.8"

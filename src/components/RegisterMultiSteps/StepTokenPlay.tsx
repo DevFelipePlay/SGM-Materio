@@ -1,13 +1,17 @@
 import { styled, useTheme } from '@mui/material/styles'
-import { Box, Button, FormHelperText, Grid, Typography } from '@mui/material'
+import { Box, Button, FormControl, FormHelperText, Grid, TextField, Typography } from '@mui/material'
 import { Controller, useForm } from 'react-hook-form'
 import CleaveWrapper from 'src/@core/styles/libs/react-cleave'
 import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
 import Cleave from 'cleave.js/react'
 import { ChangeEvent, KeyboardEvent, useState } from 'react'
+import { useForm as useFormHook } from 'src/hooks/useForm'
+import { mask } from 'remask'
 
 // ** Icon Imports
-import Icon from 'src/@core/components/icon'
+import { IReqPostPlayAutorizaCadastro } from 'src/services/ValidaCadParceiro/AutorizaCad/IReqPostPlayAutorizaCadastro'
+import { postPlayAutorizaCadastro } from 'src/services/ValidaCadParceiro/AutorizaCad/postPlayAutorizaCadastro'
+import toast from 'react-hot-toast'
 
 const defaultValues: { [key: string]: string } = {
   val1: '',
@@ -43,14 +47,16 @@ interface StepTokenPlayProps {
 const StepTokenPlay = ({ handleNext }: StepTokenPlayProps) => {
   // ** State
   const [isBackspace, setIsBackspace] = useState<boolean>(false)
-  const [isValidToken, setIsValidToken] = useState<boolean>(false)
 
   // ** Hooks
   const theme = useTheme()
+  const { formData, changeForm } = useFormHook({
+    cnpj: ''
+  })
   const {
     control,
     handleSubmit,
-    formState: { errors }
+    formState: { errors, isSubmitting }
   } = useForm({ defaultValues })
 
   // ** Vars
@@ -111,16 +117,33 @@ const StepTokenPlay = ({ handleNext }: StepTokenPlayProps) => {
     ))
   }
 
-  function handleSubmitTokenPlay(data: any) {
-    console.log(data)
-    setIsValidToken(true)
+  // Submit Form
+
+  async function handleSubmitTokenPlay(data: any) {
+    const inputValue = Object.values(data).join('') // Convertendo os valores dos inputs para string
+    console.log(formData)
+
+    const payload: IReqPostPlayAutorizaCadastro = {
+      codigo: inputValue,
+      documento: formData.cnpj
+    }
+
+    try {
+      await postPlayAutorizaCadastro(payload)
+      handleNext()
+      toast.success('Código validado com sucesso!')
+    } catch (error: any) {
+      toast.error(error.response.data)
+    }
   }
 
   return (
     <Box display='flex' flexDirection='column' alignItems='center' textAlign='center'>
       <Box sx={{ mb: 4 }}>
         <Typography variant='h5'>Código de Validação</Typography>
-        <Typography sx={{ color: 'text.secondary' }}>Insira o código fornecido pelo Comercial Play</Typography>
+        <Typography sx={{ color: 'text.secondary' }}>
+          Insira o código fornecido pelo Comercial Play e o seu CNPJ
+        </Typography>
       </Box>
 
       <Grid container spacing={5}>
@@ -142,27 +165,22 @@ const StepTokenPlay = ({ handleNext }: StepTokenPlayProps) => {
               {renderInputs()}
             </CleaveWrapper>
             {errorsArray.length ? (
-              <FormHelperText sx={{ color: 'error.main' }}>Please enter a valid OTP</FormHelperText>
+              <FormHelperText sx={{ color: 'error.main' }}>Insira um código válido</FormHelperText>
             ) : null}
-            <Button fullWidth type='submit' variant='contained' sx={{ mt: 4 }}>
-              Verificar meu Código
+            <FormControl fullWidth>
+              <TextField
+                label='CNPJ'
+                placeholder='Insira seu CNPJ'
+                sx={{ mt: 4 }}
+                value={mask(formData.cnpj, '99.999.999/9999-99')}
+                onChange={e => changeForm('cnpj', mask(e.target.value, '999999999999'))}
+              />
+            </FormControl>
+            <Button fullWidth type='submit' variant='contained' sx={{ mt: 4 }} disabled={isSubmitting}>
+              {isSubmitting ? 'Verificando...' : 'Verificar meu Código'}
             </Button>
           </form>
         </Grid>
-
-        {isValidToken && (
-          <Grid item xs={12}>
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <Button
-                variant='contained'
-                onClick={handleNext}
-                endIcon={<Icon icon='mdi:chevron-right' fontSize={20} />}
-              >
-                Next
-              </Button>
-            </Box>
-          </Grid>
-        )}
       </Grid>
     </Box>
   )
