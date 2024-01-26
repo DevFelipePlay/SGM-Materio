@@ -4,14 +4,14 @@ import { Controller, useForm } from 'react-hook-form'
 import CleaveWrapper from 'src/@core/styles/libs/react-cleave'
 import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
 import Cleave from 'cleave.js/react'
-import { ChangeEvent, KeyboardEvent, useState } from 'react'
-import { useForm as useFormHook } from 'src/hooks/useForm'
-import { mask } from 'remask'
+import { ChangeEvent, KeyboardEvent, useEffect, useState } from 'react'
 
 // ** Icon Imports
 import { IReqPostPlayAutorizaCadastro } from 'src/services/ValidaCadParceiro/AutorizaCad/IReqPostPlayAutorizaCadastro'
 import { postPlayAutorizaCadastro } from 'src/services/ValidaCadParceiro/AutorizaCad/postPlayAutorizaCadastro'
 import toast from 'react-hot-toast'
+import { maskCnpj } from 'src/utils/masks/masks'
+import { unmask } from 'remask'
 
 const defaultValues: { [key: string]: string } = {
   val1: '',
@@ -50,14 +50,20 @@ const StepTokenPlay = ({ handleNext }: StepTokenPlayProps) => {
 
   // ** Hooks
   const theme = useTheme()
-  const { formData, changeForm } = useFormHook({
-    cnpj: ''
-  })
   const {
     control,
+    register,
+    watch,
     handleSubmit,
+    setValue,
     formState: { errors, isSubmitting }
   } = useForm({ defaultValues })
+
+  // ** useEffects
+  const cnpjValue = watch('cnpj')
+  useEffect(() => {
+    setValue('cnpj', maskCnpj(cnpjValue))
+  }, [cnpjValue, setValue])
 
   // ** Vars
   const errorsArray = Object.keys(errors)
@@ -120,20 +126,24 @@ const StepTokenPlay = ({ handleNext }: StepTokenPlayProps) => {
   // Submit Form
 
   async function handleSubmitTokenPlay(data: any) {
-    const inputValue = Object.values(data).join('') // Convertendo os valores dos inputs para string
-    console.log(formData)
+    const inputValue = Object.values(data).slice(0, -1).join('') // Convertendo os valores dos inputs para string
+    const cnpj = data.cnpj
 
     const payload: IReqPostPlayAutorizaCadastro = {
       codigo: inputValue,
-      documento: formData.cnpj
+      documento: unmask(cnpj)
     }
 
     try {
       await postPlayAutorizaCadastro(payload)
       handleNext()
-      toast.success('Código validado com sucesso!')
+      toast.success('Código validado com sucesso!', {
+        duration: 2000
+      })
     } catch (error: any) {
-      toast.error(error.response.data)
+      toast.error(error.response.data, {
+        duration: 2000
+      })
     }
   }
 
@@ -168,13 +178,7 @@ const StepTokenPlay = ({ handleNext }: StepTokenPlayProps) => {
               <FormHelperText sx={{ color: 'error.main' }}>Insira um código válido</FormHelperText>
             ) : null}
             <FormControl fullWidth>
-              <TextField
-                label='CNPJ'
-                placeholder='Insira seu CNPJ'
-                sx={{ mt: 4 }}
-                value={mask(formData.cnpj, '99.999.999/9999-99')}
-                onChange={e => changeForm('cnpj', mask(e.target.value, '999999999999'))}
-              />
+              <TextField label='CNPJ' placeholder='Insira seu CNPJ' sx={{ mt: 4 }} {...register('cnpj')} />
             </FormControl>
             <Button fullWidth type='submit' variant='contained' sx={{ mt: 4 }} disabled={isSubmitting}>
               {isSubmitting ? 'Verificando...' : 'Verificar meu Código'}
