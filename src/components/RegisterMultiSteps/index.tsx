@@ -9,7 +9,6 @@ import Typography from '@mui/material/Typography'
 
 // ** Step Components
 import StepTokenPlay from './StepTokenPlay'
-import StepBillingDetails from './StepBillingDetails'
 import StepCadastrarMVNO from './StepCadastrarMVNO'
 
 // ** Custom Component Import
@@ -17,6 +16,7 @@ import StepperCustomDot from './StepperCustomDot'
 
 // ** Styled Components
 import StepperWrapper from 'src/@core/styles/mui/stepper'
+import StepDadosPessoais from './StepDadosPessoais'
 
 const steps = [
   {
@@ -50,11 +50,11 @@ const RegisterMultiSteps = () => {
   const getStepContent = (step: number) => {
     switch (step) {
       case 0:
-        return <StepTokenPlay handleNext={handleNext} />
-      case 1:
         return <StepCadastrarMVNO handleNext={handleNext} handlePrev={handlePrev} />
+      case 1:
+        return <StepDadosPessoais handlePrev={handlePrev} />
       case 2:
-        return <StepBillingDetails handlePrev={handlePrev} />
+        return <StepTokenPlay handleNext={handleNext} />
 
       default:
         return null

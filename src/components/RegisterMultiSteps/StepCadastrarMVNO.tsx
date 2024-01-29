@@ -42,7 +42,8 @@ const SchemaFormCadastroMVNO = z.object({
   inscricaomunicipal: z.string().min(1, 'Inscrição Municipal é obrigatório'),
   inscricaoestadual: z.string().min(1, 'Inscrição Estadual é obrigatório'),
   walletid: z.string().min(1, 'Wallet ID é obrigatório'),
-  consultor: z.string()
+  consultor: z.string(),
+  logo: z.any()
 })
 
 // Tipagem automática do Zod baseado no Schema acima
@@ -56,9 +57,13 @@ const StepCadastrarMVNO = ({ handleNext, handlePrev }: { [key: string]: () => vo
     handleSubmit,
     watch,
     setValue,
-    formState: { errors, isSubmitting }
+    formState: { errors, isSubmitting },
+    control
   } = useForm<FormCadastroMVNOProps>({
-    resolver: zodResolver(SchemaFormCadastroMVNO)
+    resolver: zodResolver(SchemaFormCadastroMVNO),
+    defaultValues: {
+      logo: ''
+    }
   })
 
   // Cadastrar Parceiro
@@ -80,7 +85,8 @@ const StepCadastrarMVNO = ({ handleNext, handlePrev }: { [key: string]: () => vo
       numeroendereco,
       telefone,
       tradename,
-      walletid
+      walletid,
+      logo
     } = data
 
     const payload: IReqPostPlayCadastraParceiro = {
@@ -99,11 +105,17 @@ const StepCadastrarMVNO = ({ handleNext, handlePrev }: { [key: string]: () => vo
       inscricaomunicipal,
       inscricaoestadual,
       walletid,
-      consultor
+      consultor,
+      logo: logo[0]
     }
 
+    const dados = new FormData()
+    Object.keys(payload).forEach(key => {
+      dados.append(key, (payload as any)[key])
+    })
+
     try {
-      await postPlayCadastraParceiro(payload)
+      await postPlayCadastraParceiro(dados)
       toast.success('Cadastro realizado com sucesso!', {
         duration: 2000
       })
@@ -139,7 +151,7 @@ const StepCadastrarMVNO = ({ handleNext, handlePrev }: { [key: string]: () => vo
       <Grid component='form' container spacing={5} onSubmit={handleSubmit(handleSubmitCadastroMVNO)}>
         <Grid item xs={12}>
           <DropzoneWrapper width={'100%'}>
-            <FileUploaderRestrictions />
+            <FileUploaderRestrictions nameInput='logo' control={control} />
           </DropzoneWrapper>
         </Grid>
 

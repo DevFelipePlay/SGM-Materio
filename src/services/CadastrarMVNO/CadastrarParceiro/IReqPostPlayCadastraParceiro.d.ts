@@ -15,4 +15,5 @@ export interface IReqPostPlayCadastraParceiro {
   inscricaoestadual: string
   walletid: string
   consultor: string
+  logo: File[]
 }

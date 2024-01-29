@@ -77,7 +77,8 @@ const CadastrarNovoParceiro = () => {
             src='/images/pages/auth-v2-register-multi-steps-illustration.png'
             sx={{
               position: 'fixed',
-              top: '-1.5rem'
+              top: '50%',
+              transform: 'translateY(-50%)'
             }}
           />
         </LeftWrapper>

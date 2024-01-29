@@ -97,7 +97,7 @@ const data: CustomRadioIconsData[] = [
   }
 ]
 
-const StepBillingDetails = ({ handlePrev }: { handlePrev: () => void }) => {
+const StepDadosPessoais = ({ handlePrev }: { handlePrev: () => void }) => {
   const initialSelected: string = data.filter(item => item.isSelected)[data.filter(item => item.isSelected).length - 1]
     .value
 
@@ -228,4 +228,4 @@ const StepBillingDetails = ({ handlePrev }: { handlePrev: () => void }) => {
   )
 }
 
-export default StepBillingDetails
+export default StepDadosPessoais
