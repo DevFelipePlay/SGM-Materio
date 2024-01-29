@@ -113,9 +113,9 @@ const Customizer = () => {
           }}
         >
           <Typography variant='h6' sx={{ fontWeight: 600, textTransform: 'uppercase' }}>
-            Theme Customizer
+            Temas costumizados
           </Typography>
-          <Typography sx={{ color: 'text.secondary' }}>Customize & Preview in Real Time</Typography>
+          <Typography sx={{ color: 'text.secondary' }}>Costumize & Visualize em tempo real</Typography>
           <IconButton
             onClick={() => setOpen(false)}
             sx={{
@@ -136,7 +136,7 @@ const Customizer = () => {
               variant='caption'
               sx={{ mb: 4, color: 'text.disabled', textTransform: 'uppercase' }}
             >
-              Theming
+              Tema
             </Typography>
 
             {/* Skin */}
@@ -172,7 +172,7 @@ const Customizer = () => {
 
             {/* Color Picker */}
             <div>
-              <Typography sx={{ mb: 2.5 }}>Primary Color</Typography>
+              <Typography sx={{ mb: 2.5 }}>Cor Primaria</Typography>
               <Box sx={{ display: 'flex' }}>
                 <ColorBox
                   onClick={() => handleChange('themeColor', 'primary')}
@@ -247,7 +247,7 @@ const Customizer = () => {
 
             {/* Content Width */}
             <Box sx={{ mb: 4 }}>
-              <Typography>Content Width</Typography>
+              <Typography>Largura do Conteúdo</Typography>
               <RadioGroup
                 row
                 value={contentWidth}
@@ -261,7 +261,7 @@ const Customizer = () => {
 
             {/* AppBar */}
             <Box sx={{ mb: 4 }}>
-              <Typography>AppBar Type</Typography>
+              <Typography>Tipo da Barra de Navegação</Typography>
               <RadioGroup
                 row
                 value={appBar}
@@ -278,7 +278,7 @@ const Customizer = () => {
 
             {/* Footer */}
             <Box sx={{ mb: 4 }}>
-              <Typography>Footer Type</Typography>
+              <Typography>Tipo do rodapé</Typography>
               <RadioGroup
                 row
                 value={footer}
