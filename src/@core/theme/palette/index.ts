@@ -30,10 +30,10 @@ const DefaultPalette = (mode: Palette['mode'], skin: Skin, themeColor: ThemeColo
     if (skin === 'bordered' && mode === 'light') {
       return whiteColor
     } else if (skin === 'bordered' && mode === 'dark') {
-      return grey[900]
+      return '#161616'
     } else if (mode === 'light') {
       return '#F4F5FA'
-    } else return grey[900]
+    } else return '#161616'
   }
 
   return {
@@ -114,7 +114,7 @@ const DefaultPalette = (mode: Palette['mode'], skin: Skin, themeColor: ThemeColo
     },
     divider: `rgba(${mainColor}, 0.12)`,
     background: {
-      paper: mode === 'light' ? whiteColor : grey[800],
+      paper: mode === 'light' ? whiteColor : '#303030',
       default: defaultBgColor()
     },
     action: {

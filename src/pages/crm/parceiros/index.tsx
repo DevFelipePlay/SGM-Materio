@@ -324,6 +324,26 @@ const UserList = () => {
               icon={<Icon color='secondary' icon='mdi:trending-up' />}
             />
           </Grid>
+          <Grid item xs={12} md={3} sm={6}>
+            <CardStatisticsHorizontal
+              color='error'
+              stats='95'
+              trend='positive'
+              trendNumber='10.2%'
+              title='Franquias'
+              icon={<Icon color='secondary' icon='mdi:trending-up' />}
+            />
+          </Grid>
+          <Grid item xs={12} md={3} sm={6}>
+            <CardStatisticsHorizontal
+              color='error'
+              stats='95'
+              trend='positive'
+              trendNumber='10.2%'
+              title='Franquias'
+              icon={<Icon color='secondary' icon='mdi:trending-up' />}
+            />
+          </Grid>
         </Grid>
       </Grid>
       <Grid item xs={12}>
@@ -379,10 +399,9 @@ const UserList = () => {
                     onChange={handleStatusChange}
                     inputProps={{ placeholder: 'Select Role' }}
                   >
-                    <MenuItem value=''>Select Role</MenuItem>
-                    <MenuItem value='pending'>Pending</MenuItem>
-                    <MenuItem value='active'>Active</MenuItem>
-                    <MenuItem value='inactive'>Inactive</MenuItem>
+                    <MenuItem value=''>INADINPLANTE</MenuItem>
+                    <MenuItem value='pending'>ATIVO</MenuItem>
+                    <MenuItem value='active'>CANCELADO</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
@@ -412,6 +431,11 @@ const UserList = () => {
       <AddUserDrawer open={addUserOpen} toggle={toggleAddUserDrawer} titleButton='Cadastrar Novo Parceiro' />
     </Grid>
   )
+}
+
+UserList.acl = {
+  action: 'read',
+  subject: 'parceiros'
 }
 
 export default UserList
