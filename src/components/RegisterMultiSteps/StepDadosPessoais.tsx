@@ -15,7 +15,7 @@ import { TextField } from '@mui/material'
 import * as z from 'zod'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { maskCelular, maskCep, maskCnpj, maskCpf, maskNascimento } from 'src/utils/masks/masks'
 import { unmask } from 'remask'
 import apiCep from 'src/services/apiCep'
@@ -35,7 +35,7 @@ const SchemaFormCadastroUsuario = z.object({
   nascimento: z.string().min(1, 'Data de Nascimento é obrigatório'),
   cidade: z.string().min(1, 'Cidade é obrigatório'),
   district: z.string().min(1, 'Bairro é obrigatório'),
-  street: z.string().min(1, 'Endereço'),
+  street: z.string().min(1, 'Logradouro é obrigatório'),
   number: z.string().min(1, 'Número é obrigatório'),
   complement: z.string()
 })
@@ -44,6 +44,9 @@ const SchemaFormCadastroUsuario = z.object({
 type FormCadastroUsuario = z.infer<typeof SchemaFormCadastroUsuario>
 
 const StepDadosPessoais = ({ handlePrev }: { handlePrev: () => void }) => {
+  // States
+  const [isSubmittingCEP, setIsSubmittingCEP] = useState<boolean>(false)
+
   // React Hook Form
   const {
     control,
@@ -51,6 +54,7 @@ const StepDadosPessoais = ({ handlePrev }: { handlePrev: () => void }) => {
     handleSubmit,
     watch,
     setValue,
+    trigger,
     formState: { errors, isSubmitting }
   } = useForm<FormCadastroUsuario>({
     resolver: zodResolver(SchemaFormCadastroUsuario)
@@ -81,14 +85,23 @@ const StepDadosPessoais = ({ handlePrev }: { handlePrev: () => void }) => {
 
   async function getCepInfo() {
     const formatedCep = unmask(cepValue)
+    setIsSubmittingCEP(true)
+
     try {
       const data = (await apiCep.get('/' + formatedCep + '/json')).data
+
+      // Caso retorne como undefined os campos
+      if (!data || !data.localidade || !data.logradouro || !data.bairro) return
+
       setValue('uf', data.uf)
       setValue('cidade', data.localidade)
       setValue('district', data.bairro)
       setValue('street', data.logradouro)
+      trigger(['uf', 'cidade', 'district', 'street'])
     } catch (error: any) {
       toast.error('Cep Inválido')
+    } finally {
+      setIsSubmittingCEP(false)
     }
   }
 
@@ -189,6 +202,9 @@ const StepDadosPessoais = ({ handlePrev }: { handlePrev: () => void }) => {
             {...register('whats')}
             error={!!errors.whats}
             helperText={errors.whats?.message}
+            InputProps={{
+              endAdornment: <Icon icon='mdi:whatsapp' color='#48C657' cursor='pointer' />
+            }}
           />
         </Grid>
 
@@ -216,6 +232,7 @@ const StepDadosPessoais = ({ handlePrev }: { handlePrev: () => void }) => {
                 placeholder='Ex: DF'
                 error={!!errors.uf}
                 helperText={errors.uf?.message}
+                disabled={isSubmittingCEP}
               />
             )}
           />
@@ -232,8 +249,9 @@ const StepDadosPessoais = ({ handlePrev }: { handlePrev: () => void }) => {
                 fullWidth
                 label='Cidade*'
                 placeholder='Ex: Brasília'
-                error={!!errors.uf}
-                helperText={errors.uf?.message}
+                error={!!errors.cidade}
+                helperText={errors.cidade?.message}
+                disabled={isSubmittingCEP}
               />
             )}
           />
@@ -252,6 +270,7 @@ const StepDadosPessoais = ({ handlePrev }: { handlePrev: () => void }) => {
                 placeholder=''
                 error={!!errors.district}
                 helperText={errors.district?.message}
+                disabled={isSubmittingCEP}
               />
             )}
           />
@@ -270,7 +289,7 @@ const StepDadosPessoais = ({ handlePrev }: { handlePrev: () => void }) => {
                 placeholder='Ex: Viela 16'
                 error={!!errors.street}
                 helperText={errors.street?.message}
-                autoComplete='off'
+                disabled={isSubmittingCEP}
               />
             )}
           />
