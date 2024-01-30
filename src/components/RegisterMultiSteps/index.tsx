@@ -50,9 +50,9 @@ const RegisterMultiSteps = () => {
   const getStepContent = (step: number) => {
     switch (step) {
       case 0:
-        return <StepCadastrarMVNO handleNext={handleNext} handlePrev={handlePrev} />
-      case 1:
         return <StepDadosPessoais handlePrev={handlePrev} />
+      case 1:
+        return <StepCadastrarMVNO handleNext={handleNext} handlePrev={handlePrev} />
       case 2:
         return <StepTokenPlay handleNext={handleNext} />
 
