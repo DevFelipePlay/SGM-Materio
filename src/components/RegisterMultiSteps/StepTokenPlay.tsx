@@ -141,9 +141,11 @@ const StepTokenPlay = ({ handleNext }: StepTokenPlayProps) => {
         duration: 2000
       })
     } catch (error: any) {
-      toast.error(error.response.data, {
-        duration: 2000
-      })
+      console.log(error)
+
+      // toast.error(error.response.data, {
+      //   duration: 2000
+      // })
     }
   }
 
