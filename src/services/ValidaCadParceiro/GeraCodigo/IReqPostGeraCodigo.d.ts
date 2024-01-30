@@ -1,0 +1,3 @@
+interface IReqPostGeraCodigo {
+  documento: string
+}

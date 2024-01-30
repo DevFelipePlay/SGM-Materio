@@ -1,14 +1,29 @@
-// src/layouts/components/acl/CanViewNavSectionTitle.tsx
-import { ReactNode } from 'react'
+// ** React Imports
+import { ReactNode, useContext } from 'react'
+
+// ** Component Imports
+import { AbilityContext } from 'src/layouts/components/acl/Can'
+
+// ** Types
+import { NavSectionTitle } from 'src/@core/layouts/types'
 
 interface Props {
   children: ReactNode
+  navTitle?: NavSectionTitle
 }
 
 const CanViewNavSectionTitle = (props: Props) => {
-  const { children } = props
+  // ** Props
+  const { children, navTitle } = props
 
-  return <>{children}</>
+  // ** Hook
+  const ability = useContext(AbilityContext)
+
+  if (navTitle && navTitle.auth === false) {
+    return <>{children}</>
+  } else {
+    return ability && ability.can(navTitle?.action, navTitle?.subject) ? <>{children}</> : null
+  }
 }
 
 export default CanViewNavSectionTitle
