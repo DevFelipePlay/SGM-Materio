@@ -29,7 +29,7 @@ import apiCep from 'src/services/apiCep'
 // Schema Zod
 const SchemaFormCadastroMVNO = z.object({
   companyname: z.string().min(1, 'Razão Social é obrigatório'),
-  cnpj: z.string().min(1, 'CNPJ é obrigatório'),
+  cnpj: z.string().min(18, 'CNPJ é obrigatório'),
   tradename: z.string().min(1, 'Nome da MVNO é obrigatório'),
   nomeparceiro: z.string().min(1, 'Nome Fantasia é obrigatório'),
   email: z.string().email('Email é obrigatório'),
@@ -43,15 +43,15 @@ const SchemaFormCadastroMVNO = z.object({
       return !['00000000000', '11111111111'].includes(unmaskedValue)
     }, 'Número inválido'),
 
-  telefone: z.string().min(10, 'Telefone é obrigatório'),
-  cep: z.string().min(8, 'CEP é obrigatório'),
+  telefone: z.string().min(14, 'Telefone é obrigatório'),
+  cep: z.string().min(9, 'CEP é obrigatório'),
   endereco: z.string().min(1, 'Endereço é obrigatório'),
   numeroendereco: z.string().min(1, 'Número é obrigatório'),
   complemento: z.string(),
   bairro: z.string().min(1, 'Bairro é obrigatório'),
   inscricaomunicipal: z.string(),
   inscricaoestadual: z.string().min(1, 'Inscrição Estadual é obrigatório'),
-  consultor: z.string().min(1, 'Nome do Consultor é obrigatório'),
+  consultor: z.string().min(3, 'Nome do Consultor é obrigatório'),
   logo: z.any()
 })
 

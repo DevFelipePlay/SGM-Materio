@@ -9,35 +9,40 @@ import Icon from 'src/@core/components/icon'
 
 // ** Styles Import
 import 'react-credit-cards/es/styles-compiled.css'
-import { TextField } from '@mui/material'
+import { Avatar, Divider, TextField } from '@mui/material'
 
 // ** Utils
 import * as z from 'zod'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { maskCelular, maskCep, maskCnpj, maskCpf, maskNascimento } from 'src/utils/masks/masks'
 import { unmask } from 'remask'
 import apiCep from 'src/services/apiCep'
 import toast from 'react-hot-toast'
+import { CustomRadioIconsData } from 'src/@core/components/custom-radio/types'
+import CustomRadioIcons from 'src/@core/components/custom-radio/icons'
+import DropzoneWrapper from 'src/@core/styles/libs/react-dropzone'
+import FileUploaderRestrictions from '../FileUploader/FileUploaderRestrictions'
 
 // Schema Zod
 const SchemaFormCadastroUsuario = z.object({
-  cpf: z.string().min(1, 'CPF é obrigatório'),
-  cnpjParceiro: z.string().min(1, 'CNPJ é obrigatório'),
+  cpf: z.string().min(14, 'CPF é obrigatório'),
+  cnpjParceiro: z.string().min(18, 'CNPJ é obrigatório'),
   email: z.string().email('Email é obrigatório'),
-  phone: z.string().min(1, 'Celular é obrigatório'),
-  whats: z.string().min(1, 'WhatsApp é obrigatório'),
-  name: z.string().min(1, 'Nome é obrigatório'),
-  cep: z.string().min(1, 'CEP é obrigatório'),
-  uf: z.string().min(1, 'UF é obrigatório'),
+  phone: z.string().min(16, 'Celular é obrigatório'),
+  whats: z.string().min(16, 'WhatsApp é obrigatório'),
+  name: z.string().min(3, 'Nome é obrigatório'),
+  cep: z.string().min(9, 'CEP é obrigatório'),
+  uf: z.string().min(2, 'UF é obrigatório'),
   rgie: z.string(),
   nascimento: z.string().min(1, 'Data de Nascimento é obrigatório'),
   cidade: z.string().min(1, 'Cidade é obrigatório'),
   district: z.string().min(1, 'Bairro é obrigatório'),
   street: z.string().min(1, 'Logradouro é obrigatório'),
   number: z.string().min(1, 'Número é obrigatório'),
-  complement: z.string()
+  complement: z.string(),
+  avatar: z.any()
 })
 
 // Tipagem automática de acordo com o Schema do Zod
@@ -59,10 +64,6 @@ const StepDadosPessoais = ({ handlePrev }: { handlePrev: () => void }) => {
   } = useForm<FormCadastroUsuario>({
     resolver: zodResolver(SchemaFormCadastroUsuario)
   })
-
-  function handleSubmitCadastroUsuario(data: any) {
-    console.log(data)
-  }
 
   // Máscaras
   const cpfValue = watch('cpf')
@@ -99,7 +100,7 @@ const StepDadosPessoais = ({ handlePrev }: { handlePrev: () => void }) => {
       setValue('street', data.logradouro)
       trigger(['uf', 'cidade', 'district', 'street'])
     } catch (error: any) {
-      toast.error('Cep Inválido')
+      toast.error('CEP Inválido')
     } finally {
       setIsSubmittingCEP(false)
     }
@@ -110,6 +111,219 @@ const StepDadosPessoais = ({ handlePrev }: { handlePrev: () => void }) => {
       getCepInfo()
     }
   }, [cepValue])
+
+  // Avatares
+
+  const data: CustomRadioIconsData[] = [
+    {
+      value: 'sem_avatar',
+      title: <Typography variant='h5'>Sem Avatar</Typography>,
+      content: (
+        <Box sx={{ my: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+          <Avatar sx={{ width: '3rem', height: '3rem', my: 3 }}>JP</Avatar>
+        </Box>
+      )
+    },
+    {
+      isSelected: true,
+      value: 'avatar_padrao',
+      title: <Typography variant='h5'>Avatar Padrão</Typography>,
+      content: (
+        <Box sx={{ my: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+          <Avatar src='/images/avatars/1.png' sx={{ width: '3rem', height: '3rem', my: 3 }} />
+        </Box>
+      )
+    },
+    {
+      value: 'sua_foto',
+      title: <Typography variant='h5'>Sua Foto</Typography>,
+      content: (
+        <Box sx={{ my: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+          <Icon icon='mdi:camera' cursor='pointer' fontSize={42} />
+        </Box>
+      )
+    }
+  ]
+
+  const handleRadioChange = (prop: string | ChangeEvent<HTMLInputElement>) => {
+    if (typeof prop === 'string') {
+      setSelectedRadio(prop)
+      setActiveAvatarType(prop)
+    } else {
+      setSelectedRadio((prop.target as HTMLInputElement).value)
+    }
+  }
+
+  const initialSelected: string = data.filter(item => item.isSelected)[data.filter(item => item.isSelected).length - 1]
+    .value
+
+  const [selectedRadio, setSelectedRadio] = useState<string>(initialSelected)
+
+  const [activeAvatarType, setActiveAvatarType] = useState<string>('avatar_padrao')
+
+  // Avatares Padrão
+
+  const avataresPadroes: CustomRadioIconsData[] = [
+    {
+      isSelected: true,
+      value: 'avatar_1',
+      content: (
+        <Box sx={{ my: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+          <Avatar src='/images/avatars/1.png' sx={{ width: '5rem', height: '5rem', my: 3 }} />
+        </Box>
+      )
+    },
+    {
+      value: 'avatar_2',
+      content: (
+        <Box sx={{ my: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+          <Avatar src='/images/avatars/2.png' sx={{ width: '5rem', height: '5rem', my: 3 }} />
+        </Box>
+      )
+    },
+    {
+      value: 'avatar_3',
+      content: (
+        <Box sx={{ my: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+          <Avatar src='/images/avatars/3.png' sx={{ width: '5rem', height: '5rem', my: 3 }} />
+        </Box>
+      )
+    },
+    {
+      value: 'avatar_4',
+      content: (
+        <Box sx={{ my: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+          <Avatar src='/images/avatars/4.png' sx={{ width: '5rem', height: '5rem', my: 3 }} />
+        </Box>
+      )
+    },
+    {
+      value: 'avatar_5',
+      content: (
+        <Box sx={{ my: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+          <Avatar src='/images/avatars/5.png' sx={{ width: '5rem', height: '5rem', my: 3 }} />
+        </Box>
+      )
+    },
+    {
+      value: 'avatar_6',
+      content: (
+        <Box sx={{ my: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+          <Avatar src='/images/avatars/6.png' sx={{ width: '5rem', height: '5rem', my: 3 }} />
+        </Box>
+      )
+    },
+    {
+      value: 'avatar_7',
+      content: (
+        <Box sx={{ my: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+          <Avatar src='/images/avatars/7.png' sx={{ width: '5rem', height: '5rem', my: 3 }} />
+        </Box>
+      )
+    },
+    {
+      value: 'avatar_8',
+      content: (
+        <Box sx={{ my: 'auto', display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+          <Avatar src='/images/avatars/8.png' sx={{ width: '5rem', height: '5rem', my: 3 }} />
+        </Box>
+      )
+    }
+  ]
+
+  const initialAvatarSelected: string = avataresPadroes.filter(item => item.isSelected)[
+    avataresPadroes.filter(item => item.isSelected).length - 1
+  ].value
+
+  const [selectedAvatar, setSelectedAvatar] = useState<string>(initialAvatarSelected)
+
+  const handleAvatarChange = (prop: string | ChangeEvent<HTMLInputElement>) => {
+    if (typeof prop === 'string') {
+      setSelectedAvatar(prop)
+    } else {
+      setSelectedAvatar((prop.target as HTMLInputElement).value)
+    }
+  }
+
+  // Sua Foto
+
+  // Definir qual tipo de avatar vai ser exibido em tela
+
+  const getAvatarTypeContent = (avatarType: string) => {
+    switch (avatarType) {
+      case 'sem_avatar':
+        return null
+      case 'avatar_padrao':
+        return avataresPadroes.map((item, index) => (
+          <CustomRadioIcons
+            key={index}
+            data={avataresPadroes[index]}
+            selected={selectedAvatar}
+            name='custom-radios-plan'
+            gridProps={{ sm: 4, xs: 12 }}
+            handleChange={handleAvatarChange}
+          />
+        ))
+      case 'sua_foto':
+        return (
+          <Grid item xs={12}>
+            <DropzoneWrapper width={'100%'}>
+              <FileUploaderRestrictions nameInput='avatar' control={control} />
+            </DropzoneWrapper>
+          </Grid>
+        )
+      default:
+        return null
+    }
+  }
+
+  const renderContent = () => {
+    return getAvatarTypeContent(activeAvatarType)
+  }
+
+  // Enviar formulário pro endpoint
+
+  function handleSubmitCadastroUsuario(data: FormCadastroUsuario) {
+    const {
+      cep,
+      cidade,
+      cnpjParceiro,
+      complement,
+      cpf,
+      district,
+      email,
+      name,
+      nascimento,
+      number,
+      phone,
+      rgie,
+      street,
+      uf,
+      whats,
+      avatar
+    } = data
+
+    const payload = {
+      cep,
+      cidade,
+      cnpjParceiro,
+      complement,
+      cpf,
+      district,
+      email,
+      name,
+      nascimento,
+      number,
+      phone,
+      rgie,
+      street,
+      uf,
+      whats,
+      avatar: selectedRadio === 'sem_avatar' ? '' : selectedRadio === 'avatar_padrao' ? selectedAvatar : avatar
+    }
+
+    console.log(payload)
+  }
 
   return (
     <>
@@ -315,6 +529,35 @@ const StepDadosPessoais = ({ handlePrev }: { handlePrev: () => void }) => {
             {...register('complement')}
           />
         </Grid>
+
+        <Grid item xs={12}>
+          <Typography variant='h5'>Selecione seu Avatar</Typography>
+        </Grid>
+
+        {data.map((item, index) => (
+          <CustomRadioIcons
+            key={index}
+            data={data[index]}
+            selected={selectedRadio}
+            name='custom-radios-plan'
+            gridProps={{ sm: 4, xs: 12 }}
+            handleChange={handleRadioChange}
+          />
+        ))}
+
+        {selectedRadio === 'avatar_padrao' && (
+          <Grid item xs={12} textAlign='center'>
+            <Divider />
+          </Grid>
+        )}
+
+        {selectedRadio === 'avatar_padrao' && (
+          <Grid item xs={12}>
+            <Typography variant='h6'>Escolha um Avatar Padrão</Typography>
+          </Grid>
+        )}
+
+        {renderContent()}
 
         <Grid item xs={12}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
