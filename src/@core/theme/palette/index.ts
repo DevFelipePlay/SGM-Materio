@@ -1,5 +1,6 @@
 // ** Type Imports
 import { Palette } from '@mui/material'
+import { grey } from '@mui/material/colors'
 import { Skin, ThemeColor } from 'src/@core/layouts/types'
 
 const DefaultPalette = (mode: Palette['mode'], skin: Skin, themeColor: ThemeColor): Palette => {
@@ -17,7 +18,7 @@ const DefaultPalette = (mode: Palette['mode'], skin: Skin, themeColor: ThemeColo
     } else if (themeColor === 'success') {
       return '#93DD5C'
     } else if (themeColor === 'error') {
-      return '#FF8C90'
+      return '#DF3B67'
     } else if (themeColor === 'warning') {
       return '#FFCF5C'
     } else {
@@ -29,10 +30,10 @@ const DefaultPalette = (mode: Palette['mode'], skin: Skin, themeColor: ThemeColo
     if (skin === 'bordered' && mode === 'light') {
       return whiteColor
     } else if (skin === 'bordered' && mode === 'dark') {
-      return '#312D4B'
+      return grey[900]
     } else if (mode === 'light') {
       return '#F4F5FA'
-    } else return '#28243D'
+    } else return grey[900]
   }
 
   return {
@@ -46,7 +47,7 @@ const DefaultPalette = (mode: Palette['mode'], skin: Skin, themeColor: ThemeColo
       avatarBg: mode === 'light' ? '#F0EFF0' : '#3F3B59',
       darkBg: skin === 'bordered' ? '#312D4B' : '#28243D',
       lightBg: skin === 'bordered' ? whiteColor : '#F4F5FA',
-      tableHeaderBg: mode === 'light' ? '#F9FAFC' : '#3D3759'
+      tableHeaderBg: mode === 'light' ? '#F9FAFC' : grey[700]
     },
     mode: mode,
     common: {
@@ -89,6 +90,7 @@ const DefaultPalette = (mode: Palette['mode'], skin: Skin, themeColor: ThemeColo
       dark: '#4CB200',
       contrastText: whiteColor
     },
+
     grey: {
       50: '#FAFAFA',
       100: '#F5F5F5',
@@ -112,7 +114,7 @@ const DefaultPalette = (mode: Palette['mode'], skin: Skin, themeColor: ThemeColo
     },
     divider: `rgba(${mainColor}, 0.12)`,
     background: {
-      paper: mode === 'light' ? whiteColor : '#312D4B',
+      paper: mode === 'light' ? whiteColor : grey[800],
       default: defaultBgColor()
     },
     action: {
