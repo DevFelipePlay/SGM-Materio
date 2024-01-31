@@ -1,5 +1,8 @@
 // ** MUI Imports
+//@ts-ignore
 import TreeView from '@mui/lab/TreeView'
+
+//@ts-ignore
 import TreeItem from '@mui/lab/TreeItem'
 
 // ** Icon Imports

@@ -1,5 +1,7 @@
 // ** MUI Imports
 import { useTheme } from '@mui/material/styles'
+
+//@ts-ignore
 import MuiTimelineDot from '@mui/lab/TimelineDot'
 
 // ** Hooks Imports

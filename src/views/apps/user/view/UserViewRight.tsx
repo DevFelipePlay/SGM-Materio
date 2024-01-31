@@ -7,10 +7,16 @@ import { useRouter } from 'next/router'
 // ** MUI Imports
 import Box from '@mui/material/Box'
 import Tab from '@mui/material/Tab'
+
+//@ts-ignore
 import TabPanel from '@mui/lab/TabPanel'
+
+//@ts-ignore
 import TabContext from '@mui/lab/TabContext'
 import { styled } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
+
+//@ts-ignore
 import MuiTabList, { TabListProps } from '@mui/lab/TabList'
 import CircularProgress from '@mui/material/CircularProgress'
 

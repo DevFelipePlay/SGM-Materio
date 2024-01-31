@@ -7,6 +7,7 @@ import MuiTreeView, { TreeViewProps } from '@mui/lab/TreeView'
 import Icon from 'src/@core/components/icon'
 
 // Styled TreeView component
+//@ts-ignore
 const TreeView = styled(MuiTreeView)<TreeViewProps>(({ theme }) => ({
   minHeight: 264,
   '& .MuiTreeItem-iconContainer .close': {

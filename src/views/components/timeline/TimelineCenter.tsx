@@ -5,16 +5,28 @@ import Switch from '@mui/material/Switch'
 import Avatar from '@mui/material/Avatar'
 import Divider from '@mui/material/Divider'
 import ListItem from '@mui/material/ListItem'
+
+//@ts-ignore
 import TimelineItem from '@mui/lab/TimelineItem'
 import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
 import { Theme, styled } from '@mui/material/styles'
 import ListItemIcon from '@mui/material/ListItemIcon'
+
+//@ts-ignore
 import ListItemText from '@mui/material/ListItemText'
+
+//@ts-ignore
 import TimelineContent from '@mui/lab/TimelineContent'
 import useMediaQuery from '@mui/material/useMediaQuery'
+
+//@ts-ignore
 import TimelineSeparator from '@mui/lab/TimelineSeparator'
+
+//@ts-ignore
 import TimelineConnector from '@mui/lab/TimelineConnector'
+
+//@ts-ignore
 import MuiTimeline, { TimelineProps } from '@mui/lab/Timeline'
 
 // ** Icon Imports

@@ -4,8 +4,14 @@ import { SyntheticEvent, useState } from 'react'
 // ** MUI Imports
 import Box from '@mui/material/Box'
 import Tab from '@mui/material/Tab'
+
+//@ts-ignore
 import TabList from '@mui/lab/TabList'
+
+//@ts-ignore
 import TabPanel from '@mui/lab/TabPanel'
+
+//@ts-ignore
 import TabContext from '@mui/lab/TabContext'
 import Typography from '@mui/material/Typography'
 

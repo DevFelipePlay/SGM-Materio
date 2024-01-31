@@ -4,14 +4,26 @@ import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
 import Avatar from '@mui/material/Avatar'
 import { styled } from '@mui/material/styles'
+
+//@ts-ignore
 import TimelineDot from '@mui/lab/TimelineDot'
+
+//@ts-ignore
 import TimelineItem from '@mui/lab/TimelineItem'
 import CardHeader from '@mui/material/CardHeader'
 import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
+
+//@ts-ignore
 import TimelineContent from '@mui/lab/TimelineContent'
+
+//@ts-ignore
 import TimelineSeparator from '@mui/lab/TimelineSeparator'
+
+//@ts-ignore
 import TimelineConnector from '@mui/lab/TimelineConnector'
+
+//@ts-ignore
 import MuiTimeline, { TimelineProps } from '@mui/lab/Timeline'
 
 // ** Types

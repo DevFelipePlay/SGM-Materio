@@ -3,13 +3,27 @@ import Box from '@mui/material/Box'
 import Avatar from '@mui/material/Avatar'
 import Divider from '@mui/material/Divider'
 import { styled } from '@mui/material/styles'
+
+//@ts-ignore
 import TimelineDot from '@mui/lab/TimelineDot'
+
+//@ts-ignore
 import TimelineItem from '@mui/lab/TimelineItem'
 import Typography from '@mui/material/Typography'
+
+//@ts-ignore
 import IconButton from '@mui/material/IconButton'
+
+//@ts-ignore
 import TimelineContent from '@mui/lab/TimelineContent'
+
+//@ts-ignore
 import TimelineSeparator from '@mui/lab/TimelineSeparator'
+
+//@ts-ignore
 import TimelineConnector from '@mui/lab/TimelineConnector'
+
+//@ts-ignore
 import MuiTimeline, { TimelineProps } from '@mui/lab/Timeline'
 
 // ** Icon Imports
