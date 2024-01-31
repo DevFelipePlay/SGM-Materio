@@ -9,7 +9,7 @@ import Icon from 'src/@core/components/icon'
 interface TableHeaderProps {
   value: string
   placeholderSearch: string
-  titleButton: string
+  titleButton?: string
   toggle: () => void
   handleFilter: (val: string) => void
 }
@@ -26,20 +26,24 @@ const TableHeader = (props: TableHeaderProps) => {
         variant='outlined'
         startIcon={<Icon icon='mdi:export-variant' fontSize={20} />}
       >
-        Export
+        Exportar
       </Button>
       <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
         <TextField
           size='small'
           value={value}
-          sx={{ mr: 4, mb: 2 }}
+          sx={{ mr: 4, mb: 2, display: 'flex', alignItems: 'center', gap: 5 }}
           placeholder={placeholderSearch}
           onChange={e => handleFilter(e.target.value)}
+          InputProps={{
+            startAdornment: <Icon style={{ marginRight: '0.5rem' }} icon='mdi:search' fontSize={28} />
+          }}
         />
-
-        <Button sx={{ mb: 2 }} onClick={toggle} variant='contained'>
-          {titleButton}
-        </Button>
+        {titleButton && (
+          <Button sx={{ mb: 2 }} onClick={toggle} variant='contained'>
+            {titleButton}
+          </Button>
+        )}
       </Box>
     </Box>
   )

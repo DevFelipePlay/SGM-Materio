@@ -35,7 +35,7 @@ const steps = [
 
 const RegisterMultiSteps = () => {
   // ** States
-  const [activeStep, setActiveStep] = useState<number>(0)
+  const [activeStep, setActiveStep] = useState<number>(2)
 
   // Handle Stepper
   const handleNext = () => {
