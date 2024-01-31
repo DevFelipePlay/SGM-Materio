@@ -465,6 +465,7 @@ const AutocompleteComponent = ({ hidden, settings }: Props) => {
               <Autocomplete
                 autoHighlight
                 disablePortal
+
                 //@ts-ignore
                 options={''}
                 id='appBar-search'

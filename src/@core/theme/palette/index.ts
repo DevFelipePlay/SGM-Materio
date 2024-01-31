@@ -1,6 +1,5 @@
 // ** Type Imports
 import { Palette } from '@mui/material'
-import { grey } from '@mui/material/colors'
 import { Skin, ThemeColor } from 'src/@core/layouts/types'
 
 const DefaultPalette = (mode: Palette['mode'], skin: Skin, themeColor: ThemeColor): Palette => {
@@ -16,9 +15,9 @@ const DefaultPalette = (mode: Palette['mode'], skin: Skin, themeColor: ThemeColo
     } else if (themeColor === 'secondary') {
       return '#9C9FA4'
     } else if (themeColor === 'success') {
-      return '#93DD5C'
+      return '#56CA00'
     } else if (themeColor === 'error') {
-      return '#DF3B67'
+      return '#'
     } else if (themeColor === 'warning') {
       return '#FFCF5C'
     } else {
@@ -36,6 +35,22 @@ const DefaultPalette = (mode: Palette['mode'], skin: Skin, themeColor: ThemeColo
     } else return '#161616'
   }
 
+  const tableHeaderBgColor = () => {
+    if (themeColor === 'primary') {
+      return '#DF3B67'
+    } else if (themeColor === 'secondary') {
+      return '#8A8D93'
+    } else if (themeColor === 'success') {
+      return '#56CA00'
+    } else if (themeColor === 'error') {
+      return '#FF4C51'
+    } else if (themeColor === 'warning') {
+      return '#FFB400'
+    } else {
+      return '#16B1FF'
+    }
+  }
+
   return {
     customColors: {
       dark: darkColor,
@@ -47,7 +62,7 @@ const DefaultPalette = (mode: Palette['mode'], skin: Skin, themeColor: ThemeColo
       avatarBg: mode === 'light' ? '#F0EFF0' : '#3F3B59',
       darkBg: skin === 'bordered' ? '#312D4B' : '#28243D',
       lightBg: skin === 'bordered' ? whiteColor : '#F4F5FA',
-      tableHeaderBg: mode === 'light' ? '#F9FAFC' : grey[700]
+      tableHeaderBg: mode === 'light' ? '#F9FAFC' : tableHeaderBgColor()
     },
     mode: mode,
     common: {

@@ -1,7 +1,7 @@
 export function currencyFormatter(numero?: number | string | null) {
   if (numero === '' || numero === null || numero === undefined) return '0';
 
-  let num = parseFloat(numero.toString());
+  const num = parseFloat(numero.toString());
 
   const formatter = new Intl.NumberFormat('pt-BR', {
     style: 'currency',
@@ -9,7 +9,8 @@ export function currencyFormatter(numero?: number | string | null) {
   });
 
   const numFormatado = formatter.format(num);
-  return numFormatado;
+  
+return numFormatado;
 }
 
 export function currencyMask(value: string) {
@@ -17,7 +18,8 @@ export function currencyMask(value: string) {
   maskedValue = maskedValue.replace(/\D/g, '');
   maskedValue = maskedValue.replace(/(\d)(\d{2})$/, '$1.$2');
   maskedValue = maskedValue.replace(/(?=(\d{3})+(\D))\B/g, '.');
-  return maskedValue;
+  
+return maskedValue;
 }
 
 export function currencyUnMask(maskedValue: string) {
@@ -25,6 +27,7 @@ export function currencyUnMask(maskedValue: string) {
   // return UnMaskedValue;
   // Remover pontos de milhar
   let unMaskedValue = maskedValue.replace(/\./g, '');
+
   // Substituir vírgulas por pontos
   unMaskedValue = unMaskedValue.replace(/,/, '.');
 
@@ -33,5 +36,6 @@ export function currencyUnMask(maskedValue: string) {
     const decimalIndex = unMaskedValue.length - 2;
     unMaskedValue = unMaskedValue.slice(0, decimalIndex) + '.' + unMaskedValue.slice(decimalIndex);
   }
-  return parseFloat(unMaskedValue);
+  
+return parseFloat(unMaskedValue);
 }
