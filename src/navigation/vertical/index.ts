@@ -10,7 +10,7 @@ const navigation = (): VerticalNavItemsType => {
     },
     {
       title: 'CRM',
-      icon: 'mdi:archive-outline',
+      icon: 'mdi:monitor-dashboard',
       badgeColor: 'success',
       children: [
         {
@@ -32,6 +32,11 @@ const navigation = (): VerticalNavItemsType => {
         //   ]
         // },
       ]
+    },
+    {
+      title: 'Clientes',
+      path: '/clientes',
+      icon: 'mdi:account-group'
     }
 
     // {
