@@ -11,7 +11,7 @@ const DefaultPalette = (mode: Palette['mode'], skin: Skin, themeColor: ThemeColo
 
   const primaryGradient = () => {
     if (themeColor === 'primary') {
-      return '#C6A7FE'
+      return '#F58991'
     } else if (themeColor === 'secondary') {
       return '#9C9FA4'
     } else if (themeColor === 'success') {
@@ -29,10 +29,26 @@ const DefaultPalette = (mode: Palette['mode'], skin: Skin, themeColor: ThemeColo
     if (skin === 'bordered' && mode === 'light') {
       return whiteColor
     } else if (skin === 'bordered' && mode === 'dark') {
-      return '#312D4B'
+      return '#161616'
     } else if (mode === 'light') {
       return '#F4F5FA'
-    } else return '#28243D'
+    } else return '#161616'
+  }
+
+  const tableHeaderGradient = () => {
+    if (themeColor === 'primary') {
+      return '#DF3B67'
+    } else if (themeColor === 'secondary') {
+      return '#8A8D93'
+    } else if (themeColor === 'success') {
+      return '#56CA00'
+    } else if (themeColor === 'error') {
+      return '#FF4C51'
+    } else if (themeColor === 'warning') {
+      return '#FFB400'
+    } else {
+      return '#16B1FF'
+    }
   }
 
   return {
@@ -46,7 +62,7 @@ const DefaultPalette = (mode: Palette['mode'], skin: Skin, themeColor: ThemeColo
       avatarBg: mode === 'light' ? '#F0EFF0' : '#3F3B59',
       darkBg: skin === 'bordered' ? '#312D4B' : '#28243D',
       lightBg: skin === 'bordered' ? whiteColor : '#F4F5FA',
-      tableHeaderBg: mode === 'light' ? '#F9FAFC' : '#3D3759'
+      tableHeaderBg: mode === 'light' ? primaryGradient() : tableHeaderGradient()
     },
     mode: mode,
     common: {
@@ -54,9 +70,9 @@ const DefaultPalette = (mode: Palette['mode'], skin: Skin, themeColor: ThemeColo
       white: whiteColor
     },
     primary: {
-      light: '#9E69FD',
-      main: '#9155FD',
-      dark: '#804BDF',
+      light: '#F58991',
+      main: '#DF3B67',
+      dark: '#A01D5A',
       contrastText: whiteColor
     },
     secondary: {
@@ -89,6 +105,7 @@ const DefaultPalette = (mode: Palette['mode'], skin: Skin, themeColor: ThemeColo
       dark: '#4CB200',
       contrastText: whiteColor
     },
+
     grey: {
       50: '#FAFAFA',
       100: '#F5F5F5',
@@ -112,7 +129,7 @@ const DefaultPalette = (mode: Palette['mode'], skin: Skin, themeColor: ThemeColo
     },
     divider: `rgba(${mainColor}, 0.12)`,
     background: {
-      paper: mode === 'light' ? whiteColor : '#312D4B',
+      paper: mode === 'light' ? whiteColor : '#303030',
       default: defaultBgColor()
     },
     action: {

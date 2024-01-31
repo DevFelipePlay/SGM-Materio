@@ -6,20 +6,46 @@ const navigation = (): VerticalNavItemsType => {
     {
       title: 'Home',
       path: '/home',
-      icon: 'mdi:home-outline',
+      icon: 'mdi:home-outline'
     },
     {
-      title: 'Second Page',
-      path: '/second-page',
-      icon: 'mdi:email-outline',
-    },
-    {
-      path: '/acl',
-      action: 'read',
-      subject: 'acl-page',
-      title: 'Access Control',
-      icon: 'mdi:shield-outline',
+      title: 'CRM',
+      icon: 'mdi:archive-outline',
+      badgeColor: 'success',
+      children: [
+        {
+          title: 'Parceiros',
+          path: '/crm/parceiros'
+        }
+
+        // {
+        //   title: 'Cards',
+        //   children: [
+        //     {
+        //       title: 'Basic',
+        //       path: '/components/cards/basic'
+        //     },
+        //     {
+        //       title: 'Advanced',
+        //       path: '/components/cards/advanced'
+        //     }
+        //   ]
+        // },
+      ]
     }
+
+    // {
+    //   title: 'Second Page',
+    //   path: '/second-page',
+    //   icon: 'mdi:email-outline'
+    // },
+    // {
+    //   path: '/acl',
+    //   action: 'read',
+    //   subject: 'acl-page',
+    //   title: 'Access Control',
+    //   icon: 'mdi:shield-outline'
+    // }
   ]
 }
 

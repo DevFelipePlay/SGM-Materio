@@ -113,9 +113,9 @@ const Customizer = () => {
           }}
         >
           <Typography variant='h6' sx={{ fontWeight: 600, textTransform: 'uppercase' }}>
-            Theme Customizer
+            Temas costumizados
           </Typography>
-          <Typography sx={{ color: 'text.secondary' }}>Customize & Preview in Real Time</Typography>
+          <Typography sx={{ color: 'text.secondary' }}>Customize & Visualize em tempo real</Typography>
           <IconButton
             onClick={() => setOpen(false)}
             sx={{
@@ -136,7 +136,7 @@ const Customizer = () => {
               variant='caption'
               sx={{ mb: 4, color: 'text.disabled', textTransform: 'uppercase' }}
             >
-              Theming
+              Tema
             </Typography>
 
             {/* Skin */}
@@ -148,14 +148,14 @@ const Customizer = () => {
                 onChange={e => handleChange('skin', e.target.value as Settings['skin'])}
                 sx={{ '& .MuiFormControlLabel-label': { fontSize: '.875rem', color: 'text.secondary' } }}
               >
-                <FormControlLabel value='default' label='Default' control={<Radio />} />
+                <FormControlLabel value='default' label='Padrão' control={<Radio />} />
                 <FormControlLabel value='bordered' label='Bordered' control={<Radio />} />
               </RadioGroup>
             </Box>
 
             {/* Mode */}
             <Box sx={{ mb: 4 }}>
-              <Typography>Mode</Typography>
+              <Typography>Modo</Typography>
               <RadioGroup
                 row
                 value={mode}
@@ -172,13 +172,13 @@ const Customizer = () => {
 
             {/* Color Picker */}
             <div>
-              <Typography sx={{ mb: 2.5 }}>Primary Color</Typography>
+              <Typography sx={{ mb: 2.5 }}>Cor Primária</Typography>
               <Box sx={{ display: 'flex' }}>
                 <ColorBox
                   onClick={() => handleChange('themeColor', 'primary')}
                   sx={{
                     ml: 0,
-                    backgroundColor: '#9155FD',
+                    backgroundColor: '#DF3b67',
                     ...(themeColor === 'primary' ? { boxShadow: 9 } : { '&:hover': { boxShadow: 4 } })
                   }}
                 >
@@ -247,53 +247,53 @@ const Customizer = () => {
 
             {/* Content Width */}
             <Box sx={{ mb: 4 }}>
-              <Typography>Content Width</Typography>
+              <Typography>Largura do Conteúdo</Typography>
               <RadioGroup
                 row
                 value={contentWidth}
                 onChange={e => handleChange('contentWidth', e.target.value as Settings['contentWidth'])}
                 sx={{ '& .MuiFormControlLabel-label': { fontSize: '.875rem', color: 'text.secondary' } }}
               >
-                <FormControlLabel value='full' label='Full' control={<Radio />} />
-                <FormControlLabel value='boxed' label='Boxed' control={<Radio />} />
+                <FormControlLabel value='full' label='Completo' control={<Radio />} />
+                <FormControlLabel value='boxed' label='Limitado' control={<Radio />} />
               </RadioGroup>
             </Box>
 
             {/* AppBar */}
             <Box sx={{ mb: 4 }}>
-              <Typography>AppBar Type</Typography>
+              <Typography>Tipo da Barra de Navegação</Typography>
               <RadioGroup
                 row
                 value={appBar}
                 onChange={e => handleChange('appBar', e.target.value as Settings['appBar'])}
                 sx={{ '& .MuiFormControlLabel-label': { fontSize: '.875rem', color: 'text.secondary' } }}
               >
-                <FormControlLabel value='fixed' label='Fixed' control={<Radio />} />
-                <FormControlLabel value='static' label='Static' control={<Radio />} />
+                <FormControlLabel value='fixed' label='Fixo' control={<Radio />} />
+                <FormControlLabel value='static' label='Estático' control={<Radio />} />
                 {layout === 'horizontal' ? null : (
-                  <FormControlLabel value='hidden' label='Hidden' control={<Radio />} />
+                  <FormControlLabel value='hidden' label='Esconder' control={<Radio />} />
                 )}
               </RadioGroup>
             </Box>
 
             {/* Footer */}
             <Box sx={{ mb: 4 }}>
-              <Typography>Footer Type</Typography>
+              <Typography>Tipo do Rodapé</Typography>
               <RadioGroup
                 row
                 value={footer}
                 onChange={e => handleChange('footer', e.target.value as Settings['footer'])}
                 sx={{ '& .MuiFormControlLabel-label': { fontSize: '.875rem', color: 'text.secondary' } }}
               >
-                <FormControlLabel value='fixed' label='Fixed' control={<Radio />} />
-                <FormControlLabel value='static' label='Static' control={<Radio />} />
-                <FormControlLabel value='hidden' label='Hidden' control={<Radio />} />
+                <FormControlLabel value='fixed' label='Fixo' control={<Radio />} />
+                <FormControlLabel value='static' label='Estático' control={<Radio />} />
+                <FormControlLabel value='hidden' label='Esconder' control={<Radio />} />
               </RadioGroup>
             </Box>
 
             {/* AppBar Blur */}
             <Box sx={{ mb: 4, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <Typography>AppBar Blur</Typography>
+              <Typography>AppBar Desfoque</Typography>
               <Switch
                 name='appBarBlur'
                 checked={appBarBlur}
@@ -376,7 +376,7 @@ const Customizer = () => {
             {/* Menu Hidden */}
             {layout === 'horizontal' && appBar === 'hidden' ? null : (
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <Typography>Menu Hidden</Typography>
+                <Typography>Esconder Menu</Typography>
                 <Switch
                   name='navHidden'
                   checked={navHidden}

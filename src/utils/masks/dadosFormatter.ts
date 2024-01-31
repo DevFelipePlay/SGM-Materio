@@ -8,7 +8,7 @@ export function dadosFormatter(dados: string | number, tamanho?: 'B' | 'KB' | 'M
 
     if (dadosFloat.toString().split('').some(letra => letra === '.')) {
 
-        let dado = parseFloat(dadosFloat.toString().split('.')[0]);
+        const dado = parseFloat(dadosFloat.toString().split('.')[0]);
 
         if (dado < 1000) {
             return dado.toString() + ' MB';

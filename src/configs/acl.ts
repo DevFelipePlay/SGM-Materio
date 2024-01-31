@@ -1,11 +1,11 @@
-import { AbilityBuilder, Ability } from '@casl/ability'
+import { AbilityBuilder, createMongoAbility, MongoAbility } from '@casl/ability'
 
 export type Subjects = string
 export type Actions = 'manage' | 'create' | 'read' | 'update' | 'delete'
 
-export type AppAbility = Ability<[Actions, Subjects]> | undefined
+export type AppAbility = MongoAbility<[Actions, Subjects]> | undefined
 
-export const AppAbility = Ability as any
+export const AppAbility = createMongoAbility as any
 export type ACLObj = {
   action: Actions
   subject: string
@@ -22,7 +22,7 @@ const defineRulesFor = (role: string, subject: string) => {
   if (role === 'admin') {
     can('manage', 'all')
   } else if (role === 'client') {
-    can(['read'], 'acl-page')
+    can(['read', 'deletar', 'create'], ['acl-page', 'home-page'])
   } else {
     can(['read', 'create', 'update', 'delete'], subject)
   }
