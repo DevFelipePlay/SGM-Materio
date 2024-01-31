@@ -1,6 +1,5 @@
 // ** Type Imports
 import { Palette } from '@mui/material'
-import { grey } from '@mui/material/colors'
 import { Skin, ThemeColor } from 'src/@core/layouts/types'
 
 const DefaultPalette = (mode: Palette['mode'], skin: Skin, themeColor: ThemeColor): Palette => {
@@ -12,13 +11,13 @@ const DefaultPalette = (mode: Palette['mode'], skin: Skin, themeColor: ThemeColo
 
   const primaryGradient = () => {
     if (themeColor === 'primary') {
-      return '#C6A7FE'
+      return '#F58991'
     } else if (themeColor === 'secondary') {
       return '#9C9FA4'
     } else if (themeColor === 'success') {
       return '#93DD5C'
     } else if (themeColor === 'error') {
-      return '#DF3B67'
+      return '#FF8C90'
     } else if (themeColor === 'warning') {
       return '#FFCF5C'
     } else {
@@ -71,9 +70,9 @@ const DefaultPalette = (mode: Palette['mode'], skin: Skin, themeColor: ThemeColo
       white: whiteColor
     },
     primary: {
-      light: '#9E69FD',
-      main: '#9155FD',
-      dark: '#804BDF',
+      light: '#F58991',
+      main: '#DF3B67',
+      dark: '#A01D5A',
       contrastText: whiteColor
     },
     secondary: {

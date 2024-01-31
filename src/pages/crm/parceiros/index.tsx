@@ -209,7 +209,7 @@ const columns: GridColDef[] = [
     headerName: 'Role',
     renderCell: ({ row }: CellType) => {
       return (
-        <Box sx={{ display: 'flex', alignItems: 'center', '& svg': { mr: 3, color: userRoleObj[row.role].color } }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', '& svg': { mr: 3, color: 'userRoleObj[row.role].color' } }}>
           <Icon icon={userRoleObj[row.role].icon} fontSize={20} />
           <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
             {row.role}
