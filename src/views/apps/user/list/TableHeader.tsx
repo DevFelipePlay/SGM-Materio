@@ -9,7 +9,7 @@ import Icon from 'src/@core/components/icon'
 interface TableHeaderProps {
   value: string
   placeholderSearch: string
-  titleButton: string
+  titleButton?: string
   toggle: () => void
   handleFilter: (val: string) => void
 }
@@ -36,10 +36,11 @@ const TableHeader = (props: TableHeaderProps) => {
           placeholder={placeholderSearch}
           onChange={e => handleFilter(e.target.value)}
         />
-
-        <Button sx={{ mb: 2 }} onClick={toggle} variant='contained'>
-          {titleButton}
-        </Button>
+        {titleButton && (
+          <Button sx={{ mb: 2 }} onClick={toggle} variant='contained'>
+            {titleButton}
+          </Button>
+        )}
       </Box>
     </Box>
   )
