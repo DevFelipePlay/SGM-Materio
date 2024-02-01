@@ -10,7 +10,7 @@ interface TableHeaderProps {
   value: string
   placeholderSearch: string
   titleButton?: string
-  toggle: () => void
+  toggle?: () => void
   handleFilter: (val: string) => void
 }
 

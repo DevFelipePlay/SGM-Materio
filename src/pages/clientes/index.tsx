@@ -12,7 +12,7 @@ import CardHeader from '@mui/material/CardHeader'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import CardContent from '@mui/material/CardContent'
-import { DataGrid, GridColDef, gridClasses } from '@mui/x-data-grid'
+import { GridColDef } from '@mui/x-data-grid'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 
 // ** Icon Imports
@@ -24,8 +24,8 @@ import CardStatisticsHorizontal from 'src/@core/components/card-statistics/card-
 // ** Third Party Components
 
 // ** Custom Table Components Imports
-import TableHeader from 'src/views/apps/user/list/TableHeader'
 import AddUserDrawer from 'src/views/apps/user/list/AddUserDrawer'
+import CustomDataGrid from 'src/components/CustomDataGrid/CustomDataGrid'
 
 const columns: GridColDef[] = [
   {
@@ -38,7 +38,7 @@ const columns: GridColDef[] = [
     flex: 0.1,
     minWidth: 100,
     field: 'cpf',
-    headerName: 'CPF'
+    headerName: 'CPF / CNPJ'
   },
   {
     flex: 0.1,
@@ -58,93 +58,92 @@ const rows = [
   {
     id: 1,
     name: 'Adam Sandler',
-    cpf: '050.018.691-84',
-    iccid: '8955170110333028510',
-    msisdn: '(61) 92004-6246'
+    cpf: '33.093.462/0001-50',
+    iccid: '8955170110333029997',
+    msisdn: '(61) 92002-8084',
+    tipoCliente: 'cnpj',
+    tipoDeLinha: 'pospago'
   },
   {
     id: 2,
     name: 'João Pedro',
     cpf: '080.070.691-94',
     iccid: '8955170110333028510',
-    msisdn: '(61) 92004-6246'
+    msisdn: '(61) 92004-6246',
+    tipoCliente: 'cpf',
+    tipoDeLinha: 'prepago'
   },
   {
     id: 3,
-    name: 'João Pedro',
-    cpf: '080.070.691-94',
-    iccid: '8955170110333028510',
-    msisdn: '(61) 92004-6246'
+    name: 'Daniel',
+    cpf: '840.168.642-82',
+    iccid: '8955170110319855035',
+    msisdn: '(61) 92002-9499',
+    tipoCliente: 'cpf',
+    tipoDeLinha: 'prepago'
   },
   {
     id: 4,
-    name: 'João Pedro',
-    cpf: '080.070.691-94',
-    iccid: '8955170110333028510',
-    msisdn: '(61) 92004-6246'
+    name: 'Leandro',
+    cpf: '552.842.231-81',
+    iccid: '8955170110333025532',
+    msisdn: '(61) 92003-1586',
+    tipoCliente: 'cpf',
+    tipoDeLinha: 'prepago'
   },
   {
     id: 5,
-    name: 'João Pedro',
-    cpf: '080.070.691-94',
-    iccid: '8955170110333028510',
-    msisdn: '(61) 92004-6246'
+    name: 'Marcelo',
+    cpf: '561.876.464-13',
+    iccid: '8955170110333025995',
+    msisdn: '(61) 92003-3758',
+    tipoCliente: 'cpf',
+    tipoDeLinha: 'prepago'
   },
   {
     id: 6,
-    name: 'João Pedro',
-    cpf: '080.070.691-94',
-    iccid: '8955170110333028510',
-    msisdn: '(61) 92004-6246'
+    name: 'Eder',
+    cpf: '495.424.264-45',
+    iccid: '8955170110333027306',
+    msisdn: '(61) 92003-4430',
+    tipoCliente: 'cpf',
+    tipoDeLinha: 'prepago'
   },
   {
     id: 7,
-    name: 'João Pedro',
-    cpf: '080.070.691-94',
-    iccid: '8955170110333028510',
-    msisdn: '(61) 92004-6246'
+    name: 'Pedro',
+    cpf: '457.485.568-32',
+    iccid: '8955170110333029062',
+    msisdn: '(61) 92004-2693',
+    tipoCliente: 'cpf',
+    tipoDeLinha: 'prepago'
   },
   {
     id: 8,
-    name: 'João Pedro',
-    cpf: '080.070.691-94',
-    iccid: '8955170110333028510',
-    msisdn: '(61) 92004-6246'
+    name: 'Renato',
+    cpf: '587.456.867-15',
+    iccid: '8955170110333030086',
+    msisdn: '(61) 92004-6246',
+    tipoCliente: 'cpf',
+    tipoDeLinha: 'prepago'
   },
   {
     id: 9,
-    name: 'João Pedro',
-    cpf: '080.070.691-94',
-    iccid: '8955170110333028510',
-    msisdn: '(61) 92004-6246'
+    name: 'Felipe',
+    cpf: '565.154.847-14',
+    iccid: '8955170110114549551',
+    msisdn: '(61) 92004-3512',
+    tipoCliente: 'cpf',
+    tipoDeLinha: 'prepago'
   },
   {
     id: 10,
-    name: 'João Pedro',
-    cpf: '080.070.691-94',
-    iccid: '8955170110333028510',
-    msisdn: '(61) 92004-6246'
-  },
-  {
-    id: 11,
-    name: 'João Pedro',
-    cpf: '080.070.691-94',
-    iccid: '8955170110333028510',
-    msisdn: '(61) 92004-6246'
-  },
-  {
-    id: 12,
-    name: 'João Pedro',
-    cpf: '080.070.691-94',
-    iccid: '8955170110333028510',
-    msisdn: '(61) 92004-6246'
-  },
-  {
-    id: 13,
-    name: 'João Pedro',
-    cpf: '080.070.691-94',
-    iccid: '8955170110333028510',
-    msisdn: '(61) 92004-6246'
+    name: 'Mateus',
+    cpf: '653.466.534-18',
+    iccid: '8955170110114511429',
+    msisdn: '(61) 92004-6246',
+    tipoCliente: 'cpf',
+    tipoDeLinha: 'prepago'
   }
 ]
 
@@ -152,14 +151,8 @@ const Clientes = () => {
   // ** State
   const [role, setRole] = useState<string>('')
   const [plan, setPlan] = useState<string>('')
-  const [value, setValue] = useState<string>('')
   const [status, setStatus] = useState<string>('')
   const [addUserOpen, setAddUserOpen] = useState<boolean>(false)
-  const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 })
-
-  const handleFilter = useCallback((val: string) => {
-    setValue(val)
-  }, [])
 
   const handleRoleChange = useCallback((e: SelectChangeEvent) => {
     setRole(e.target.value)
@@ -203,7 +196,7 @@ const Clientes = () => {
         </Grid>
       </Grid>
       <Grid item xs={12}>
-        <Card sx={{ p: 6 }}>
+        <Card sx={{ px: 4 }}>
           <CardHeader title='Filtrar' />
           <CardContent>
             <Grid container spacing={6}>
@@ -264,39 +257,8 @@ const Clientes = () => {
             </Grid>
           </CardContent>
           <Divider />
-          <TableHeader
-            value={value}
-            handleFilter={handleFilter}
-            toggle={toggleAddUserDrawer}
-            placeholderSearch='Buscar Cliente'
-            titleButton='Novo Cliente'
-          />
-          <DataGrid
-            autoHeight
-            rows={rows}
-            columns={columns}
-            disableRowSelectionOnClick
-            pageSizeOptions={[10, 25, 50]}
-            paginationModel={paginationModel}
-            onPaginationModelChange={setPaginationModel}
-            getRowSpacing={params => ({
-              top: params.isFirstVisible ? 10 : 5,
-              bottom: params.isLastVisible ? 10 : 5
-            })}
-            sx={{
-              [`& .${gridClasses.row}`]: {
-                bgcolor: theme => (theme.palette.mode === 'light' ? '#f1f1f1' : '#404040'),
-                borderRadius: '8px'
-              },
-              [`& .${gridClasses.cell}`]: {
-                padding: '16px',
-                border: 'none'
-              },
-              [`& .${gridClasses.columnHeader}`]: {
-                border: 'none'
-              }
-            }}
-          />
+
+          <CustomDataGrid columns={columns} rows={rows} />
         </Card>
       </Grid>
 
