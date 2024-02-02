@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 
 // ** Next Imports
 
@@ -26,6 +26,9 @@ import CardStatisticsHorizontal from 'src/@core/components/card-statistics/card-
 // ** Custom Table Components Imports
 import AddUserDrawer from 'src/views/apps/user/list/AddUserDrawer'
 import CustomDataGrid from 'src/components/CustomDataGrid/CustomDataGrid'
+import { useRouter } from 'next/router'
+import { maskCnpj, maskCpf } from 'src/utils/masks/masks'
+import axios from 'axios'
 
 const columns: GridColDef[] = [
   {
@@ -38,7 +41,12 @@ const columns: GridColDef[] = [
     flex: 0.1,
     minWidth: 100,
     field: 'cpf',
-    headerName: 'CPF / CNPJ'
+    headerName: 'CPF / CNPJ',
+    renderCell: ({ row }: any) => {
+      const { cpf } = row
+
+      return <p>{row.tipoCliente === 'pf' ? maskCpf(cpf) : maskCnpj(cpf)}</p>
+    }
   },
   {
     flex: 0.1,
@@ -54,104 +62,16 @@ const columns: GridColDef[] = [
   }
 ]
 
-const rows = [
-  {
-    id: 1,
-    name: 'Adam Sandler',
-    cpf: '33.093.462/0001-50',
-    iccid: '8955170110333029997',
-    msisdn: '(61) 92002-8084',
-    tipoCliente: 'cnpj',
-    tipoDeLinha: 'pospago'
-  },
-  {
-    id: 2,
-    name: 'João Pedro',
-    cpf: '080.070.691-94',
-    iccid: '8955170110333028510',
-    msisdn: '(61) 92004-6246',
-    tipoCliente: 'cpf',
-    tipoDeLinha: 'prepago'
-  },
-  {
-    id: 3,
-    name: 'Daniel',
-    cpf: '840.168.642-82',
-    iccid: '8955170110319855035',
-    msisdn: '(61) 92002-9499',
-    tipoCliente: 'cpf',
-    tipoDeLinha: 'prepago'
-  },
-  {
-    id: 4,
-    name: 'Leandro',
-    cpf: '552.842.231-81',
-    iccid: '8955170110333025532',
-    msisdn: '(61) 92003-1586',
-    tipoCliente: 'cpf',
-    tipoDeLinha: 'prepago'
-  },
-  {
-    id: 5,
-    name: 'Marcelo',
-    cpf: '561.876.464-13',
-    iccid: '8955170110333025995',
-    msisdn: '(61) 92003-3758',
-    tipoCliente: 'cpf',
-    tipoDeLinha: 'prepago'
-  },
-  {
-    id: 6,
-    name: 'Eder',
-    cpf: '495.424.264-45',
-    iccid: '8955170110333027306',
-    msisdn: '(61) 92003-4430',
-    tipoCliente: 'cpf',
-    tipoDeLinha: 'prepago'
-  },
-  {
-    id: 7,
-    name: 'Pedro',
-    cpf: '457.485.568-32',
-    iccid: '8955170110333029062',
-    msisdn: '(61) 92004-2693',
-    tipoCliente: 'cpf',
-    tipoDeLinha: 'prepago'
-  },
-  {
-    id: 8,
-    name: 'Renato',
-    cpf: '587.456.867-15',
-    iccid: '8955170110333030086',
-    msisdn: '(61) 92004-6246',
-    tipoCliente: 'cpf',
-    tipoDeLinha: 'prepago'
-  },
-  {
-    id: 9,
-    name: 'Felipe',
-    cpf: '565.154.847-14',
-    iccid: '8955170110114549551',
-    msisdn: '(61) 92004-3512',
-    tipoCliente: 'cpf',
-    tipoDeLinha: 'prepago'
-  },
-  {
-    id: 10,
-    name: 'Mateus',
-    cpf: '653.466.534-18',
-    iccid: '8955170110114511429',
-    msisdn: '(61) 92004-6246',
-    tipoCliente: 'cpf',
-    tipoDeLinha: 'prepago'
-  }
-]
-
 const Clientes = () => {
+  const [users, setUsers] = useState([])
+  useEffect(() => {
+    axios.get('/users/list').then(response => setUsers(response.data))
+  }, [])
+  console.log(users)
+
   // ** State
   const [role, setRole] = useState<string>('')
   const [plan, setPlan] = useState<string>('')
-  const [status, setStatus] = useState<string>('')
   const [addUserOpen, setAddUserOpen] = useState<boolean>(false)
 
   const handleRoleChange = useCallback((e: SelectChangeEvent) => {
@@ -162,11 +82,20 @@ const Clientes = () => {
     setPlan(e.target.value)
   }, [])
 
-  const handleStatusChange = useCallback((e: SelectChangeEvent) => {
-    setStatus(e.target.value)
-  }, [])
-
   const toggleAddUserDrawer = () => setAddUserOpen(!addUserOpen)
+
+  // ** Função de filtro
+  const filterFunction = useCallback(
+    (row: any) => {
+      const matchesTipoCliente = role === '' || row.tipoCliente === role
+      const matchesTipoDeLinha = plan === '' || row.tipoDeLinha === plan
+
+      return matchesTipoCliente && matchesTipoDeLinha
+    },
+    [role, plan]
+  )
+
+  const router = useRouter()
 
   return (
     <Grid container spacing={6}>
@@ -200,7 +129,7 @@ const Clientes = () => {
           <CardHeader title='Filtrar' />
           <CardContent>
             <Grid container spacing={6}>
-              <Grid item sm={4} xs={12}>
+              <Grid item sm={6} xs={12}>
                 <FormControl fullWidth>
                   <InputLabel id='tipo-client-select'>Tipo de Cliente</InputLabel>
                   <Select
@@ -212,12 +141,13 @@ const Clientes = () => {
                     onChange={handleRoleChange}
                     inputProps={{ placeholder: 'Selecione o Tipo de Cliente' }}
                   >
+                    <MenuItem value=''>Todos</MenuItem>
                     <MenuItem value='pf'>Pessoa Física</MenuItem>
                     <MenuItem value='pj'>Pessoa Jurídica</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
-              <Grid item sm={4} xs={12}>
+              <Grid item sm={6} xs={12}>
                 <FormControl fullWidth>
                   <InputLabel id='tipo-linha-select'>Tipo de Linha</InputLabel>
                   <Select
@@ -229,28 +159,9 @@ const Clientes = () => {
                     onChange={handlePlanChange}
                     inputProps={{ placeholder: 'Selecione o Tipo de Cliente' }}
                   >
+                    <MenuItem value=''>Todos</MenuItem>
                     <MenuItem value='prepago'>Pré-Pago</MenuItem>
                     <MenuItem value='pospago'>Pós-Pago</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item sm={4} xs={12}>
-                <FormControl fullWidth>
-                  <InputLabel id='status-select'>Status</InputLabel>
-                  <Select
-                    fullWidth
-                    value={status}
-                    id='select-status'
-                    label='Status'
-                    labelId='status-select'
-                    onChange={handleStatusChange}
-                    inputProps={{ placeholder: 'Select Role' }}
-                  >
-                    <MenuItem value='ativo'>Ativo</MenuItem>
-                    <MenuItem value='grace1'>Grace 1</MenuItem>
-                    <MenuItem value='grace2'>Grace 2</MenuItem>
-                    <MenuItem value='grace3'>Grace 3</MenuItem>
-                    <MenuItem value='ex'>Ex</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
@@ -258,7 +169,12 @@ const Clientes = () => {
           </CardContent>
           <Divider />
 
-          <CustomDataGrid columns={columns} rows={rows} />
+          <CustomDataGrid
+            columns={columns}
+            rows={users}
+            filterFunction={filterFunction}
+            onCellClick={e => router.push(`clientes/detalhes/${e.row.cpf}`)}
+          />
         </Card>
       </Grid>
 

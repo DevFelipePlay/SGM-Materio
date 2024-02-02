@@ -1,42 +1,26 @@
-// // ** Next Import
-// import { GetStaticProps, GetStaticPaths, GetStaticPropsContext, InferGetStaticPropsType } from 'next/types'
+// ** MUI Imports
+import Card from '@mui/material/Card'
+import Grid from '@mui/material/Grid'
+import Typography from '@mui/material/Typography'
+import CardHeader from '@mui/material/CardHeader'
+import CardContent from '@mui/material/CardContent'
+import { useRouter } from 'next/router'
 
-// // ** Third Party Imports
-// import axios from 'axios'
+const Cliente = () => {
+  const { query } = useRouter()
 
-// // ** Types
-// import { InvoiceType } from 'src/types/apps/invoiceTypes'
+  return (
+    <Grid container spacing={6}>
+      <Grid item xs={12}>
+        <Card>
+          <CardHeader title='Detalhes'></CardHeader>
+          <CardContent>
+            <Typography>Cliente: {query.cliente}</Typography>
+          </CardContent>
+        </Card>
+      </Grid>
+    </Grid>
+  )
+}
 
-// // ** Demo Components Imports
-// import UserViewPage from 'src/views/apps/user/view/UserViewPage'
-
-// const UserView = ({ tab, invoiceData }: InferGetStaticPropsType<typeof getStaticProps>) => {
-//   return <UserViewPage tab={tab} invoiceData={invoiceData} />
-// }
-
-// export const getStaticPaths: GetStaticPaths = () => {
-//   return {
-//     paths: [
-//       { params: { tab: 'overview' } },
-//       { params: { tab: 'security' } },
-//       { params: { tab: 'billing-plan' } },
-//       { params: { tab: 'notification' } },
-//       { params: { tab: 'connection' } }
-//     ],
-//     fallback: false
-//   }
-// }
-
-// export const getStaticProps: GetStaticProps = async ({ params }: GetStaticPropsContext) => {
-//   const res = await axios.get('/apps/invoice/invoices')
-//   const invoiceData: InvoiceType[] = res.data.allData
-
-//   return {
-//     props: {
-//       invoiceData,
-//       tab: params?.tab
-//     }
-//   }
-// }
-
-// export default UserView
+export default Cliente
