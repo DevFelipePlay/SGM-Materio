@@ -20,6 +20,9 @@ import FormControl from '@mui/material/FormControl'
 import CardContent from '@mui/material/CardContent'
 import { GridColDef } from '@mui/x-data-grid'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
+import * as React from 'react'
+import Dialog from '@mui/material/Dialog'
+import DialogContent from '@mui/material/DialogContent'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
@@ -46,9 +49,9 @@ import { ThemeColor } from 'src/@core/layouts/types'
 import { UsersType } from 'src/types/apps/userTypes'
 
 // ** Custom Table Components Imports
-import AddUserDrawer from 'src/views/apps/user/list/AddUserDrawer'
-import CustomDataGrid from 'src/components/CustomDataGrid/CustomDataGrid'
+import CadastroMVNO from 'src/components/CadastroMVNO'
 import { useRouter } from 'next/router'
+import CustomDataGrid from 'src/components/CustomDataGrid/CustomDataGrid'
 
 interface UserRoleType {
   [key: string]: { icon: string; color: string }
@@ -264,7 +267,6 @@ const UserList = () => {
   const [role, setRole] = useState<string>('')
   const [plan, setPlan] = useState<string>('')
   const [status, setStatus] = useState<string>('')
-  const [addUserOpen, setAddUserOpen] = useState<boolean>(false)
 
   // ** Hooks
   const dispatch = useDispatch<AppDispatch>()
@@ -294,7 +296,19 @@ const UserList = () => {
     setStatus(e.target.value)
   }, [])
 
-  const toggleAddUserDrawer = () => setAddUserOpen(!addUserOpen)
+  //Dialog
+
+  const [open, setOpen] = useState(false)
+
+  // const handleClickOpen = () => {
+  //   setOpen(true)
+  // }
+
+  const handleClose = () => {
+    setOpen(false)
+  }
+
+  // const toggleAddUserDrawer = () => handleClickOpen()
 
   const filterFunction = useCallback(
     (row: any) => {
@@ -433,7 +447,19 @@ const UserList = () => {
         </Card>
       </Grid>
 
-      <AddUserDrawer open={addUserOpen} toggle={toggleAddUserDrawer} titleButton='Cadastrar Novo Parceiro' />
+      <>
+        <Dialog
+          open={open}
+          maxWidth={'xl'}
+          onClose={handleClose}
+          aria-labelledby='alert-dialog-title'
+          aria-describedby='alert-dialog-description'
+        >
+          <DialogContent>
+            <CadastroMVNO />
+          </DialogContent>
+        </Dialog>
+      </>
     </Grid>
   )
 }

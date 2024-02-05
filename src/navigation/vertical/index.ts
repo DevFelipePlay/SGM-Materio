@@ -15,22 +15,32 @@ const navigation = (): VerticalNavItemsType => {
       children: [
         {
           title: 'Parceiros',
-          path: '/crm/parceiros'
-        }
+          path: '/crm/parceiros',
+          badgeColor: 'success'
+        },
 
-        // {
-        //   title: 'Cards',
-        //   children: [
-        //     {
-        //       title: 'Basic',
-        //       path: '/components/cards/basic'
-        //     },
-        //     {
-        //       title: 'Advanced',
-        //       path: '/components/cards/advanced'
-        //     }
-        //   ]
-        // },
+        {
+          title: 'Enviar',
+          path: '/crm/enviar'
+        },
+        {
+          title: 'Aprovar',
+          children: [
+            {
+              title: 'Envio de SMS',
+              path: '/components/cards/basic'
+            },
+
+            {
+              title: 'Envio de Push',
+              path: '/components/cards/advanced'
+            },
+            {
+              title: 'Troca de Chip',
+              path: '/components/cards/advanced'
+            }
+          ]
+        }
       ]
     },
     {
