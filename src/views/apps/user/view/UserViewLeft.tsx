@@ -39,6 +39,7 @@ import { UsersType } from 'src/types/apps/userTypes'
 
 // ** Utils Import
 import { Avatar } from '@mui/material'
+import { maskCpf } from 'src/utils/masks/masks'
 
 const data: UsersType = {
   id: 1,
@@ -94,9 +95,9 @@ const UserViewLeft = ({ userData }: UserViewLeftProps) => {
       <Grid container spacing={6}>
         <Grid item xs={12}>
           <Card>
-            <CardContent sx={{ pt: 15, display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
-              <Avatar src={userData.avatar} sx={{ width: '5rem', height: '5rem' }} />
-              <Typography variant='h6' sx={{ mb: 4, mt: 2 }}>
+            <CardContent sx={{ pt: 10, display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+              <Avatar src={userData.avatar} sx={{ width: '7rem', height: '7rem' }} />
+              <Typography variant='h6' sx={{ mb: 2, mt: 3 }}>
                 {userData.name}
               </Typography>
             </CardContent>
@@ -107,7 +108,7 @@ const UserViewLeft = ({ userData }: UserViewLeftProps) => {
               <Box sx={{ pb: 1 }}>
                 <Box sx={{ display: 'flex', mb: 2 }}>
                   <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>CPF:</Typography>
-                  <Typography variant='body2'>{userData.cpf}</Typography>
+                  <Typography variant='body2'>{maskCpf(userData.cpf)}</Typography>
                 </Box>
                 <Box sx={{ display: 'flex', mb: 2 }}>
                   <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>Data de Nascimento:</Typography>

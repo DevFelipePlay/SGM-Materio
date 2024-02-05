@@ -28,8 +28,6 @@ const CardStatsHorizontal = (props: CardStatsHorizontalProps) => {
   // ** Props
   const { title, icon, stats, trendNumber, color = 'primary', trend = 'positive' } = props
 
-  console.log(trend)
-
   return (
     <Card
       sx={{
