@@ -5,7 +5,7 @@ import { Box, Card, CardContent, Typography, styled } from '@mui/material'
 import Grid from '@mui/material/Grid'
 import MuiAvatar, { AvatarProps } from '@mui/material/Avatar'
 
-const UserViewOverview = () => {
+const DetalhesCliente = () => {
   return (
     <Grid container spacing={6}>
       <Grid item xs={6}>
@@ -103,7 +103,7 @@ const UserViewOverview = () => {
   )
 }
 
-export default UserViewOverview
+export default DetalhesCliente
 
 const CustomCardOverview = (props: any) => {
   // ** Styled Avatar component
