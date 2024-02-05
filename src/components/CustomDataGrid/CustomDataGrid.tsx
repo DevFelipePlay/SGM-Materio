@@ -6,11 +6,22 @@ import TableHeader from 'src/views/apps/user/list/TableHeader'
 interface CustomDataGridProps {
   rows: any
   columns: GridColDef[]
-  filterFunction: (row: any) => boolean
+  filterFunction?: (row: any) => boolean
   onCellClick?: (params: GridCellParams, event: React.MouseEvent) => void
+  placeholderSearch?: string
+  titleButton?: string
+  toggle?: () => void
 }
 
-export default function CustomDataGrid({ rows, columns, filterFunction, ...rest }: CustomDataGridProps) {
+export default function CustomDataGrid({
+  rows,
+  columns,
+  placeholderSearch = 'Buscar',
+  titleButton = 'Adicionar',
+  toggle,
+  filterFunction,
+  ...rest
+}: CustomDataGridProps) {
   // ** State
   const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 })
   const [searchText, setSearchText] = useState('')
@@ -18,7 +29,7 @@ export default function CustomDataGrid({ rows, columns, filterFunction, ...rest 
   // Filtrar linhas
   const filteredRows = rows.filter(
     (row: any) =>
-      filterFunction(row) &&
+      (filterFunction ? filterFunction(row) : true) &&
       columns.some((column: GridColDef) =>
         row[column.field]?.toString().toLowerCase().includes(searchText.toLowerCase())
       )
@@ -29,8 +40,9 @@ export default function CustomDataGrid({ rows, columns, filterFunction, ...rest 
       <TableHeader
         value={searchText}
         handleFilter={setSearchText}
-        placeholderSearch='Buscar Cliente'
-        titleButton='Novo Cliente'
+        placeholderSearch={placeholderSearch}
+        titleButton={titleButton}
+        toggle={toggle}
       />
       {filteredRows.length > 0 ? (
         <Box display='flex' flexDirection='column' mx='auto' pb={5}>
