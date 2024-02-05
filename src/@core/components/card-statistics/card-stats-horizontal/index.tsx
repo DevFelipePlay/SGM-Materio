@@ -28,6 +28,8 @@ const CardStatsHorizontal = (props: CardStatsHorizontalProps) => {
   // ** Props
   const { title, icon, stats, trendNumber, color = 'primary', trend = 'positive' } = props
 
+  console.log(trend)
+
   return (
     <Card
       sx={{
@@ -59,6 +61,7 @@ const CardStatsHorizontal = (props: CardStatsHorizontalProps) => {
                 >
                   <Icon icon={trend === 'positive' ? 'mdi:chevron-up' : 'mdi:chevron-down'} />
                 </Box>
+
                 <Typography
                   variant='caption'
                   sx={{ fontWeight: 600, color: trend === 'positive' ? 'success.main' : 'error.main' }}
