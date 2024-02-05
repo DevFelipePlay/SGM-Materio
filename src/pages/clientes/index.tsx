@@ -29,26 +29,23 @@ import CustomDataGrid from 'src/components/CustomDataGrid/CustomDataGrid'
 import { useRouter } from 'next/router'
 import { maskCnpj, maskCpf } from 'src/utils/masks/masks'
 import axios from 'axios'
-import { Avatar } from '@mui/material'
+import { Avatar, Box } from '@mui/material'
 import { getInitials } from 'src/@core/utils/get-initials'
 
 const columns: GridColDef[] = [
   {
-    flex: 0.05,
-    minWidth: 100,
-    field: 'avatar',
-    headerName: 'Avatar',
-    renderCell: ({ row }: any) => {
-      if (row.avatar === '') return <Avatar>{getInitials(row.name)}</Avatar>
-
-      return <Avatar src={row.avatar} />
-    }
-  },
-  {
     flex: 0.1,
     minWidth: 100,
     field: 'name',
-    headerName: 'Nome'
+    headerName: 'Cliente',
+    renderCell: ({ row }: any) => {
+      return (
+        <Box display='flex' alignItems='center' gap={4}>
+          {row.avatar === '' ? <Avatar>{getInitials(row.name)}</Avatar> : <Avatar src={row.avatar} />}
+          <p>{row.name}</p>
+        </Box>
+      )
+    }
   },
   {
     flex: 0.1,
@@ -187,6 +184,8 @@ const Clientes = () => {
             rows={users}
             filterFunction={filterFunction}
             onCellClick={e => router.push(`clientes/detalhes/${e.row.cpf}`)}
+            placeholderSearch='Buscar Cliente'
+            titleButton='Novo Cliente'
           />
         </Card>
       </Grid>
