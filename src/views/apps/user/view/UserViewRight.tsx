@@ -30,6 +30,7 @@ import { InvoiceType } from 'src/types/apps/invoiceTypes'
 interface Props {
   tab: string
   invoiceData: InvoiceType[]
+  userID: string
 }
 
 // ** Styled Tab component
@@ -53,9 +54,9 @@ const TabList = styled(MuiTabList)<TabListProps>(({ theme }) => ({
   }
 }))
 
-const UserViewRight = ({ tab, invoiceData }: Props) => {
+const UserViewRight = ({ tab, invoiceData, userID }: Props) => {
   // ** State
-  const [activeTab, setActiveTab] = useState<string>(tab)
+  const [activeTab, setActiveTab] = useState<string>('detalhes')
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
   // ** Hooks
@@ -66,7 +67,7 @@ const UserViewRight = ({ tab, invoiceData }: Props) => {
     setActiveTab(value)
     router
       .push({
-        pathname: `/apps/user/view/${value.toLowerCase()}`
+        pathname: `/clientes/${value.toLowerCase()}/${userID}`
       })
       .then(() => setIsLoading(false))
   }
@@ -94,47 +95,80 @@ const UserViewRight = ({ tab, invoiceData }: Props) => {
         aria-label='forced scroll tabs example'
       >
         <Tab
-          value='overview'
+          value='detalhes'
           label={
             <Box sx={{ display: 'flex', alignItems: 'center', '& svg': { mr: 2 } }}>
               <Icon fontSize={20} icon='mdi:account-outline' />
-              Overview
+              Detalhes
             </Box>
           }
         />
         <Tab
-          value='security'
+          value='consumo'
           label={
             <Box sx={{ display: 'flex', alignItems: 'center', '& svg': { mr: 2 } }}>
-              <Icon fontSize={20} icon='mdi:lock-outline' />
-              Security
+              <Icon fontSize={20} icon='mdi:chart-pie' />
+              Consumo
             </Box>
           }
         />
         <Tab
-          value='billing-plan'
+          value='alterarplano'
           label={
             <Box sx={{ display: 'flex', alignItems: 'center', '& svg': { mr: 2 } }}>
-              <Icon fontSize={20} icon='mdi:bookmark-outline' />
-              Billing & Plan
+              <Icon fontSize={20} icon='bxs:collection' />
+              Alterar Plano
             </Box>
           }
         />
         <Tab
-          value='notification'
+          value='recargaadicional'
           label={
             <Box sx={{ display: 'flex', alignItems: 'center', '& svg': { mr: 2 } }}>
-              <Icon fontSize={20} icon='mdi:bell-outline' />
-              Notification
+              <Icon fontSize={20} icon='mdi:plus-circle' />
+              Recarga Adicional
             </Box>
           }
         />
         <Tab
-          value='connection'
+          value='portabilidade'
           label={
             <Box sx={{ display: 'flex', alignItems: 'center', '& svg': { mr: 2 } }}>
-              <Icon fontSize={20} icon='mdi:link' />
-              Connection
+              <Icon fontSize={20} icon='mdi:swap-horizontal' />
+              Portabilidade
+            </Box>
+          }
+        />
+        <Tab
+          value='cobrancas'
+          label={
+            <Box sx={{ display: 'flex', alignItems: 'center', '& svg': { mr: 2 } }}>
+              <Icon fontSize={20} icon='material-symbols:paid' /> Cobranças
+            </Box>
+          }
+        />
+        <Tab
+          value='recorrencia'
+          label={
+            <Box sx={{ display: 'flex', alignItems: 'center', '& svg': { mr: 2 } }}>
+              <Icon fontSize={20} icon='mdi-autorenew' /> Recorrência
+            </Box>
+          }
+        />
+        <Tab
+          value='bloqueio'
+          label={
+            <Box sx={{ display: 'flex', alignItems: 'center', '& svg': { mr: 2 } }}>
+              <Icon fontSize={20} icon='mdi:cancel' />
+              Bloqueio de Linha
+            </Box>
+          }
+        />
+        <Tab
+          value='addprotocolo'
+          label={
+            <Box sx={{ display: 'flex', alignItems: 'center', '& svg': { mr: 2 } }}>
+              <Icon fontSize={20} icon='material-symbols:note-add' /> Adicionar Protocolo
             </Box>
           }
         />
@@ -147,19 +181,31 @@ const UserViewRight = ({ tab, invoiceData }: Props) => {
           </Box>
         ) : (
           <>
-            <TabPanel sx={{ p: 0 }} value='overview'>
+            <TabPanel sx={{ p: 0 }} value='detalhes'>
               <UserViewOverview invoiceData={invoiceData} />
             </TabPanel>
-            <TabPanel sx={{ p: 0 }} value='security'>
+            <TabPanel sx={{ p: 0 }} value='consumo'>
               <UserViewSecurity />
             </TabPanel>
-            <TabPanel sx={{ p: 0 }} value='billing-plan'>
+            <TabPanel sx={{ p: 0 }} value='alterarplano'>
               <UserViewBilling />
             </TabPanel>
-            <TabPanel sx={{ p: 0 }} value='notification'>
+            <TabPanel sx={{ p: 0 }} value='recargaadicional'>
               <UserViewNotification />
             </TabPanel>
-            <TabPanel sx={{ p: 0 }} value='connection'>
+            <TabPanel sx={{ p: 0 }} value='portabilidade'>
+              <UserViewConnection />
+            </TabPanel>
+            <TabPanel sx={{ p: 0 }} value='cobrancas'>
+              <UserViewConnection />
+            </TabPanel>
+            <TabPanel sx={{ p: 0 }} value='recorrencia'>
+              <UserViewConnection />
+            </TabPanel>
+            <TabPanel sx={{ p: 0 }} value='bloqueio'>
+              <UserViewConnection />
+            </TabPanel>
+            <TabPanel sx={{ p: 0 }} value='addprotocolo'>
               <UserViewConnection />
             </TabPanel>
           </>

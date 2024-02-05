@@ -11,16 +11,20 @@ import UserViewRight from 'src/views/apps/user/view/UserViewRight'
 type Props = {
   tab: string
   invoiceData: InvoiceType[]
+  userID: string
+  user: any
 }
 
-const UserView = ({ tab, invoiceData }: Props) => {
+const UserView = ({ tab, invoiceData, userID, user }: Props) => {
+  console.log(user)
+
   return (
     <Grid container spacing={6}>
       <Grid item xs={12} md={5} lg={4}>
-        <UserViewLeft />
+        <UserViewLeft userData={user} />
       </Grid>
       <Grid item xs={12} md={7} lg={8}>
-        <UserViewRight tab={tab} invoiceData={invoiceData} />
+        <UserViewRight tab={tab} invoiceData={invoiceData} userID={userID} />
       </Grid>
     </Grid>
   )

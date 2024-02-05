@@ -28,6 +28,7 @@
     "@fullcalendar/timegrid": "6.1.6",
     "@hookform/resolvers": "^3.3.4",
     "@iconify/react": "4.1.0",
+    "@mui/lab": "^5.0.0-alpha.163",
     "@mui/material": "5.12.2",
     "@mui/material-nextjs": "^5.15.6",
     "@mui/system": "5.12.1",

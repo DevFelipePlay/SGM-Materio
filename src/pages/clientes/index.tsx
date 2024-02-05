@@ -29,8 +29,21 @@ import CustomDataGrid from 'src/components/CustomDataGrid/CustomDataGrid'
 import { useRouter } from 'next/router'
 import { maskCnpj, maskCpf } from 'src/utils/masks/masks'
 import axios from 'axios'
+import { Avatar } from '@mui/material'
+import { getInitials } from 'src/@core/utils/get-initials'
 
 const columns: GridColDef[] = [
+  {
+    flex: 0.05,
+    minWidth: 100,
+    field: 'avatar',
+    headerName: 'Avatar',
+    renderCell: ({ row }: any) => {
+      if (row.avatar === '') return <Avatar>{getInitials(row.name)}</Avatar>
+
+      return <Avatar src={row.avatar} />
+    }
+  },
   {
     flex: 0.1,
     minWidth: 100,

@@ -43,9 +43,9 @@ export default function CustomDataGrid({ rows, columns, filterFunction, ...rest 
             paginationModel={paginationModel}
             onPaginationModelChange={setPaginationModel}
             hideFooterPagination
-            getRowSpacing={params => ({
-              top: params.isFirstVisible ? 10 : 5,
-              bottom: params.isLastVisible ? 10 : 5
+            getRowSpacing={() => ({
+              top: 5,
+              bottom: 5
             })}
             sx={{
               [`& .${gridClasses.row}`]: {
@@ -58,7 +58,11 @@ export default function CustomDataGrid({ rows, columns, filterFunction, ...rest 
                 border: 'none'
               },
               [`& .${gridClasses.columnHeader}`]: {
-                border: 'none'
+                border: 'none',
+                width: 'calc(100% + 8px)'
+              },
+              [`& .${gridClasses.footerContainer}`]: {
+                mt: 1.5
               }
             }}
             {...rest}
