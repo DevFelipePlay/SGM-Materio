@@ -18,7 +18,7 @@ import CardHeader from '@mui/material/CardHeader'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import CardContent from '@mui/material/CardContent'
-import { DataGrid, GridColDef } from '@mui/x-data-grid'
+import { GridColDef } from '@mui/x-data-grid'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 
 // ** Icon Imports
@@ -46,8 +46,8 @@ import { ThemeColor } from 'src/@core/layouts/types'
 import { UsersType } from 'src/types/apps/userTypes'
 
 // ** Custom Table Components Imports
-import TableHeader from 'src/views/apps/user/list/TableHeader'
 import AddUserDrawer from 'src/views/apps/user/list/AddUserDrawer'
+import CustomDataGrid from 'src/components/CustomDataGrid/CustomDataGrid'
 
 interface UserRoleType {
   [key: string]: { icon: string; color: string }
@@ -262,10 +262,8 @@ const UserList = () => {
   // ** State
   const [role, setRole] = useState<string>('')
   const [plan, setPlan] = useState<string>('')
-  const [value, setValue] = useState<string>('')
   const [status, setStatus] = useState<string>('')
   const [addUserOpen, setAddUserOpen] = useState<boolean>(false)
-  const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 })
 
   // ** Hooks
   const dispatch = useDispatch<AppDispatch>()
@@ -276,15 +274,11 @@ const UserList = () => {
       fetchData({
         role,
         status,
-        q: value,
+        q: '',
         currentPlan: plan
       })
     )
-  }, [dispatch, plan, role, status, value])
-
-  const handleFilter = useCallback((val: string) => {
-    setValue(val)
-  }, [])
+  }, [dispatch, plan, role, status])
 
   const handleRoleChange = useCallback((e: SelectChangeEvent) => {
     setRole(e.target.value)
@@ -299,6 +293,15 @@ const UserList = () => {
   }, [])
 
   const toggleAddUserDrawer = () => setAddUserOpen(!addUserOpen)
+
+  const filterFunction = useCallback(
+    (row: any) => {
+      const matchRole = plan === '' || row.plan === plan
+
+      return matchRole
+    },
+    [plan]
+  )
 
   return (
     <Grid container spacing={6}>
@@ -347,7 +350,7 @@ const UserList = () => {
         </Grid>
       </Grid>
       <Grid item xs={12}>
-        <Card>
+        <Card sx={{ px: 4 }}>
           <CardHeader title='Filtrar' />
           <CardContent>
             <Grid container spacing={6}>
@@ -408,14 +411,8 @@ const UserList = () => {
             </Grid>
           </CardContent>
           <Divider />
-          <TableHeader
-            value={value}
-            handleFilter={handleFilter}
-            toggle={toggleAddUserDrawer}
-            placeholderSearch='Buscar Parceiro'
-            titleButton='Novo Parceiro'
-          />
-          <DataGrid
+
+          {/* <DataGrid
             autoHeight
             rows={store.data}
             columns={columns}
@@ -424,7 +421,8 @@ const UserList = () => {
             pageSizeOptions={[10, 25, 50]}
             paginationModel={paginationModel}
             onPaginationModelChange={setPaginationModel}
-          />
+          /> */}
+          <CustomDataGrid columns={columns} rows={store.data} filterFunction={filterFunction} />
         </Card>
       </Grid>
 
