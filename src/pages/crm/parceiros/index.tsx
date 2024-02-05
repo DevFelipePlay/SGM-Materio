@@ -48,6 +48,7 @@ import { UsersType } from 'src/types/apps/userTypes'
 // ** Custom Table Components Imports
 import AddUserDrawer from 'src/views/apps/user/list/AddUserDrawer'
 import CustomDataGrid from 'src/components/CustomDataGrid/CustomDataGrid'
+import { useRouter } from 'next/router'
 
 interface UserRoleType {
   [key: string]: { icon: string; color: string }
@@ -268,6 +269,7 @@ const UserList = () => {
   // ** Hooks
   const dispatch = useDispatch<AppDispatch>()
   const store = useSelector((state: RootState) => state.user)
+  const router = useRouter()
 
   useEffect(() => {
     dispatch(
@@ -422,7 +424,12 @@ const UserList = () => {
             paginationModel={paginationModel}
             onPaginationModelChange={setPaginationModel}
           /> */}
-          <CustomDataGrid columns={columns} rows={store.data} filterFunction={filterFunction} />
+          <CustomDataGrid
+            columns={columns}
+            rows={store.data}
+            filterFunction={filterFunction}
+            toggle={() => router.push('/home')}
+          />
         </Card>
       </Grid>
 
