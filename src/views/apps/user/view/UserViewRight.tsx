@@ -19,13 +19,13 @@ import Icon from 'src/@core/components/icon'
 
 // ** Demo Components Imports
 import UserViewBilling from 'src/views/apps/user/view/UserViewBilling'
-import UserViewOverview from 'src/views/apps/user/view/UserViewOverview'
-import UserViewSecurity from 'src/views/apps/user/view/UserViewSecurity'
 import UserViewConnection from 'src/views/apps/user/view/UserViewConnection'
 import UserViewNotification from 'src/views/apps/user/view/UserViewNotification'
 
 // ** Types
 import { InvoiceType } from 'src/types/apps/invoiceTypes'
+import DetalhesCliente from './DetalhesCliente'
+import ConsumoCliente from './ConsumoCliente'
 
 interface Props {
   tab: string
@@ -182,10 +182,10 @@ const UserViewRight = ({ tab, invoiceData, userID }: Props) => {
         ) : (
           <>
             <TabPanel sx={{ p: 0 }} value='detalhes'>
-              <UserViewOverview invoiceData={invoiceData} />
+              <DetalhesCliente />
             </TabPanel>
             <TabPanel sx={{ p: 0 }} value='consumo'>
-              <UserViewSecurity />
+              <ConsumoCliente />
             </TabPanel>
             <TabPanel sx={{ p: 0 }} value='alterarplano'>
               <UserViewBilling />
