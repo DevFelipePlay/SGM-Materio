@@ -21,18 +21,51 @@ const TableHeader = (props: TableHeaderProps) => {
   return (
     <Box sx={{ p: 5, pb: 3, display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between' }}>
       <Button
-        sx={{ mr: 4, mb: 2 }}
+        sx={{
+          mr: {
+            xs: 0,
+            sm: 4
+          },
+          mb: 2,
+          width: {
+            xs: '100%',
+            sm: 'auto'
+          }
+        }}
         color='secondary'
         variant='outlined'
         startIcon={<Icon icon='mdi:export-variant' fontSize={20} />}
       >
         Exportar
       </Button>
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
+      <Box
+        sx={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          alignItems: 'center',
+          justifyContent: {
+            xs: 'center',
+            sm: 'inherit'
+          }
+        }}
+      >
         <TextField
           size='small'
           value={value}
-          sx={{ mr: 4, mb: 2, display: 'flex', alignItems: 'center', gap: 5 }}
+          sx={{
+            mr: {
+              xs: 0,
+              sm: 4
+            },
+            mb: 2,
+            display: 'flex',
+            alignItems: 'center',
+            gap: 5,
+            width: {
+              xs: '100%',
+              sm: 'auto'
+            }
+          }}
           placeholder={placeholderSearch}
           onChange={e => handleFilter(e.target.value)}
           InputProps={{
@@ -40,7 +73,17 @@ const TableHeader = (props: TableHeaderProps) => {
           }}
         />
         {titleButton && (
-          <Button sx={{ mb: 2 }} onClick={toggle} variant='contained'>
+          <Button
+            sx={{
+              mb: 2,
+              width: {
+                xs: '100%',
+                sm: 'auto'
+              }
+            }}
+            onClick={toggle}
+            variant='contained'
+          >
             {titleButton}
           </Button>
         )}

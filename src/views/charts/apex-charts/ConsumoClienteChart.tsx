@@ -13,6 +13,7 @@ import InputAdornment from '@mui/material/InputAdornment'
 import format from 'date-fns/format'
 import { ApexOptions } from 'apexcharts'
 import DatePicker from 'react-datepicker'
+import { ptBR } from 'date-fns/locale'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
@@ -123,8 +124,8 @@ const ConsumoClienteChart = ({ title, series }: ConsumoClienteChartProps) => {
   }
 
   const CustomInput = forwardRef((props: PickerProps, ref) => {
-    const startDate = props.start !== null ? format(props.start, 'MM/dd/yyyy') : ''
-    const endDate = props.end !== null ? ` - ${format(props.end, 'MM/dd/yyyy')}` : null
+    const startDate = props.start !== null ? format(props.start, 'dd/MM/yyyy') : ''
+    const endDate = props.end !== null ? ` - ${format(props.end, 'dd/MM/yyyy')}` : null
 
     const value = `${startDate}${endDate !== null ? endDate : ''}`
 
@@ -177,6 +178,7 @@ const ConsumoClienteChart = ({ title, series }: ConsumoClienteChartProps) => {
             onChange={handleOnChange}
             placeholderText='Selecione uma data'
             customInput={<CustomInput start={startDate as Date | number} end={endDate as Date | number} />}
+            locale={ptBR}
           />
         }
       />

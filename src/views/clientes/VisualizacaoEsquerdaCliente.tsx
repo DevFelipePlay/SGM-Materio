@@ -8,7 +8,6 @@ import Card from '@mui/material/Card'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import Select from '@mui/material/Select'
-import Switch from '@mui/material/Switch'
 import Divider from '@mui/material/Divider'
 import MenuItem from '@mui/material/MenuItem'
 import { styled } from '@mui/material/styles'
@@ -21,9 +20,7 @@ import DialogTitle from '@mui/material/DialogTitle'
 import FormControl from '@mui/material/FormControl'
 import DialogContent from '@mui/material/DialogContent'
 import DialogActions from '@mui/material/DialogActions'
-import InputAdornment from '@mui/material/InputAdornment'
 import LinearProgress from '@mui/material/LinearProgress'
-import FormControlLabel from '@mui/material/FormControlLabel'
 import DialogContentText from '@mui/material/DialogContentText'
 
 // ** Icon Imports
@@ -31,20 +28,17 @@ import Icon from 'src/@core/components/icon'
 
 // ** Custom Components
 import CustomChip from 'src/@core/components/mui/chip'
-import CustomAvatar from 'src/@core/components/mui/avatar'
 import UserSuspendDialog from 'src/views/apps/user/view/UserSuspendDialog'
 import UserSubscriptionDialog from 'src/views/apps/user/view/UserSubscriptionDialog'
 
 // ** Types
-import { ThemeColor } from 'src/@core/layouts/types'
 import { UsersType } from 'src/types/apps/userTypes'
 
 // ** Utils Import
+import { Avatar } from '@mui/material'
+import { maskCpf } from 'src/utils/masks/masks'
+import toast from 'react-hot-toast'
 import { getInitials } from 'src/@core/utils/get-initials'
-
-interface ColorsType {
-  [key: string]: ThemeColor
-}
 
 const data: UsersType = {
   id: 1,
@@ -61,18 +55,10 @@ const data: UsersType = {
   avatar: '/images/avatars/4.png'
 }
 
-const roleColors: ColorsType = {
-  admin: 'error',
-  editor: 'info',
-  author: 'warning',
-  maintainer: 'success',
-  subscriber: 'primary'
-}
-
 // ** Styled <sup> component
 const Sup = styled('sup')(({ theme }) => ({
   top: '0.2rem',
-  left: '-0.6rem',
+  left: '-1.125rem',
   position: 'absolute',
   color: theme.palette.primary.main
 }))
@@ -84,7 +70,11 @@ const Sub = styled('sub')({
   alignSelf: 'flex-end'
 })
 
-const UserViewLeft = () => {
+interface VisualizacaoEsquerdaClienteProps {
+  userData: any
+}
+
+const VisualizacaoEsquerdaCliente = ({ userData }: VisualizacaoEsquerdaClienteProps) => {
   // ** States
   const [openEdit, setOpenEdit] = useState<boolean>(false)
   const [openPlans, setOpenPlans] = useState<boolean>(false)
@@ -95,117 +85,96 @@ const UserViewLeft = () => {
   const handleEditClickOpen = () => setOpenEdit(true)
   const handleEditClose = () => setOpenEdit(false)
 
-  // Handle Upgrade Plan dialog
+  // Handle Altera Plan dialog
   const handlePlansClickOpen = () => setOpenPlans(true)
   const handlePlansClose = () => setOpenPlans(false)
+  const handleAlteraPlano = () => {
+    handlePlansClose()
+    toast.success('Alteração feita com sucesso!')
+  }
 
   if (data) {
     return (
       <Grid container spacing={6}>
         <Grid item xs={12}>
           <Card>
-            <CardContent sx={{ pt: 15, display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
-              {data.avatar ? (
-                <CustomAvatar
-                  src={data.avatar}
-                  variant='rounded'
-                  alt={data.fullName}
-                  sx={{ width: 120, height: 120, fontWeight: 600, mb: 4 }}
-                />
-              ) : (
-                <CustomAvatar
-                  skin='light'
-                  variant='rounded'
-                  color={data.avatarColor as ThemeColor}
-                  sx={{ width: 120, height: 120, fontWeight: 600, mb: 4, fontSize: '3rem' }}
+            <CardContent sx={{ pt: 10, display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+              {userData.avatar === '' ? (
+                <Avatar
+                  sx={{
+                    color: '#fff',
+                    bgcolor: theme => theme.palette.primary.main,
+                    width: '7rem',
+                    height: '7rem',
+                    fontSize: '2rem'
+                  }}
                 >
-                  {getInitials(data.fullName)}
-                </CustomAvatar>
+                  {getInitials(userData.name)}
+                </Avatar>
+              ) : (
+                <Avatar sx={{ width: '7rem', height: '7rem' }} src={userData.avatar} />
               )}
-              <Typography variant='h6' sx={{ mb: 4 }}>
-                {data.fullName}
+              {/* <Avatar src={userData.avatar} sx={{ width: '7rem', height: '7rem' }} /> */}
+              <Typography variant='h6' sx={{ mb: 2, mt: 3 }}>
+                {userData.name}
               </Typography>
-              <CustomChip
-                skin='light'
-                size='small'
-                label={data.role}
-                color={roleColors[data.role]}
-                sx={{ textTransform: 'capitalize' }}
-              />
-            </CardContent>
-
-            <CardContent sx={{ my: 1 }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Box sx={{ mr: 8, display: 'flex', alignItems: 'center' }}>
-                  <CustomAvatar skin='light' variant='rounded' sx={{ mr: 4, width: 44, height: 44 }}>
-                    <Icon icon='mdi:check' />
-                  </CustomAvatar>
-                  <div>
-                    <Typography variant='h6'>1.23k</Typography>
-                    <Typography variant='body2'>Task Done</Typography>
-                  </div>
-                </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <CustomAvatar skin='light' variant='rounded' sx={{ mr: 4, width: 44, height: 44 }}>
-                    <Icon icon='mdi:star-outline' />
-                  </CustomAvatar>
-                  <div>
-                    <Typography variant='h6'>568</Typography>
-                    <Typography variant='body2'>Project Done</Typography>
-                  </div>
-                </Box>
-              </Box>
             </CardContent>
 
             <CardContent>
-              <Typography variant='h6'>Details</Typography>
+              <Typography variant='h6'>Dados Pessoais</Typography>
               <Divider sx={{ my: theme => `${theme.spacing(4)} !important` }} />
               <Box sx={{ pb: 1 }}>
                 <Box sx={{ display: 'flex', mb: 2 }}>
-                  <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>Username:</Typography>
-                  <Typography variant='body2'>@{data.username}</Typography>
+                  <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>CPF:</Typography>
+                  <Typography variant='body2'>{maskCpf(userData.cpf)}</Typography>
                 </Box>
                 <Box sx={{ display: 'flex', mb: 2 }}>
-                  <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>Billing Email:</Typography>
-                  <Typography variant='body2'>{data.email}</Typography>
-                </Box>
-                <Box sx={{ display: 'flex', mb: 2 }}>
-                  <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>Status:</Typography>
+                  <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>Data de Nascimento:</Typography>
                   <Typography variant='body2' sx={{ textTransform: 'capitalize' }}>
-                    {data.status}
+                    09/01/2001
                   </Typography>
                 </Box>
                 <Box sx={{ display: 'flex', mb: 2 }}>
-                  <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>Role:</Typography>
-                  <Typography variant='body2' sx={{ textTransform: 'capitalize' }}>
-                    {data.role}
-                  </Typography>
+                  <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>Email:</Typography>
+                  <Typography variant='body2'>teste@teste.com</Typography>
                 </Box>
                 <Box sx={{ display: 'flex', mb: 2 }}>
-                  <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>Tax ID:</Typography>
-                  <Typography variant='body2'>Tax-8894</Typography>
+                  <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>Celular:</Typography>
+                  <Typography variant='body2'>{userData.msisdn}</Typography>
                 </Box>
                 <Box sx={{ display: 'flex', mb: 2 }}>
-                  <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>Contact:</Typography>
-                  <Typography variant='body2'>+1 {data.contact}</Typography>
+                  <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>WhatsApp:</Typography>
+                  <Typography variant='body2'>{userData.msisdn}</Typography>
                 </Box>
                 <Box sx={{ display: 'flex', mb: 2 }}>
-                  <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>Language:</Typography>
-                  <Typography variant='body2'>English</Typography>
+                  <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>CEP:</Typography>
+                  <Typography variant='body2'>72870-265</Typography>
                 </Box>
-                <Box sx={{ display: 'flex' }}>
-                  <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>Country:</Typography>
-                  <Typography variant='body2'>{data.country}</Typography>
+                <Box sx={{ display: 'flex', mb: 2 }}>
+                  <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>UF:</Typography>
+                  <Typography variant='body2'>DF</Typography>
+                </Box>
+                <Box sx={{ display: 'flex', mb: 2 }}>
+                  <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>Cidade:</Typography>
+                  <Typography variant='body2'>Brasília</Typography>
+                </Box>
+                <Box sx={{ display: 'flex', mb: 2 }}>
+                  <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>Bairro:</Typography>
+                  <Typography variant='body2'>Riacho Fundo</Typography>
+                </Box>
+                <Box sx={{ display: 'flex', mb: 2 }}>
+                  <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>Endereço:</Typography>
+                  <Typography variant='body2'>QN 8B 12 Casa 25</Typography>
                 </Box>
               </Box>
             </CardContent>
 
-            <CardActions sx={{ display: 'flex', justifyContent: 'center' }}>
-              <Button variant='contained' sx={{ mr: 2 }} onClick={handleEditClickOpen}>
-                Edit
+            <CardActions sx={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: 3 }}>
+              <Button variant='contained' onClick={handleEditClickOpen}>
+                Editar
               </Button>
               <Button color='error' variant='outlined' onClick={() => setSuspendDialogOpen(true)}>
-                Suspend
+                Excluir Linha
               </Button>
             </CardActions>
 
@@ -225,7 +194,7 @@ const UserViewLeft = () => {
                   pt: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(12.5)} !important`]
                 }}
               >
-                Edit User Information
+                Editar Dados do Cliente
               </DialogTitle>
               <DialogContent
                 sx={{
@@ -233,87 +202,57 @@ const UserViewLeft = () => {
                   px: theme => [`${theme.spacing(5)} !important`, `${theme.spacing(15)} !important`]
                 }}
               >
-                <DialogContentText variant='body2' id='user-view-edit-description' sx={{ textAlign: 'center', mb: 7 }}>
-                  Updating user details will receive a privacy audit.
-                </DialogContentText>
                 <form>
-                  <Grid container spacing={6}>
+                  <Grid container spacing={6} sx={{ mt: 1 }}>
+                    <Grid item xs={12}>
+                      <TextField fullWidth label='Nome*' />
+                    </Grid>
                     <Grid item xs={12} sm={6}>
-                      <TextField fullWidth label='Full Name' defaultValue={data.fullName} />
+                      <TextField fullWidth label='CPF*' placeholder='000.000.000-00' />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField fullWidth label={'RG*'} />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField fullWidth label={'Data Nascimento*'} placeholder='dd/mm/yyyy' />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField fullWidth label='Email*' placeholder='seu@email.com' />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField fullWidth label='Celular*' placeholder='(00) 0 0000-0000' />
                     </Grid>
                     <Grid item xs={12} sm={6}>
                       <TextField
                         fullWidth
-                        label='Username'
-                        defaultValue={data.username}
-                        InputProps={{ startAdornment: <InputAdornment position='start'>@</InputAdornment> }}
+                        label='WhatsApp*'
+                        placeholder='(00) 0 0000-0000'
+                        InputProps={{ endAdornment: <Icon icon='mdi:whatsapp' color='#56CA00' /> }}
                       />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                      <TextField fullWidth type='email' label='Billing Email' defaultValue={data.email} />
+                      <TextField fullWidth label='CEP*' placeholder='00000-000' />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                      <FormControl fullWidth>
-                        <InputLabel id='user-view-status-label'>Status</InputLabel>
-                        <Select
-                          label='Status'
-                          defaultValue={data.status}
-                          id='user-view-status'
-                          labelId='user-view-status-label'
-                        >
-                          <MenuItem value='pending'>Pending</MenuItem>
-                          <MenuItem value='active'>Active</MenuItem>
-                          <MenuItem value='inactive'>Inactive</MenuItem>
-                        </Select>
-                      </FormControl>
+                      <TextField fullWidth label='UF*' placeholder='Ex: DF' />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                      <TextField fullWidth label='TAX ID' defaultValue='Tax-8894' />
+                      <TextField fullWidth label='Cidade*' placeholder='Ex: Brasília' />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                      <TextField fullWidth label='Contact' defaultValue={`+1 ${data.contact}`} />
+                      <TextField fullWidth label='Bairro*' placeholder='Ex: Parque São José' />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                      <FormControl fullWidth>
-                        <InputLabel id='user-view-language-label'>Language</InputLabel>
-                        <Select
-                          label='Language'
-                          defaultValue='English'
-                          id='user-view-language'
-                          labelId='user-view-language-label'
-                        >
-                          <MenuItem value='English'>English</MenuItem>
-                          <MenuItem value='Spanish'>Spanish</MenuItem>
-                          <MenuItem value='Portuguese'>Portuguese</MenuItem>
-                          <MenuItem value='Russian'>Russian</MenuItem>
-                          <MenuItem value='French'>French</MenuItem>
-                          <MenuItem value='German'>German</MenuItem>
-                        </Select>
-                      </FormControl>
+                      <TextField fullWidth label='Logradouro*' placeholder='Ex: Viela 16' />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                      <FormControl fullWidth>
-                        <InputLabel id='user-view-country-label'>Country</InputLabel>
-                        <Select
-                          label='Country'
-                          defaultValue='USA'
-                          id='user-view-country'
-                          labelId='user-view-country-label'
-                        >
-                          <MenuItem value='USA'>USA</MenuItem>
-                          <MenuItem value='UK'>UK</MenuItem>
-                          <MenuItem value='Spain'>Spain</MenuItem>
-                          <MenuItem value='Russia'>Russia</MenuItem>
-                          <MenuItem value='France'>France</MenuItem>
-                          <MenuItem value='Germany'>Germany</MenuItem>
-                        </Select>
-                      </FormControl>
+                      <TextField fullWidth label='Número*' placeholder='Ex: 123' />
                     </Grid>
                     <Grid item xs={12}>
-                      <FormControlLabel
-                        label='Use as a billing address?'
-                        control={<Switch defaultChecked />}
-                        sx={{ '& .MuiTypography-root': { fontWeight: 500 } }}
+                      <TextField
+                        fullWidth
+                        label='Complemento*'
+                        placeholder='Ex: Sobrado verde ao lado da sorveteria...'
                       />
                     </Grid>
                   </Grid>
@@ -327,10 +266,10 @@ const UserViewLeft = () => {
                 }}
               >
                 <Button variant='contained' sx={{ mr: 2 }} onClick={handleEditClose}>
-                  Submit
+                  Enviar
                 </Button>
                 <Button variant='outlined' color='secondary' onClick={handleEditClose}>
-                  Cancel
+                  Cancelar
                 </Button>
               </DialogActions>
             </Dialog>
@@ -342,24 +281,24 @@ const UserViewLeft = () => {
 
         <Grid item xs={12}>
           <Card sx={{ boxShadow: 'none', border: theme => `2px solid ${theme.palette.primary.main}` }}>
-            <CardContent
-              sx={{ display: 'flex', flexWrap: 'wrap', pb: '0 !important', justifyContent: 'space-between' }}
-            >
-              <CustomChip skin='light' size='small' color='primary' label='Standard' />
-              <Box sx={{ display: 'flex', position: 'relative' }}>
+            <CardContent sx={{ display: 'flex', flexWrap: 'wrap', pb: '0 !important', justifyContent: 'center' }}>
+              <CustomChip skin='light' size='small' color='primary' label='(Start) 6Gb + 100 Minutos + 60 sms' />
+              <Box
+                sx={{
+                  display: 'flex',
+                  position: 'relative'
+                }}
+              >
                 <Typography variant='h6' sx={{ color: 'primary.main', alignSelf: 'flex-end' }}>
-                  $
+                  R$
                 </Typography>
                 <Typography
-                  variant='h3'
+                  variant='h4'
                   sx={{
                     color: 'primary.main'
                   }}
                 >
-                  99
-                </Typography>
-                <Typography variant='body2' sx={{ color: 'text.primary', alignSelf: 'flex-end' }}>
-                  / month
+                  29,90
                 </Typography>
               </Box>
             </CardContent>
@@ -368,7 +307,7 @@ const UserViewLeft = () => {
               <Box sx={{ mt: 6, mb: 5 }}>
                 <Box sx={{ display: 'flex', mb: 3.5, alignItems: 'center', '& svg': { mr: 2, color: 'grey.300' } }}>
                   <Icon icon='mdi:circle' fontSize='0.5rem' />
-                  <Typography variant='body2'>10 Users</Typography>
+                  <Typography variant='body2'>6 GB</Typography>
                 </Box>
                 <Box
                   sx={{
@@ -379,7 +318,7 @@ const UserViewLeft = () => {
                   }}
                 >
                   <Icon icon='mdi:circle' fontSize='0.5rem' />
-                  <Typography variant='body2'>Up to 10GB storage</Typography>
+                  <Typography variant='body2'>WhatsApp Grátis</Typography>
                 </Box>
                 <Box
                   sx={{
@@ -389,23 +328,27 @@ const UserViewLeft = () => {
                   }}
                 >
                   <Icon icon='mdi:circle' fontSize='0.5rem' />
-                  <Typography variant='body2'>Basic Support</Typography>
+                  <Typography variant='body2'>100 Minutos</Typography>
                 </Box>
               </Box>
+              <Divider sx={{ width: '100%', mx: 'auto' }} />
+              <Typography variant='h6' sx={{ color: 'text.primary', fontWeight: 600, my: 2 }}>
+                Consumo
+              </Typography>
               <Box sx={{ display: 'flex', mb: 1.5, justifyContent: 'space-between' }}>
                 <Typography variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }}>
-                  Days
+                  Gasto: 3GB
                 </Typography>
                 <Typography variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }}>
-                  26 of 30 Days
+                  Total: 6GB
                 </Typography>
               </Box>
-              <LinearProgress value={86.66} variant='determinate' sx={{ height: 6, borderRadius: '5px' }} />
+              <LinearProgress value={50} variant='determinate' sx={{ height: 6, borderRadius: '5px' }} />
               <Typography variant='caption' sx={{ mt: 1.5, mb: 6, display: 'block' }}>
-                4 days remaining
+                3GB restantes
               </Typography>
               <Button variant='contained' sx={{ width: '100%' }} onClick={handlePlansClickOpen}>
-                Upgrade Plan
+                Alterar Plano
               </Button>
             </CardContent>
 
@@ -422,17 +365,18 @@ const UserViewLeft = () => {
                   textAlign: 'center',
                   fontSize: '1.5rem !important',
                   px: theme => [`${theme.spacing(5)} !important`, `${theme.spacing(15)} !important`],
-                  pt: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(12.5)} !important`]
+                  pt: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(12.5)} !important`],
+                  mb: -4
                 }}
               >
-                Upgrade Plan
+                Alterar Plano
               </DialogTitle>
 
               <DialogContent
                 sx={{ px: theme => [`${theme.spacing(5)} !important`, `${theme.spacing(15)} !important`] }}
               >
                 <DialogContentText variant='body2' sx={{ textAlign: 'center' }} id='user-view-plans-description'>
-                  Choose the best plan for the user.
+                  Escolha o melhor plano para o usuário.
                 </DialogContentText>
               </DialogContent>
 
@@ -447,21 +391,27 @@ const UserViewLeft = () => {
                 }}
               >
                 <FormControl fullWidth size='small' sx={{ mr: [0, 3], mb: [3, 0] }}>
-                  <InputLabel id='user-view-plans-select-label'>Choose Plan</InputLabel>
+                  <InputLabel id='user-view-plans-select-label'>Escolha o Plano</InputLabel>
                   <Select
-                    label='Choose Plan'
-                    defaultValue='Standard'
+                    label='Escolha o Plano'
+                    defaultValue='6gb'
                     id='user-view-plans-select'
                     labelId='user-view-plans-select-label'
                   >
-                    <MenuItem value='Basic'>Basic - $0/month</MenuItem>
-                    <MenuItem value='Standard'>Standard - $99/month</MenuItem>
-                    <MenuItem value='Enterprise'>Enterprise - $499/month</MenuItem>
-                    <MenuItem value='Company'>Company - $999/month</MenuItem>
+                    <MenuItem value='6gb'>PLAY 6Gb + 100 Minutos + 60 sms - R$29,90/mês</MenuItem>
+                    <MenuItem value='8gb'>
+                      PLAY 8Gb + Minutos Ilimitados + 100 sms + 1 Gb Portabilidade - R$34,90/mês
+                    </MenuItem>
+                    <MenuItem value='14gb'>
+                      PLAY 14Gb + Minutos Ilimitados + 100 sms + 1 Gb Portabilidade - R$39,90/mês
+                    </MenuItem>
+                    <MenuItem value='21gb'>
+                      PLAY 21Gb + Minutos Ilimitados + 100 sms + 1 Gb Portabilidade - R$49,90/mês
+                    </MenuItem>
                   </Select>
                 </FormControl>
-                <Button variant='contained' sx={{ minWidth: ['100%', 0] }}>
-                  Upgrade
+                <Button variant='contained' sx={{ minWidth: ['100%', 0] }} onClick={handleAlteraPlano}>
+                  ALTERAR
                 </Button>
               </DialogContent>
 
@@ -474,8 +424,13 @@ const UserViewLeft = () => {
                   pb: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(12.5)} !important`]
                 }}
               >
-                <Typography sx={{ fontWeight: 500, mb: 2, fontSize: '0.875rem' }}>
-                  User current plan is standard plan
+                <Typography
+                  sx={{ fontWeight: 500, mb: 2, fontSize: '0.875rem', wordBreak: 'break-word', maxWidth: '400px' }}
+                >
+                  O plano atual do usuário é:
+                  <Typography variant='inherit' fontWeight={700} sx={{ color: theme => theme.palette.primary.main }}>
+                    PLAY 6Gb + 100 Minutos + 60 sms
+                  </Typography>
                 </Typography>
                 <Box
                   sx={{
@@ -486,9 +441,9 @@ const UserViewLeft = () => {
                   }}
                 >
                   <Box sx={{ mr: 3, display: 'flex', ml: 2.4, position: 'relative' }}>
-                    <Sup>$</Sup>
+                    <Sup>R$</Sup>
                     <Typography
-                      variant='h3'
+                      variant='h5'
                       sx={{
                         mb: -1.2,
                         lineHeight: 1,
@@ -496,17 +451,12 @@ const UserViewLeft = () => {
                         fontSize: '3rem !important'
                       }}
                     >
-                      99
+                      29,90
                     </Typography>
-                    <Sub>/ month</Sub>
+                    <Sub>/ mês</Sub>
                   </Box>
-                  <Button
-                    color='error'
-                    variant='outlined'
-                    sx={{ mt: 2 }}
-                    onClick={() => setSubscriptionDialogOpen(true)}
-                  >
-                    Cancel Subscription
+                  <Button color='error' variant='outlined' sx={{ mt: 2 }} onClick={handlePlansClose}>
+                    Voltar
                   </Button>
                 </Box>
               </DialogContent>
@@ -520,4 +470,4 @@ const UserViewLeft = () => {
   }
 }
 
-export default UserViewLeft
+export default VisualizacaoEsquerdaCliente

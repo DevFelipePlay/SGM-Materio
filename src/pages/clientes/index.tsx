@@ -24,7 +24,6 @@ import CardStatisticsHorizontal from 'src/@core/components/card-statistics/card-
 // ** Third Party Components
 
 // ** Custom Table Components Imports
-import AddUserDrawer from 'src/views/apps/user/list/AddUserDrawer'
 import CustomDataGrid from 'src/components/CustomDataGrid/CustomDataGrid'
 import { useRouter } from 'next/router'
 import { maskCnpj, maskCpf } from 'src/utils/masks/masks'
@@ -41,7 +40,13 @@ const columns: GridColDef[] = [
     renderCell: ({ row }: any) => {
       return (
         <Box display='flex' alignItems='center' gap={4}>
-          {row.avatar === '' ? <Avatar>{getInitials(row.name)}</Avatar> : <Avatar src={row.avatar} />}
+          {row.avatar === '' ? (
+            <Avatar sx={{ color: '#fff', bgcolor: theme => theme.palette.primary.main }}>
+              {getInitials(row.name)}
+            </Avatar>
+          ) : (
+            <Avatar src={row.avatar} />
+          )}
           <p>{row.name}</p>
         </Box>
       )
@@ -82,7 +87,6 @@ const Clientes = () => {
   // ** State
   const [role, setRole] = useState<string>('')
   const [plan, setPlan] = useState<string>('')
-  const [addUserOpen, setAddUserOpen] = useState<boolean>(false)
 
   const handleRoleChange = useCallback((e: SelectChangeEvent) => {
     setRole(e.target.value)
@@ -91,8 +95,6 @@ const Clientes = () => {
   const handlePlanChange = useCallback((e: SelectChangeEvent) => {
     setPlan(e.target.value)
   }, [])
-
-  const toggleAddUserDrawer = () => setAddUserOpen(!addUserOpen)
 
   // ** Função de filtro
   const filterFunction = useCallback(
@@ -189,8 +191,6 @@ const Clientes = () => {
           />
         </Card>
       </Grid>
-
-      <AddUserDrawer open={addUserOpen} toggle={toggleAddUserDrawer} titleButton='Cadastrar Novo Parceiro' />
     </Grid>
   )
 }
