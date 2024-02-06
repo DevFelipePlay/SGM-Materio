@@ -8,7 +8,7 @@ import MuiAvatar, { AvatarProps } from '@mui/material/Avatar'
 const DetalhesCliente = () => {
   return (
     <Grid container spacing={6}>
-      <Grid item xs={6}>
+      <Grid item xs={12} sm={6}>
         <CustomCardOverview
           color='primary'
           stats='Pré-Pago'
@@ -16,7 +16,7 @@ const DetalhesCliente = () => {
           icon={<Icon color='secondary' icon='mdi:credit-card-outline' />}
         />
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={12} sm={6}>
         <CustomCardOverview
           color='primary'
           stats='8955170110114501412'
@@ -24,7 +24,7 @@ const DetalhesCliente = () => {
           icon={<Icon color='secondary' icon='mdi:barcode-scan' />}
         />
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={12} sm={6}>
         <CustomCardOverview
           color='primary'
           stats='PLAY MÓVEL'
@@ -32,7 +32,7 @@ const DetalhesCliente = () => {
           icon={<Icon color='secondary' icon='mdi:web' />}
         />
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={12} sm={6}>
         <CustomCardOverview
           color='primary'
           stats='Portabilidade não ocorreu'
@@ -40,7 +40,7 @@ const DetalhesCliente = () => {
           icon={<Icon color='secondary' icon='mdi:swap-horizontal' />}
         />
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={12} sm={6}>
         <CustomCardOverview
           color='primary'
           stats='(Start) 6Gb + 100 Minutos + 60 sms'
@@ -48,7 +48,7 @@ const DetalhesCliente = () => {
           icon={<Icon color='secondary' icon='mdi:cellphone' />}
         />
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={12} sm={6}>
         <CustomCardOverview
           color='primary'
           stats='ATIVO'
@@ -56,7 +56,7 @@ const DetalhesCliente = () => {
           icon={<Icon color='secondary' icon='mdi:magnify' />}
         />
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={12} sm={6}>
         <CustomCardOverview
           color='primary'
           stats='22/07/2023'
@@ -64,7 +64,7 @@ const DetalhesCliente = () => {
           icon={<Icon color='secondary' icon='mdi:calendar-start' />}
         />
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={12} sm={6}>
         <CustomCardOverview
           color='primary'
           stats='16/02/2024'
@@ -72,7 +72,7 @@ const DetalhesCliente = () => {
           icon={<Icon color='secondary' icon='mdi:calendar-end' />}
         />
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={12} sm={6}>
         <CustomCardOverview
           color='primary'
           stats='5.84 GB'
@@ -80,7 +80,7 @@ const DetalhesCliente = () => {
           icon={<Icon color='secondary' icon='mdi:signal-cellular-3' />}
         />
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={12} sm={6}>
         <CustomCardOverview
           color='primary'
           stats='198'
@@ -88,10 +88,10 @@ const DetalhesCliente = () => {
           icon={<Icon color='secondary' icon='mdi:clock' />}
         />
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={12} sm={6}>
         <CustomCardOverview color='primary' stats='120' title='SMS' icon={<Icon color='secondary' icon='mdi:sms' />} />
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={12} sm={6}>
         <CustomCardOverview
           color='primary'
           stats='Sem Revendedor'
