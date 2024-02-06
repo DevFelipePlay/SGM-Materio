@@ -18,7 +18,6 @@ import CircularProgress from '@mui/material/CircularProgress'
 import Icon from 'src/@core/components/icon'
 
 // ** Demo Components Imports
-import UserViewBilling from 'src/views/apps/user/view/UserViewBilling'
 import UserViewConnection from 'src/views/apps/user/view/UserViewConnection'
 import UserViewNotification from 'src/views/apps/user/view/UserViewNotification'
 
@@ -143,7 +142,7 @@ const UserViewRight = ({ tab, invoiceData }: Props) => {
         {isLoading ? (
           <Box sx={{ mt: 6, display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
             <CircularProgress sx={{ mb: 4 }} />
-            <Typography>Loading...</Typography>
+            <Typography>Carregando...</Typography>
           </Box>
         ) : (
           <>
@@ -151,9 +150,6 @@ const UserViewRight = ({ tab, invoiceData }: Props) => {
               <UserViewOverview invoiceData={invoiceData} />
             </TabPanel>
 
-            <TabPanel sx={{ p: 0 }} value='billing-plan'>
-              <UserViewBilling />
-            </TabPanel>
             <TabPanel sx={{ p: 0 }} value='notification'>
               <UserViewNotification />
             </TabPanel>
