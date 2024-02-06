@@ -20,12 +20,20 @@ const UserView = ({ tab, invoiceData, userID, user }: Props) => {
 
   return (
     <Grid container spacing={6}>
-      <Grid item xs={12} md={5} lg={4}>
-        <UserViewLeft userData={user} />
-      </Grid>
-      <Grid item xs={12} md={7} lg={8}>
-        <UserViewRight tab={tab} invoiceData={invoiceData} userID={userID} />
-      </Grid>
+      {tab !== 'cobrancas' && (
+        <Grid item xs={12} md={5} lg={4}>
+          <UserViewLeft userData={user} />
+        </Grid>
+      )}
+      {tab === 'cobrancas' ? (
+        <Grid item xs={12}>
+          <UserViewRight tab={tab} invoiceData={invoiceData} userID={userID} />
+        </Grid>
+      ) : (
+        <Grid item xs={12} md={7} lg={8}>
+          <UserViewRight tab={tab} invoiceData={invoiceData} userID={userID} />
+        </Grid>
+      )}
     </Grid>
   )
 }

@@ -18,7 +18,6 @@ import CircularProgress from '@mui/material/CircularProgress'
 import Icon from 'src/@core/components/icon'
 
 // ** Demo Components Imports
-import UserViewBilling from 'src/views/apps/user/view/UserViewBilling'
 import UserViewConnection from 'src/views/apps/user/view/UserViewConnection'
 import UserViewNotification from 'src/views/apps/user/view/UserViewNotification'
 
@@ -26,6 +25,9 @@ import UserViewNotification from 'src/views/apps/user/view/UserViewNotification'
 import { InvoiceType } from 'src/types/apps/invoiceTypes'
 import DetalhesCliente from './DetalhesCliente'
 import ConsumoCliente from './ConsumoCliente'
+import UserViewSecurity from './UserViewSecurity'
+import BloqueioDeLinha from './BloqueioDeLinha'
+import FaturasCliente from './FaturasCliente'
 
 interface Props {
   tab: string
@@ -113,15 +115,6 @@ const UserViewRight = ({ tab, invoiceData, userID }: Props) => {
           }
         />
         <Tab
-          value='alterarplano'
-          label={
-            <Box sx={{ display: 'flex', alignItems: 'center', '& svg': { mr: 2 } }}>
-              <Icon fontSize={20} icon='bxs:collection' />
-              Alterar Plano
-            </Box>
-          }
-        />
-        <Tab
           value='recargaadicional'
           label={
             <Box sx={{ display: 'flex', alignItems: 'center', '& svg': { mr: 2 } }}>
@@ -177,7 +170,7 @@ const UserViewRight = ({ tab, invoiceData, userID }: Props) => {
         {isLoading ? (
           <Box sx={{ mt: 6, display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
             <CircularProgress sx={{ mb: 4 }} />
-            <Typography>Loading...</Typography>
+            <Typography>Carregando...</Typography>
           </Box>
         ) : (
           <>
@@ -187,23 +180,20 @@ const UserViewRight = ({ tab, invoiceData, userID }: Props) => {
             <TabPanel sx={{ p: 0 }} value='consumo'>
               <ConsumoCliente />
             </TabPanel>
-            <TabPanel sx={{ p: 0 }} value='alterarplano'>
-              <UserViewBilling />
-            </TabPanel>
             <TabPanel sx={{ p: 0 }} value='recargaadicional'>
               <UserViewNotification />
             </TabPanel>
             <TabPanel sx={{ p: 0 }} value='portabilidade'>
-              <UserViewConnection />
+              <UserViewSecurity />
             </TabPanel>
             <TabPanel sx={{ p: 0 }} value='cobrancas'>
-              <UserViewConnection />
+              <FaturasCliente />
             </TabPanel>
             <TabPanel sx={{ p: 0 }} value='recorrencia'>
               <UserViewConnection />
             </TabPanel>
             <TabPanel sx={{ p: 0 }} value='bloqueio'>
-              <UserViewConnection />
+              <BloqueioDeLinha />
             </TabPanel>
             <TabPanel sx={{ p: 0 }} value='addprotocolo'>
               <UserViewConnection />
