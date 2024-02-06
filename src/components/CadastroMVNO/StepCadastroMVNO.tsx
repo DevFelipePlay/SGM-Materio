@@ -85,7 +85,6 @@ const StepCadastrarMVNO = ({ handleNext }: { [key: string]: () => void }) => {
       numeroendereco,
       telefone,
       tradename,
-      walletid,
       logo
     } = data
 
@@ -104,7 +103,6 @@ const StepCadastrarMVNO = ({ handleNext }: { [key: string]: () => void }) => {
       bairro,
       inscricaomunicipal,
       inscricaoestadual,
-      walletid,
       consultor,
       logo: logo[0]
     }
@@ -320,13 +318,7 @@ const StepCadastrarMVNO = ({ handleNext }: { [key: string]: () => void }) => {
         </Grid>
 
         <Grid item xs={12} sm={6}>
-          <TextField
-            fullWidth
-            label='Wallet ID'
-            {...register('walletid')}
-            error={!!errors.walletid}
-            helperText={errors.walletid?.message}
-          />
+          <TextField fullWidth label='Wallet ID' {...register('walletid')} />
         </Grid>
 
         <Grid item xs={12}>
