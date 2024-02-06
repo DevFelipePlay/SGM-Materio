@@ -50,7 +50,6 @@ import { UsersType } from 'src/types/apps/userTypes'
 
 // ** Custom Table Components Imports
 import CadastroMVNO from 'src/components/CadastroMVNO'
-import { useRouter } from 'next/router'
 import CustomDataGrid from 'src/components/CustomDataGrid/CustomDataGrid'
 
 interface UserRoleType {
@@ -176,7 +175,7 @@ const columns: GridColDef[] = [
     flex: 0.2,
     minWidth: 230,
     field: 'fullName',
-    headerName: 'User',
+    headerName: 'Parceiro',
     renderCell: ({ row }: CellType) => {
       const { fullName, username } = row
 
@@ -194,38 +193,16 @@ const columns: GridColDef[] = [
     }
   },
   {
-    flex: 0.2,
-    minWidth: 250,
-    field: 'email',
-    headerName: 'Email',
-    renderCell: ({ row }: CellType) => {
-      return (
-        <Typography noWrap variant='body2'>
-          {row.email}
-        </Typography>
-      )
-    }
+    flex: 0.1,
+    minWidth: 110,
+    field: 'id',
+    headerName: 'ID'
   },
-  {
-    flex: 0.15,
-    field: 'role',
-    minWidth: 150,
-    headerName: 'Role',
-    renderCell: ({ row }: CellType) => {
-      return (
-        <Box sx={{ display: 'flex', alignItems: 'center', '& svg': { mr: 3, color: 'userRoleObj[row.role].color' } }}>
-          <Icon icon={userRoleObj[row.role].icon} fontSize={20} />
-          <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
-            {row.role}
-          </Typography>
-        </Box>
-      )
-    }
-  },
+
   {
     flex: 0.15,
     minWidth: 120,
-    headerName: 'Plan',
+    headerName: 'CNPJ',
     field: 'currentPlan',
     renderCell: ({ row }: CellType) => {
       return (
@@ -251,14 +228,6 @@ const columns: GridColDef[] = [
         />
       )
     }
-  },
-  {
-    flex: 0.1,
-    minWidth: 90,
-    sortable: false,
-    field: 'actions',
-    headerName: 'Actions',
-    renderCell: ({ row }: CellType) => <RowOptions id={row.id} />
   }
 ]
 
@@ -271,7 +240,6 @@ const UserList = () => {
   // ** Hooks
   const dispatch = useDispatch<AppDispatch>()
   const store = useSelector((state: RootState) => state.user)
-  const router = useRouter()
 
   useEffect(() => {
     dispatch(
@@ -300,15 +268,15 @@ const UserList = () => {
 
   const [open, setOpen] = useState(false)
 
-  // const handleClickOpen = () => {
-  //   setOpen(true)
-  // }
+  const handleClickOpen = () => {
+    setOpen(true)
+  }
 
   const handleClose = () => {
     setOpen(false)
   }
 
-  // const toggleAddUserDrawer = () => handleClickOpen()
+  const toggleAddUserDrawer = () => handleClickOpen()
 
   const filterFunction = useCallback(
     (row: any) => {
@@ -442,7 +410,7 @@ const UserList = () => {
             columns={columns}
             rows={store.data}
             filterFunction={filterFunction}
-            toggle={() => router.push('/home')}
+            toggle={() => toggleAddUserDrawer()}
           />
         </Card>
       </Grid>
