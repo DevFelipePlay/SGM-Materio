@@ -58,9 +58,9 @@ const DefaultPalette = (mode: Palette['mode'], skin: Skin, themeColor: ThemeColo
       light: lightColor,
       primaryGradient: primaryGradient(),
       bodyBg: mode === 'light' ? '#F4F5FA' : '#28243D', // Same as palette.background.default but doesn't consider bordered skin
-      trackBg: mode === 'light' ? '#F0F2F8' : '#474360',
-      avatarBg: mode === 'light' ? '#F0EFF0' : '#3F3B59',
-      darkBg: skin === 'bordered' ? '#312D4B' : '#28243D',
+      trackBg: mode === 'light' ? '#F0F2F8' : '#404040',
+      avatarBg: mode === 'light' ? '#F0EFF0' : '#202020',
+      darkBg: skin === 'bordered' ? '#202020' : '#161616',
       lightBg: skin === 'bordered' ? whiteColor : '#F4F5FA',
       tableHeaderBg: mode === 'light' ? primaryGradient() : tableHeaderGradient()
     },

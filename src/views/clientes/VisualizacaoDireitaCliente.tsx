@@ -17,19 +17,20 @@ import CircularProgress from '@mui/material/CircularProgress'
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 
-// ** Demo Components Imports
-import UserViewBilling from 'src/views/apps/user/view/UserViewBilling'
-import UserViewOverview from 'src/views/apps/user/view/UserViewOverview'
-import UserViewSecurity from 'src/views/apps/user/view/UserViewSecurity'
-import UserViewConnection from 'src/views/apps/user/view/UserViewConnection'
-import UserViewNotification from 'src/views/apps/user/view/UserViewNotification'
-
 // ** Types
 import { InvoiceType } from 'src/types/apps/invoiceTypes'
+import DetalhesCliente from './DetalhesCliente'
+import ConsumoCliente from './ConsumoCliente'
+import RecargaAdicionalCliente from './RecargaAdicionalCliente'
+import PortabilidadeCliente from './PortabilidadeCliente'
+import FaturasCliente from './FaturasCliente'
+import BloqueioDeLinha from './BloqueioDeLinha'
+import AdicionarProtocoloCliente from './AdicionarProtocoloCliente'
 
 interface Props {
   tab: string
   invoiceData: InvoiceType[]
+  userID: string
 }
 
 // ** Styled Tab component
@@ -53,9 +54,9 @@ const TabList = styled(MuiTabList)<TabListProps>(({ theme }) => ({
   }
 }))
 
-const UserViewRight = ({ tab, invoiceData }: Props) => {
+const VisualizacaoDireitaCliente = ({ tab, invoiceData, userID }: Props) => {
   // ** State
-  const [activeTab, setActiveTab] = useState<string>(tab)
+  const [activeTab, setActiveTab] = useState<string>('detalhes')
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
   // ** Hooks
@@ -66,7 +67,7 @@ const UserViewRight = ({ tab, invoiceData }: Props) => {
     setActiveTab(value)
     router
       .push({
-        pathname: `/apps/user/view/${value.toLowerCase()}`
+        pathname: `/clientes/${value.toLowerCase()}/${userID}`
       })
       .then(() => setIsLoading(false))
   }
@@ -94,47 +95,71 @@ const UserViewRight = ({ tab, invoiceData }: Props) => {
         aria-label='forced scroll tabs example'
       >
         <Tab
-          value='overview'
+          value='detalhes'
           label={
             <Box sx={{ display: 'flex', alignItems: 'center', '& svg': { mr: 2 } }}>
               <Icon fontSize={20} icon='mdi:account-outline' />
-              Overview
+              Detalhes
             </Box>
           }
         />
         <Tab
-          value='security'
+          value='consumo'
           label={
             <Box sx={{ display: 'flex', alignItems: 'center', '& svg': { mr: 2 } }}>
-              <Icon fontSize={20} icon='mdi:lock-outline' />
-              Security
+              <Icon fontSize={20} icon='mdi:chart-pie' />
+              Consumo
             </Box>
           }
         />
         <Tab
-          value='billing-plan'
+          value='recargaadicional'
           label={
             <Box sx={{ display: 'flex', alignItems: 'center', '& svg': { mr: 2 } }}>
-              <Icon fontSize={20} icon='mdi:bookmark-outline' />
-              Billing & Plan
+              <Icon fontSize={20} icon='mdi:plus-circle' />
+              Recarga Adicional
             </Box>
           }
         />
         <Tab
-          value='notification'
+          value='portabilidade'
           label={
             <Box sx={{ display: 'flex', alignItems: 'center', '& svg': { mr: 2 } }}>
-              <Icon fontSize={20} icon='mdi:bell-outline' />
-              Notification
+              <Icon fontSize={20} icon='mdi:swap-horizontal' />
+              Portabilidade
             </Box>
           }
         />
         <Tab
-          value='connection'
+          value='cobrancas'
           label={
             <Box sx={{ display: 'flex', alignItems: 'center', '& svg': { mr: 2 } }}>
-              <Icon fontSize={20} icon='mdi:link' />
-              Connection
+              <Icon fontSize={20} icon='material-symbols:paid' /> Cobranças
+            </Box>
+          }
+        />
+        {/* <Tab
+          value='recorrencia'
+          label={
+            <Box sx={{ display: 'flex', alignItems: 'center', '& svg': { mr: 2 } }}>
+              <Icon fontSize={20} icon='mdi-autorenew' /> Recorrência
+            </Box>
+          }
+        /> */}
+        <Tab
+          value='bloqueio'
+          label={
+            <Box sx={{ display: 'flex', alignItems: 'center', '& svg': { mr: 2 } }}>
+              <Icon fontSize={20} icon='mdi:cancel' />
+              Bloqueio de Linha
+            </Box>
+          }
+        />
+        <Tab
+          value='addprotocolo'
+          label={
+            <Box sx={{ display: 'flex', alignItems: 'center', '& svg': { mr: 2 } }}>
+              <Icon fontSize={20} icon='material-symbols:note-add' /> Adicionar Protocolo
             </Box>
           }
         />
@@ -143,24 +168,33 @@ const UserViewRight = ({ tab, invoiceData }: Props) => {
         {isLoading ? (
           <Box sx={{ mt: 6, display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
             <CircularProgress sx={{ mb: 4 }} />
-            <Typography>Loading...</Typography>
+            <Typography>Carregando...</Typography>
           </Box>
         ) : (
           <>
-            <TabPanel sx={{ p: 0 }} value='overview'>
-              <UserViewOverview invoiceData={invoiceData} />
+            <TabPanel sx={{ p: 0 }} value='detalhes'>
+              <DetalhesCliente />
             </TabPanel>
-            <TabPanel sx={{ p: 0 }} value='security'>
-              <UserViewSecurity />
+            <TabPanel sx={{ p: 0 }} value='consumo'>
+              <ConsumoCliente />
             </TabPanel>
-            <TabPanel sx={{ p: 0 }} value='billing-plan'>
-              <UserViewBilling />
+            <TabPanel sx={{ p: 0 }} value='recargaadicional'>
+              <RecargaAdicionalCliente />
             </TabPanel>
-            <TabPanel sx={{ p: 0 }} value='notification'>
-              <UserViewNotification />
+            <TabPanel sx={{ p: 0 }} value='portabilidade'>
+              <PortabilidadeCliente />
             </TabPanel>
-            <TabPanel sx={{ p: 0 }} value='connection'>
+            <TabPanel sx={{ p: 0 }} value='cobrancas'>
+              <FaturasCliente />
+            </TabPanel>
+            {/* <TabPanel sx={{ p: 0 }} value='recorrencia'>
               <UserViewConnection />
+            </TabPanel> */}
+            <TabPanel sx={{ p: 0 }} value='bloqueio'>
+              <BloqueioDeLinha />
+            </TabPanel>
+            <TabPanel sx={{ p: 0 }} value='addprotocolo'>
+              <AdicionarProtocoloCliente />
             </TabPanel>
           </>
         )}
@@ -169,4 +203,4 @@ const UserViewRight = ({ tab, invoiceData }: Props) => {
   )
 }
 
-export default UserViewRight
+export default VisualizacaoDireitaCliente

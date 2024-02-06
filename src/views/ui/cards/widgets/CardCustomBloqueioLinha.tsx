@@ -20,23 +20,24 @@ const CardCustomBloqueioLinha = () => {
       <CardContent sx={{ '& .apexcharts-xcrosshairs.apexcharts-active': { opacity: 0 } }}>
         <Grid item xs={12}>
           <Typography variant='body2'>Voz - Origina</Typography>
-          <RadioGroup row aria-label='voz' name='voz'>
+          <RadioGroup row aria-label='voz' name='voz' defaultValue='voz-unchecked'>
             <FormControlLabel value='voz-checked' control={<Radio />} label='Bloquear' />
             <FormControlLabel value='voz-unchecked' control={<Radio />} label='Desbloquear' />
           </RadioGroup>
         </Grid>
         <Grid item xs={12}>
           <Typography variant='body2'>SMS</Typography>
-          <RadioGroup row aria-label='sms' name='sms'>
-            <FormControlLabel value='sms-checked' defaultChecked control={<Radio />} label='Bloquear' />
+          <RadioGroup row aria-label='sms' name='sms' defaultValue='sms-unchecked'>
+            <FormControlLabel value='sms-checked' control={<Radio />} label='Bloquear' />
             <FormControlLabel value='sms-unchecked' control={<Radio />} label='Desbloquear' />
           </RadioGroup>
         </Grid>
         <Grid item xs={12}>
           <Typography variant='body2'>Dados</Typography>
-          <RadioGroup row aria-label='dados' name='dados'>
-            <FormControlLabel value='dados-checked' defaultChecked control={<Radio />} label='Bloquear' />
+          <RadioGroup row aria-label='dados' name='dados' defaultValue='dados-unchecked'>
+            <FormControlLabel value='dados-checked' control={<Radio />} label='Bloquear' />
             <FormControlLabel value='dados-unchecked' control={<Radio />} label='Desbloquear' />
+            <FormControlLabel value='dados-reduced' control={<Radio />} label='Reduzir' />
           </RadioGroup>
         </Grid>
         <Button fullWidth variant='contained' sx={{ mt: 4 }}>
