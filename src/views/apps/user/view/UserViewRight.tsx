@@ -28,6 +28,7 @@ import ConsumoCliente from './ConsumoCliente'
 import UserViewSecurity from './UserViewSecurity'
 import BloqueioDeLinha from './BloqueioDeLinha'
 import FaturasCliente from './FaturasCliente'
+import AdicionarProtocoloCliente from './AdicionarProtocoloCliente'
 
 interface Props {
   tab: string
@@ -196,7 +197,7 @@ const UserViewRight = ({ tab, invoiceData, userID }: Props) => {
               <BloqueioDeLinha />
             </TabPanel>
             <TabPanel sx={{ p: 0 }} value='addprotocolo'>
-              <UserViewConnection />
+              <AdicionarProtocoloCliente />
             </TabPanel>
           </>
         )}

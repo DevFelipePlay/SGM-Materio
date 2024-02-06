@@ -11,14 +11,10 @@ import {
   Typography
 } from '@mui/material'
 import Grid from '@mui/material/Grid'
-import CardCustomBloqueioLinha from 'src/views/ui/cards/widgets/CardCustomBloqueioLinha'
 
-const BloqueioDeLinha = () => {
+const AdicionarProtocoloCliente = () => {
   return (
     <Grid container spacing={6}>
-      <Grid item xs={12}>
-        <CardCustomBloqueioLinha />
-      </Grid>
       <Grid item xs={12}>
         <Card>
           <CardHeader title='Agendamento de Bloqueio' />
@@ -60,4 +56,4 @@ const BloqueioDeLinha = () => {
   )
 }
 
-export default BloqueioDeLinha
+export default AdicionarProtocoloCliente

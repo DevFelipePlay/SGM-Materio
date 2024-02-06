@@ -151,8 +151,8 @@ const UserViewLeft = ({ userData }: UserViewLeftProps) => {
               </Box>
             </CardContent>
 
-            <CardActions sx={{ display: 'flex', justifyContent: 'center' }}>
-              <Button variant='contained' sx={{ mr: 2 }} onClick={handleEditClickOpen}>
+            <CardActions sx={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: 3 }}>
+              <Button variant='contained' onClick={handleEditClickOpen}>
                 Editar
               </Button>
               <Button color='error' variant='outlined' onClick={() => setSuspendDialogOpen(true)}>
