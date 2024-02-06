@@ -1,19 +1,49 @@
 export type ErrCallbackType = (err: { [key: string]: string }) => void
 
 export type LoginParams = {
-  email: string
+  cpf: string
   password: string
   rememberMe?: boolean
 }
 
+export interface IJwt {
+  sub: string
+  iat: number
+  exp: number
+}
+
+export interface IResPostAuthLogin {
+  access_token: string
+  token_type: string
+  expires_in: number
+}
+
 export type UserDataType = {
-  id: number
-  role: string
+  parceiro: string
+  cnpj: string
+  cpf: string
+  name: string
   email: string
-  fullName: string
-  username: string
-  password: string
-  avatar?: string | null
+  userid: number
+  companyid: number
+  companyref: string
+  profileid: number
+  UF: string
+  token: string
+  faturaaberta: number
+  faturas: any[]
+  pospago: boolean
+  mk: boolean
+  parceirorevendedor: boolean
+  primeiroAcesso: boolean
+  super: boolean
+  cadastrocompleto: boolean
+  primeiroacessoconcluidoparceirommn: boolean
+  profileid_multinivel: number
+  licenciado: boolean
+  msisdnativo: boolean
+  niveis: number
+  logo: string
 }
 
 export type AuthValuesType = {

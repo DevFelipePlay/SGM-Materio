@@ -794,6 +794,11 @@
   dependencies:
     "@types/react" "*"
 
+"@types/cookie@^0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/@types/cookie/-/cookie-0.6.0.tgz#eac397f28bf1d6ae0ae081363eca2f425bedf0d5"
+  integrity sha512-4Kh9a6B2bQciAhf7FSuMRRkUWecJgJu9nPnx3yzpsfXX/c50REIqpHY4C82bXP90qrLtXtkDxTZosYO3UpOwlA==
+
 "@types/d3-array@^3.0.3":
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/@types/d3-array/-/d3-array-3.0.4.tgz#44eebe40be57476cad6a0cd6a85b0f57d54185a2"
@@ -1492,6 +1497,11 @@ concat-map@0.0.1:
 convert-source-map@^1.5.0, convert-source-map@^1.7.0:
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/convert-source-map/-/convert-source-map-1.9.0.tgz#7faae62353fb4213366d0ca98358d22e8368b05f"
+
+cookie@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/cookie/-/cookie-0.6.0.tgz#2798b04b071b0ecbff0dbb62a505a8efa4e19051"
+  integrity sha512-U71cyTamuh1CRNCfpGY6to28lxvNwPG4Guz/EVjgf3Jmzv0vlDp1atT9eS5dDjMYHucpHbWns6Lwf3BKz6svdw==
 
 core-js@^1.0.0:
   version "1.2.7"
@@ -2902,6 +2912,11 @@ jws@^3.2.2:
     jwa "^1.4.1"
     safe-buffer "^5.0.1"
 
+jwt-decode@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/jwt-decode/-/jwt-decode-4.0.0.tgz#2270352425fd413785b2faf11f6e755c5151bd4b"
+  integrity sha512-+KJGIyHgkGuIq3IEBNftfhW/LfWhXUIY6OmyVWjliu5KH1y0fw7VQ8YndE2O4qZdMSd9SqbnC8GOcZEy0Om7sA==
+
 keen-slider@6.8.5:
   version "6.8.5"
   resolved "https://registry.yarnpkg.com/keen-slider/-/keen-slider-6.8.5.tgz#1d96ff3ab77f195fc6cacd2e5aecc35d8ceb9702"
@@ -4108,6 +4123,14 @@ unbox-primitive@^1.0.2:
     has-bigints "^1.0.2"
     has-symbols "^1.0.3"
     which-boxed-primitive "^1.0.2"
+
+universal-cookie@^7.0.2:
+  version "7.0.2"
+  resolved "https://registry.yarnpkg.com/universal-cookie/-/universal-cookie-7.0.2.tgz#490221c790bc13694347340a758ac65adbaa30b8"
+  integrity sha512-EC9PA+1nojhJtVnKW2Z7WYah01jgYJApqhX+Y8XU97TnFd7KaoxWTHiTZFtfpfV50jEF1L8V5p64ZxIx3Q67dg==
+  dependencies:
+    "@types/cookie" "^0.6.0"
+    cookie "^0.6.0"
 
 untildify@^4.0.0:
   version "4.0.0"
