@@ -144,20 +144,20 @@ const FaturasCliente = () => {
   const columns: GridColDef[] = [
     {
       flex: 0.1,
-      minWidth: 100,
+      minWidth: 150,
       field: 'dataGeracao',
       headerName: 'Data de Geração'
     },
     {
       flex: 0.1,
-      minWidth: 100,
+      minWidth: 150,
       field: 'dataPagamento',
       headerName: 'Data de Pagamento'
     },
     {
       flex: 0.125,
       field: 'idPagamento',
-      minWidth: 100,
+      minWidth: 200,
       headerName: 'Id do Pagamento',
       renderCell: row => (
         <Tooltip title={'Clique para copiar'}>
@@ -169,7 +169,7 @@ const FaturasCliente = () => {
     },
     {
       flex: 0.105,
-      minWidth: 100,
+      minWidth: 150,
       field: 'tipoFatura',
       headerName: 'Tipo de Fatura'
     },
@@ -181,7 +181,7 @@ const FaturasCliente = () => {
     },
     {
       flex: 0.08,
-      minWidth: 100,
+      minWidth: 125,
       field: 'status',
       headerName: 'Status',
       renderCell: ({ row }) => {
