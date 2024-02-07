@@ -34,7 +34,7 @@ import { getInitials } from 'src/@core/utils/get-initials'
 const columns: GridColDef[] = [
   {
     flex: 0.1,
-    minWidth: 100,
+    minWidth: 200,
     field: 'name',
     headerName: 'Cliente',
     renderCell: ({ row }: any) => {
@@ -54,7 +54,7 @@ const columns: GridColDef[] = [
   },
   {
     flex: 0.1,
-    minWidth: 100,
+    minWidth: 200,
     field: 'cpf',
     headerName: 'CPF / CNPJ',
     renderCell: ({ row }: any) => {
@@ -66,12 +66,12 @@ const columns: GridColDef[] = [
   {
     flex: 0.1,
     field: 'iccid',
-    minWidth: 100,
+    minWidth: 200,
     headerName: 'ICCID'
   },
   {
     flex: 0.1,
-    minWidth: 100,
+    minWidth: 200,
     field: 'msisdn',
     headerName: 'MSISDN'
   }
