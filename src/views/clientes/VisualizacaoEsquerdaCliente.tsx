@@ -23,9 +23,6 @@ import DialogActions from '@mui/material/DialogActions'
 import LinearProgress from '@mui/material/LinearProgress'
 import DialogContentText from '@mui/material/DialogContentText'
 
-// ** Icon Imports
-import Icon from 'src/@core/components/icon'
-
 // ** Custom Components
 import CustomChip from 'src/@core/components/mui/chip'
 import UserSuspendDialog from 'src/views/apps/user/view/UserSuspendDialog'
@@ -35,13 +32,14 @@ import UserSubscriptionDialog from 'src/views/apps/user/view/UserSubscriptionDia
 import { UsersType } from 'src/types/apps/userTypes'
 
 // ** Utils Import
-import { Avatar, CardHeader, IconButton } from '@mui/material'
+import { Avatar, CardHeader, IconButton, Tooltip } from '@mui/material'
 import { maskCnpj, maskCpf } from 'src/utils/masks/masks'
 import toast from 'react-hot-toast'
 import { getInitials } from 'src/@core/utils/get-initials'
 import CriarContaFaturaDialog from './ContaFaturaDialogs/CriarContaFaturaDialog'
 import EditarContaFaturaDialog from './ContaFaturaDialogs/EditarContaFaturaDialog'
 import VisualizarContaFaturaDialog from './ContaFaturaDialogs/VisualizarContaFaturaDialog'
+import { Icon } from '@iconify/react'
 
 const data: UsersType = {
   id: 1,
@@ -292,7 +290,19 @@ const VisualizacaoEsquerdaCliente = ({ userData }: VisualizacaoEsquerdaClientePr
         {userData.tipoCliente === 'pj' && (
           <Grid item xs={12}>
             <Card>
-              <CardHeader title='Conta Fatura' />
+              <CardHeader
+                title={
+                  <Box display='flex' alignItems='center' gap={2}>
+                    <Typography variant='h6'>Conta Fatura</Typography>
+                    <Tooltip
+                      title='A rotina de geração de fatura é executada todos os dias às 14:00h, após este horário novas alterações entrarão em vigor no próximo dia.
+'
+                    >
+                      <Icon icon='mdi:information-outline' />
+                    </Tooltip>
+                  </Box>
+                }
+              />
               <Divider sx={{ width: '90%', mx: 'auto' }} />
               <CardContent>
                 <Box sx={{ pb: 1 }}>
@@ -314,9 +324,14 @@ const VisualizacaoEsquerdaCliente = ({ userData }: VisualizacaoEsquerdaClientePr
                     <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>Total de Linhas:</Typography>
                     <Box display='flex' alignItems='center' gap={1}>
                       <Typography variant='body2'>7</Typography>
-                      <IconButton sx={{ alignSelf: 'start' }} onClick={() => setVisualizarContaFaturaDialogOpen(true)}>
-                        <Icon icon='mdi:eye' fontSize={16} />
-                      </IconButton>
+                      <Tooltip title='Visualizar'>
+                        <IconButton
+                          sx={{ alignSelf: 'start' }}
+                          onClick={() => setVisualizarContaFaturaDialogOpen(true)}
+                        >
+                          <Icon icon='mdi:eye' fontSize={16} />
+                        </IconButton>
+                      </Tooltip>
                     </Box>
                   </Box>
                 </Box>

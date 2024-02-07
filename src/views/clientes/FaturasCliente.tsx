@@ -270,8 +270,8 @@ const FaturasCliente = () => {
                     onChange={handleStatusChange}
                   >
                     <MenuItem value=''>Todos</MenuItem>
-                    <MenuItem value='pending'>Pendente</MenuItem>
-                    <MenuItem value='active'>Confirmado</MenuItem>
+                    <MenuItem value='pendente'>Pendente</MenuItem>
+                    <MenuItem value='confirmado'>Confirmado</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
