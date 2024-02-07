@@ -7,12 +7,15 @@ import { useRouter } from 'next/router'
 // ** Hooks Import
 import { useAuth } from 'src/hooks/useAuth'
 
+// import Cookies from 'universal-cookie'
+
 interface AuthGuardProps {
   children: ReactNode
   fallback: ReactElement | null
 }
 
 const AuthGuard = (props: AuthGuardProps) => {
+  // const cookies = new Cookies()
   const { children, fallback } = props
   const auth = useAuth()
   const router = useRouter()
@@ -23,7 +26,8 @@ const AuthGuard = (props: AuthGuardProps) => {
         return
       }
 
-      if (auth.user === null && !window.localStorage.getItem('userData')) {
+      if (auth.user === null) {
+        // if (auth.user === null && !cookies.get('user')) {
         if (router.asPath !== '/') {
           router.replace({
             pathname: '/login',
@@ -38,7 +42,7 @@ const AuthGuard = (props: AuthGuardProps) => {
     [router.route]
   )
 
-  if (auth.loading || auth.user === null) {
+  if (auth.loadingAuth || auth.user === null) {
     return fallback
   }
 

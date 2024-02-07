@@ -1,1 +1,1 @@
-export * from './maskphone'
+export * from './masks'

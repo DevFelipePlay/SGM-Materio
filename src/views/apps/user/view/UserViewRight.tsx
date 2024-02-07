@@ -19,7 +19,8 @@ import Icon from 'src/@core/components/icon'
 
 // ** Demo Components Imports
 import UserViewBilling from 'src/views/apps/user/view/UserViewBilling'
-import UserViewOverview from 'src/views/apps/user/view/UserViewOverview'
+
+// import UserViewOverview from 'src/views/apps/user/view/UserViewOverview'
 import UserViewSecurity from 'src/views/apps/user/view/UserViewSecurity'
 import UserViewConnection from 'src/views/apps/user/view/UserViewConnection'
 import UserViewNotification from 'src/views/apps/user/view/UserViewNotification'
@@ -181,9 +182,9 @@ const UserViewRight = ({ tab, invoiceData, userID }: Props) => {
           </Box>
         ) : (
           <>
-            <TabPanel sx={{ p: 0 }} value='detalhes'>
+            {/* <TabPanel sx={{ p: 0 }} value='detalhes'>
               <UserViewOverview invoiceData={invoiceData} />
-            </TabPanel>
+            </TabPanel> */}
             <TabPanel sx={{ p: 0 }} value='consumo'>
               <UserViewSecurity />
             </TabPanel>

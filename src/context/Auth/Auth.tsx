@@ -3,10 +3,11 @@ import { IJwt, UserDataType } from '../types'
 import { ReactNode, createContext, useContext, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import Cookies from 'universal-cookie'
-import jwtDecode from 'jwt-decode'
+import { jwtDecode } from 'jwt-decode'
 import apiPlaySgm from 'src/services/apiPlaySgm'
 import { postPlayUserInfo } from 'src/services/UserInfo/postPlayUserInfo'
 import toast from 'react-hot-toast'
+import { Box } from '@mui/material'
 
 interface IAuthContext {
   user: UserDataType | null
@@ -30,44 +31,47 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setuser] = useState<UserDataType | null>(null)
 
   const [jwt, setJwt] = useState<IJwt | null>(null)
+  console.log(jwt)
 
   async function signIn(formData: IReqPostAuthLogin) {
     setLoadingAuth(true)
 
+    const { access_token } = await postAuthLogin({
+      cpf: formData.cpf,
+      password: formData.password
+    })
+    const jwtContent = jwtDecode<IJwt>(access_token)
     try {
-      const { access_token } = await postAuthLogin({
-        cpf: formData.cpf,
-        password: formData.password
-      })
-
-      //@ts-ignore
-      const jwtContent = jwtDecode<IJwt>(access_token)
       cookies.set('jwt', access_token, {
         expires: new Date(jwtContent.exp * 1000)
       })
 
       apiPlaySgm.defaults.headers.common.Authorization = `Bearer ${access_token}`
-
+    } catch (error) {}
+    try {
       const returnUrl = router.query.returnUrl
 
       const userInfo = await postPlayUserInfo({
         cpf: formData.cpf
       })
-      setuser(userInfo)
 
-      cookies.set('user', JSON.stringify(user), {
+      const userWithRole: UserDataType = {
+        ...userInfo,
+        role: 'admin' // ou a role desejada
+      }
+      cookies.set('user', userWithRole, {
         expires: new Date(jwtContent.exp * 1000)
       })
+      setuser(userWithRole)
 
       setJwt(jwtContent)
 
-      formData.rememberMe ? cookies.set('user', JSON.stringify(user)) : null
+      // formData.rememberMe ? cookies.set('user', JSON.stringify(userInfo)) : null
 
       const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
 
       router.replace(redirectURL as string)
     } catch (error: any) {
-      toast.error(error)
     } finally {
       setLoadingAuth(false)
     }
@@ -81,7 +85,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       signIn({ cpf: formData.email, password: formData.password })
     } catch (error: any) {
       console.log(error)
-      toast.error(error)
+
+      // toast.error(error
     } finally {
       setLoadingAuth(false)
     }
@@ -117,27 +122,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setLoadingSystem(false)
   }
 
-  function handle401Unauthorized() {
-    // Adiciona um interceptador na resposta
-    apiPlaySgm.interceptors.response.use(
-      response => response,
-      error => {
-        if (error.response.status === 401) {
-          toast.success('Sua sessão expirou, por favor logue novamente!')
-          router.push('/login')
-        }
+  // function handle401Unauthorized() {
+  //   // Adiciona um interceptador na resposta
+  //   apiPlaySgm.interceptors.response.use(
+  //     response => response,
+  //     error => {
+  //       if (error.response.status === 401) {
+  //         toast.success('Sua sessão expirou, por favor logue novamente!')
+  //         router.push('/login')
+  //       }
 
-        return Promise.reject(error)
-      }
-    )
-  }
+  //       return Promise.reject(error)
+  //     }
+  //   )
+  // }
 
   useEffect(() => {
     // handle401Unauthorized();
     checkLogin()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  if (loadingSystem) return <div />
+  if (loadingSystem) return <Box></Box>
 
   return (
     <AuthContext.Provider

@@ -13,8 +13,8 @@ import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
 
 // ** Third Party Imports
-import * as yup from 'yup'
-import { yupResolver } from '@hookform/resolvers/yup'
+// import * as yup from 'yup'
+// import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm, Controller } from 'react-hook-form'
 
 // ** Icon Imports
@@ -48,13 +48,13 @@ const Header = styled(Box)<BoxProps>(({ theme }) => ({
   backgroundColor: theme.palette.background.default
 }))
 
-const schema = yup.object().shape({
-  name: yup.string().required(),
-  email: yup.string().email().required(),
-  company: yup.string().required(),
-  contact: yup.string().min(10).max(10).required(),
-  address: yup.string().max(120).required()
-})
+// const schema = yup.object().shape({
+//   name: yup.string().required(),
+//   email: yup.string().email().required(),
+//   company: yup.string().required(),
+//   contact: yup.string().min(10).max(10).required(),
+//   address: yup.string().max(120).required()
+// })
 
 const AddNewCustomer = ({ open, toggle, setSelectedClient, clients, setClients }: Props) => {
   const {
@@ -63,7 +63,7 @@ const AddNewCustomer = ({ open, toggle, setSelectedClient, clients, setClients }
     handleSubmit,
     formState: { errors }
   } = useForm({
-    resolver: yupResolver(schema),
+    // resolver: yupResolver(schema),
     defaultValues: { name: '', email: '', company: '', address: '', country: 'USA', contact: '' }
   })
 

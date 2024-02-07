@@ -7,7 +7,7 @@ import CardHeader from '@mui/material/CardHeader'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import CardContent from '@mui/material/CardContent'
-import { DataGrid } from '@mui/x-data-grid'
+
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import * as React from 'react'
 import Button from '@mui/material/Button'
@@ -15,13 +15,14 @@ import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import Icon from 'src/@core/components/icon'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import CardStatisticsHorizontal from 'src/@core/components/card-statistics/card-stats-horizontal'
 import { fetchData } from 'src/store/apps/user'
-import { RootState, AppDispatch } from 'src/store'
+import { AppDispatch } from 'src/store'
 import TableHeader from 'src/views/apps/user/list/TableHeader'
 import CadastrarNovoParceiro from 'src/pages/cadastrar-novo-parceiro'
-import { columns } from '.'
+
+// import { columns } from '.'
 
 export const UserList = () => {
   // ** State
@@ -29,11 +30,13 @@ export const UserList = () => {
   const [plan, setPlan] = useState<string>('')
   const [value, setValue] = useState<string>('')
   const [status, setStatus] = useState<string>('')
-  const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 })
+
+  // const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 })
 
   // ** Hooks
   const dispatch = useDispatch<AppDispatch>()
-  const store = useSelector((state: RootState) => state.user)
+
+  // const store = useSelector((state: RootState) => state.user)
 
   useEffect(() => {
     dispatch(
@@ -189,7 +192,7 @@ export const UserList = () => {
             placeholderSearch='Buscar Parceiro'
             titleButton='Novo Parceiro'
           />
-          <DataGrid
+          {/* <DataGrid
             autoHeight
             rows={store.data}
             columns={columns}
@@ -198,7 +201,7 @@ export const UserList = () => {
             pageSizeOptions={[10, 25, 50]}
             paginationModel={paginationModel}
             onPaginationModelChange={setPaginationModel}
-          />
+          /> */}
         </Card>
       </Grid>
 
@@ -227,3 +230,5 @@ export const UserList = () => {
     </Grid>
   )
 }
+
+export default UserList

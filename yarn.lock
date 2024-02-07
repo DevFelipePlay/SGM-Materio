@@ -536,6 +536,7 @@
 "@mui/lab@^5.0.0-alpha.163":
   version "5.0.0-alpha.163"
   resolved "https://registry.yarnpkg.com/@mui/lab/-/lab-5.0.0-alpha.163.tgz#e25969a3e9188da7d76aa3c9047422df98662fe7"
+  integrity sha512-ieOX3LFBln78jgNsBca0JUX+zAC2p6/u2P9b7rU9eZIr0AK44b5Qr8gDOWI1JfJtib4kxLGd1Msasrbxy5cMSQ==
   dependencies:
     "@babel/runtime" "^7.23.9"
     "@mui/base" "5.0.0-beta.34"

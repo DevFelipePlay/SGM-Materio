@@ -44,6 +44,7 @@ export type UserDataType = {
   msisdnativo: boolean
   niveis: number
   logo: string
+  role: string
 }
 
 export type AuthValuesType = {
