@@ -35,10 +35,13 @@ import UserSubscriptionDialog from 'src/views/apps/user/view/UserSubscriptionDia
 import { UsersType } from 'src/types/apps/userTypes'
 
 // ** Utils Import
-import { Avatar } from '@mui/material'
-import { maskCpf } from 'src/utils/masks/masks'
+import { Avatar, CardHeader, IconButton } from '@mui/material'
+import { maskCnpj, maskCpf } from 'src/utils/masks/masks'
 import toast from 'react-hot-toast'
 import { getInitials } from 'src/@core/utils/get-initials'
+import CriarContaFaturaDialog from './ContaFaturaDialogs/CriarContaFaturaDialog'
+import EditarContaFaturaDialog from './ContaFaturaDialogs/EditarContaFaturaDialog'
+import VisualizarContaFaturaDialog from './ContaFaturaDialogs/VisualizarContaFaturaDialog'
 
 const data: UsersType = {
   id: 1,
@@ -80,6 +83,9 @@ const VisualizacaoEsquerdaCliente = ({ userData }: VisualizacaoEsquerdaClientePr
   const [openPlans, setOpenPlans] = useState<boolean>(false)
   const [suspendDialogOpen, setSuspendDialogOpen] = useState<boolean>(false)
   const [subscriptionDialogOpen, setSubscriptionDialogOpen] = useState<boolean>(false)
+  const [criarContaFaturaDialogOpen, setCriarContaFaturaDialogOpen] = useState<boolean>(false)
+  const [editarContaFaturaDialogOpen, setEditarContaFaturaDialogOpen] = useState<boolean>(false)
+  const [visualizarContaFaturaDialogOpen, setVisualizarContaFaturaDialogOpen] = useState<boolean>(false)
 
   // Handle Edit dialog
   const handleEditClickOpen = () => setOpenEdit(true)
@@ -125,8 +131,12 @@ const VisualizacaoEsquerdaCliente = ({ userData }: VisualizacaoEsquerdaClientePr
               <Divider sx={{ my: theme => `${theme.spacing(4)} !important` }} />
               <Box sx={{ pb: 1 }}>
                 <Box sx={{ display: 'flex', mb: 2 }}>
-                  <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>CPF:</Typography>
-                  <Typography variant='body2'>{maskCpf(userData.cpf)}</Typography>
+                  <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>
+                    {userData.tipoCliente === 'pf' ? 'CPF:' : 'CNPJ:'}
+                  </Typography>
+                  <Typography variant='body2'>
+                    {userData.tipoCliente === 'pf' ? maskCpf(userData.cpf) : maskCnpj(userData.cpf)}
+                  </Typography>
                 </Box>
                 <Box sx={{ display: 'flex', mb: 2 }}>
                   <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>Data de Nascimento:</Typography>
@@ -278,6 +288,57 @@ const VisualizacaoEsquerdaCliente = ({ userData }: VisualizacaoEsquerdaClientePr
             <UserSubscriptionDialog open={subscriptionDialogOpen} setOpen={setSubscriptionDialogOpen} />
           </Card>
         </Grid>
+
+        {userData.tipoCliente === 'pj' && (
+          <Grid item xs={12}>
+            <Card>
+              <CardHeader title='Conta Fatura' />
+              <Divider sx={{ width: '90%', mx: 'auto' }} />
+              <CardContent>
+                <Box sx={{ pb: 1 }}>
+                  <Box sx={{ display: 'flex', mb: 2, alignItems: 'center' }}>
+                    <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>MSISDN:</Typography>
+                    <Typography variant='body2'>{maskCpf(userData.cpf)}</Typography>
+                  </Box>
+                  <Box sx={{ display: 'flex', mb: 2, alignItems: 'center' }}>
+                    <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>Nome da Linha:</Typography>
+                    <Typography variant='body2' sx={{ textTransform: 'capitalize' }}>
+                      -
+                    </Typography>
+                  </Box>
+                  <Box sx={{ display: 'flex', mb: 2, alignItems: 'center' }}>
+                    <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>Conta Fatura:</Typography>
+                    <Typography variant='body2'>Play3303060</Typography>
+                  </Box>
+                  <Box sx={{ display: 'flex', mb: 2, alignItems: 'center' }}>
+                    <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>Total de Linhas:</Typography>
+                    <Box display='flex' alignItems='center' gap={1}>
+                      <Typography variant='body2'>7</Typography>
+                      <IconButton sx={{ alignSelf: 'start' }} onClick={() => setVisualizarContaFaturaDialogOpen(true)}>
+                        <Icon icon='mdi:eye' fontSize={16} />
+                      </IconButton>
+                    </Box>
+                  </Box>
+                </Box>
+              </CardContent>
+              <CardActions sx={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: 3 }}>
+                <Button variant='contained' onClick={() => setCriarContaFaturaDialogOpen(true)} sx={{ flex: 1 }}>
+                  Criar
+                </Button>
+                <Button variant='outlined' onClick={() => setEditarContaFaturaDialogOpen(true)} sx={{ flex: 1 }}>
+                  Editar
+                </Button>
+              </CardActions>
+
+              <CriarContaFaturaDialog open={criarContaFaturaDialogOpen} setOpen={setCriarContaFaturaDialogOpen} />
+              <EditarContaFaturaDialog open={editarContaFaturaDialogOpen} setOpen={setEditarContaFaturaDialogOpen} />
+              <VisualizarContaFaturaDialog
+                open={visualizarContaFaturaDialogOpen}
+                setOpen={setVisualizarContaFaturaDialogOpen}
+              />
+            </Card>
+          </Grid>
+        )}
 
         <Grid item xs={12}>
           <Card sx={{ boxShadow: 'none', border: theme => `2px solid ${theme.palette.primary.main}` }}>

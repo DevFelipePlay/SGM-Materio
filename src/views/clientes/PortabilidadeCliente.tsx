@@ -8,7 +8,7 @@ import InputLabel from '@mui/material/InputLabel'
 import CardContent from '@mui/material/CardContent'
 import FormControl from '@mui/material/FormControl'
 import OutlinedInput from '@mui/material/OutlinedInput'
-import { FormControlLabel, Switch } from '@mui/material'
+import { FormControlLabel, Switch, Typography } from '@mui/material'
 import { useState } from 'react'
 import { Icon } from '@iconify/react'
 
@@ -40,6 +40,9 @@ const PortabilidadeCliente = () => {
             <form onSubmit={e => e.preventDefault()}>
               <Grid container spacing={6}>
                 <Grid item xs={12}>
+                  <Typography mx={3} mb={6} sx={{ fontSize: '1rem', fontWeight: 600 }}>
+                    Número atual: (61) 92004-6246
+                  </Typography>
                   <FormControl fullWidth size='medium'>
                     <InputLabel htmlFor='numero-a-portar'>Número a portar</InputLabel>
                     <OutlinedInput
