@@ -12,32 +12,61 @@ interface TableHeaderProps {
   titleButton?: string
   toggle?: () => void
   handleFilter: (val: string) => void
+  hasButton?: boolean
+  hasExport?: boolean
+
+  seccondButtonVariant?: 'contained' | 'outlined' | 'text'
+  seccondButtonColor?: 'error' | 'info' | 'inherit' | 'primary' | 'secondary' | 'success' | 'warning'
+  seccondButtonTitle?: string
+  seccondButtonToggle?: () => void
 }
 
-const TableHeader = (props: TableHeaderProps) => {
-  // ** Props
-  const { handleFilter, toggle, value, placeholderSearch, titleButton } = props
+const TableHeader = ({
+  handleFilter,
+  toggle,
+  seccondButtonToggle,
+  value,
+  placeholderSearch,
+  titleButton,
+  seccondButtonTitle,
+  hasButton = true,
+  hasExport = true,
+  seccondButtonVariant = 'outlined',
+  seccondButtonColor = 'primary'
+}: TableHeaderProps) => {
+  console.log(hasExport)
 
   return (
-    <Box sx={{ p: 5, pb: 3, display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between' }}>
-      <Button
-        sx={{
-          mr: {
-            xs: 0,
-            sm: 4
-          },
-          mb: 2,
-          width: {
-            xs: '100%',
-            sm: 'auto'
-          }
-        }}
-        color='secondary'
-        variant='outlined'
-        startIcon={<Icon icon='mdi:export-variant' fontSize={20} />}
-      >
-        Exportar
-      </Button>
+    <Box
+      sx={{
+        p: !hasButton && !hasExport ? 0 : 5,
+        pb: 3,
+        display: 'flex',
+        flexWrap: 'wrap',
+        alignItems: 'center',
+        justifyContent: 'space-between'
+      }}
+    >
+      {hasExport && (
+        <Button
+          sx={{
+            mr: {
+              xs: 0,
+              sm: 4
+            },
+            mb: 2,
+            width: {
+              xs: '100%',
+              sm: 'auto'
+            }
+          }}
+          color='secondary'
+          variant='outlined'
+          startIcon={<Icon icon='mdi:export-variant' fontSize={20} />}
+        >
+          Exportar
+        </Button>
+      )}
       <Box
         sx={{
           display: 'flex',
@@ -45,7 +74,7 @@ const TableHeader = (props: TableHeaderProps) => {
           alignItems: 'center',
           justifyContent: {
             xs: 'center',
-            sm: 'inherit'
+            sm: 'end'
           }
         }}
       >
@@ -72,20 +101,38 @@ const TableHeader = (props: TableHeaderProps) => {
             startAdornment: <Icon style={{ marginRight: '0.5rem' }} icon='mdi:search' fontSize={28} />
           }}
         />
-        {titleButton && (
-          <Button
-            sx={{
-              mb: 2,
-              width: {
-                xs: '100%',
-                sm: 'auto'
-              }
-            }}
-            onClick={toggle}
-            variant='contained'
-          >
-            {titleButton}
-          </Button>
+        {hasButton && (
+          <Box display='flex' gap={3}>
+            <Button
+              sx={{
+                mb: 2,
+                width: {
+                  xs: '100%',
+                  sm: 'auto'
+                }
+              }}
+              onClick={toggle}
+              variant='contained'
+            >
+              {titleButton}
+            </Button>
+            {seccondButtonTitle && (
+              <Button
+                variant={seccondButtonVariant}
+                color={seccondButtonColor}
+                onClick={seccondButtonToggle}
+                sx={{
+                  mb: 2,
+                  width: {
+                    xs: '100%',
+                    sm: 'auto'
+                  }
+                }}
+              >
+                {seccondButtonTitle}
+              </Button>
+            )}
+          </Box>
         )}
       </Box>
     </Box>
