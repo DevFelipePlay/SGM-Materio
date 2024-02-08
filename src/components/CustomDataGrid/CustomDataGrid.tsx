@@ -1,30 +1,37 @@
 import { useState } from 'react'
 import { DataGrid, GridCellParams, gridClasses, GridColDef } from '@mui/x-data-grid'
-import { Box, Divider, Pagination, Typography } from '@mui/material'
+import { Box, CircularProgress, Divider, Pagination, Typography } from '@mui/material'
 import TableHeader from 'src/views/apps/user/list/TableHeader'
 
 interface CustomDataGridProps {
+  // eslint-disable-next-line lines-around-comment
+
+  // Props Data Grid
+
   rows: any
   columns: GridColDef[]
-  filterFunction?: (row: any) => boolean
   onCellClick?: (params: GridCellParams, event: React.MouseEvent) => void
+  filterFunction?: (row: any) => boolean
+  checkboxSelection?: boolean
+  loading?: boolean
+
+  // Props Table header
+
   placeholderSearch?: string
   titleButton?: string
-  toggle?: () => void
-  checkboxSelection?: boolean
-
   seccondButtonVariant?: 'contained' | 'outlined' | 'text'
   seccondButtonColor?: 'error' | 'info' | 'inherit' | 'primary' | 'secondary' | 'success' | 'warning'
   seccondButtonTitle?: string
-  seccondButtonToggle?: () => void
-
   hasButton?: boolean
   hasExport?: boolean
+  toggle?: () => void
+  seccondButtonToggle?: () => void
 }
 
 export default function CustomDataGrid({
   rows,
   columns,
+  loading,
 
   toggle,
   filterFunction,
@@ -71,7 +78,14 @@ export default function CustomDataGrid({
         hasButton={hasButton}
         hasExport={hasExport}
       />
-      {filteredRows.length > 0 ? (
+      {loading ? (
+        <>
+          <Divider />
+          <Box width='100%' display='flex' justifyContent='center' py={20}>
+            <CircularProgress />
+          </Box>
+        </>
+      ) : filteredRows.length > 0 ? (
         <Box display='flex' flexDirection='column' mx='auto' pb={5}>
           <DataGrid
             autoHeight
@@ -83,6 +97,7 @@ export default function CustomDataGrid({
             onPaginationModelChange={setPaginationModel}
             hideFooterPagination
             checkboxSelection={checkboxSelection}
+            loading={loading}
             localeText={{
               footerRowSelected: count => `${count} linha${count !== 1 ? 's' : ''} selecionada${count !== 1 ? 's' : ''}`
             }}

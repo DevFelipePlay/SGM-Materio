@@ -235,7 +235,7 @@ const VisualizacaoEsquerdaCliente = ({ userData }: VisualizacaoEsquerdaClientePr
                         fullWidth
                         label='WhatsApp*'
                         placeholder='(00) 0 0000-0000'
-                        InputProps={{ endAdornment: <Icon icon='mdi:whatsapp' color='#56CA00' /> }}
+                        InputProps={{ endAdornment: <Icon icon='mdi:whatsapp' color='#56CA00' fontSize={24} /> }}
                       />
                     </Grid>
                     <Grid item xs={12} sm={6}>

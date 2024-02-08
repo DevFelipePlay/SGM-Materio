@@ -173,7 +173,11 @@ const data = {
 
 // Obter a lista
 mock.onGet('/users/list').reply(config => {
-  return [200, data.users]
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve([200, data.users])
+    }, 1000) // Delay de 2 segundos
+  })
 })
 
 // Buscar usuário pelo cpf
