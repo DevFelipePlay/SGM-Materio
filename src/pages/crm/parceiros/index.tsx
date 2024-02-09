@@ -415,6 +415,7 @@ const UserList = () => {
         </Card>
       </Grid>
 
+<<<<<<< HEAD
       <>
         <Dialog
           open={open}
@@ -428,6 +429,9 @@ const UserList = () => {
           </DialogContent>
         </Dialog>
       </>
+=======
+      <AddUserDrawer open={addUserOpen} toggle={toggleAddUserDrawer} />
+>>>>>>> 176cc88 (drawer de adicionar cliente)
     </Grid>
   )
 }

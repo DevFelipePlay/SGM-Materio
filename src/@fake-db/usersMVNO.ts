@@ -172,7 +172,6 @@ const data = {
 }
 
 // Obter a lista
-//@ts-ignore
 mock.onGet('/users/list').reply(config => {
   return new Promise(resolve => {
     console.log(config)
