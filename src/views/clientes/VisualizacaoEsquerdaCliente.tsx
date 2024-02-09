@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -33,13 +33,16 @@ import { UsersType } from 'src/types/apps/userTypes'
 
 // ** Utils Import
 import { Avatar, CardHeader, IconButton, Tooltip } from '@mui/material'
-import { maskCnpj, maskCpf } from 'src/utils/masks/masks'
+import { maskCelular, maskCep, maskCnpj, maskCpf } from 'src/utils/masks/masks'
 import toast from 'react-hot-toast'
 import { getInitials } from 'src/@core/utils/get-initials'
 import CriarContaFaturaDialog from './ContaFaturaDialogs/CriarContaFaturaDialog'
 import EditarContaFaturaDialog from './ContaFaturaDialogs/EditarContaFaturaDialog'
 import VisualizarContaFaturaDialog from './ContaFaturaDialogs/VisualizarContaFaturaDialog'
 import { Icon } from '@iconify/react'
+import * as z from 'zod'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 const data: UsersType = {
   id: 1,
@@ -75,6 +78,26 @@ interface VisualizacaoEsquerdaClienteProps {
   userData: any
 }
 
+// ** Zod
+const SchemaEditDadosClientForm = z.object({
+  nome: z.string().min(1, 'Nome é obrigatório'),
+  cpf: z.string().min(1, 'CPF é obrigatório'),
+  rgie: z.string(),
+  nascimento: z.string().min(1, 'Data de Nascimento é obrigatório'),
+  email: z.string().email('Email é obrigatório'),
+  phone: z.string().min(1, 'Celular é obrigatório'),
+  whats: z.string().min(1, 'WhatsApp é obrigatório'),
+  cep: z.string().min(1, 'CEP é obrigatório'),
+  uf: z.string().min(1, 'UF é obrigatório'),
+  cidade: z.string().min(1, 'Cidade é obrigatório'),
+  bairro: z.string().min(1, 'Bairro é obrigatório'),
+  logradouro: z.string().min(1, 'Logradouro é obrigatório'),
+  number: z.string().min(1, 'Número é obrigatório'),
+  complemento: z.string()
+})
+
+type EditDadosClienteFormData = z.infer<typeof SchemaEditDadosClientForm>
+
 const VisualizacaoEsquerdaCliente = ({ userData }: VisualizacaoEsquerdaClienteProps) => {
   // ** States
   const [openEdit, setOpenEdit] = useState<boolean>(false)
@@ -95,6 +118,41 @@ const VisualizacaoEsquerdaCliente = ({ userData }: VisualizacaoEsquerdaClientePr
   const handleAlteraPlano = () => {
     handlePlansClose()
     toast.success('Alteração feita com sucesso!')
+  }
+
+  // ** Hook Form
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { isSubmitting, errors }
+  } = useForm<EditDadosClienteFormData>({
+    resolver: zodResolver(SchemaEditDadosClientForm)
+  })
+
+  // ** Máscaração
+  const cpfValue = watch('cpf')
+  const phoneValue = watch('phone')
+  const whatsAppValue = watch('whats')
+  const cepValue = watch('cep')
+
+  useEffect(() => {
+    setValue('cpf', maskCpf(cpfValue))
+    setValue('phone', maskCelular(phoneValue))
+    setValue('whats', maskCelular(whatsAppValue))
+    setValue('cep', maskCep(cepValue))
+  }, [setValue, cpfValue, phoneValue, whatsAppValue, cepValue])
+
+  // Enviar form
+
+  async function handleSubmitEditDadosCliente(data: EditDadosClienteFormData) {
+    await new Promise(resolve => setTimeout(resolve, 2000))
+
+    handleEditClose()
+    toast.success('Dados editados com sucesso!')
+
+    console.log(data)
   }
 
   if (data) {
@@ -213,54 +271,142 @@ const VisualizacaoEsquerdaCliente = ({ userData }: VisualizacaoEsquerdaClientePr
                 <form>
                   <Grid container spacing={6} sx={{ mt: 1 }}>
                     <Grid item xs={12}>
-                      <TextField fullWidth label='Nome*' />
+                      <TextField
+                        fullWidth
+                        label='Nome*'
+                        {...register('nome')}
+                        error={!!errors.nome}
+                        helperText={errors.nome?.message}
+                      />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                      <TextField fullWidth label='CPF*' placeholder='000.000.000-00' />
+                      <TextField
+                        fullWidth
+                        label='CPF*'
+                        placeholder='000.000.000-00'
+                        {...register('cpf')}
+                        error={!!errors.cpf}
+                        helperText={errors.cpf?.message}
+                      />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                      <TextField fullWidth label={'RG*'} />
+                      <TextField
+                        fullWidth
+                        label={'RG'}
+                        {...register('rgie')}
+                        error={!!errors.rgie}
+                        helperText={errors.rgie?.message}
+                      />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                      <TextField fullWidth label={'Data Nascimento*'} placeholder='dd/mm/yyyy' />
+                      <TextField
+                        fullWidth
+                        label={'Data Nascimento*'}
+                        placeholder='dd/mm/yyyy'
+                        {...register('nascimento')}
+                        error={!!errors.nascimento}
+                        helperText={errors.nascimento?.message}
+                      />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                      <TextField fullWidth label='Email*' placeholder='seu@email.com' />
+                      <TextField
+                        fullWidth
+                        label='Email*'
+                        placeholder='seu@email.com'
+                        {...register('email')}
+                        error={!!errors.email}
+                        helperText={errors.email?.message}
+                      />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                      <TextField fullWidth label='Celular*' placeholder='(00) 0 0000-0000' />
+                      <TextField
+                        fullWidth
+                        label='Celular*'
+                        placeholder='(00) 0 0000-0000'
+                        {...register('phone')}
+                        error={!!errors.phone}
+                        helperText={errors.phone?.message}
+                      />
                     </Grid>
                     <Grid item xs={12} sm={6}>
                       <TextField
                         fullWidth
                         label='WhatsApp*'
                         placeholder='(00) 0 0000-0000'
-                        InputProps={{ endAdornment: <Icon icon='mdi:whatsapp' color='#56CA00' fontSize={24} /> }}
+                        InputProps={{
+                          endAdornment: <Icon icon='mdi:whatsapp' color='#56CA00' fontSize={24} />
+                        }}
+                        {...register('whats')}
+                        error={!!errors.whats}
+                        helperText={errors.whats?.message}
                       />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                      <TextField fullWidth label='CEP*' placeholder='00000-000' />
+                      <TextField
+                        fullWidth
+                        label='CEP*'
+                        placeholder='00000-000'
+                        {...register('cep')}
+                        error={!!errors.cep}
+                        helperText={errors.cep?.message}
+                      />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                      <TextField fullWidth label='UF*' placeholder='Ex: DF' />
+                      <TextField
+                        fullWidth
+                        label='UF*'
+                        placeholder='Ex: DF'
+                        {...register('uf')}
+                        error={!!errors.uf}
+                        helperText={errors.uf?.message}
+                      />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                      <TextField fullWidth label='Cidade*' placeholder='Ex: Brasília' />
+                      <TextField
+                        fullWidth
+                        label='Cidade*'
+                        placeholder='Ex: Brasília'
+                        {...register('cidade')}
+                        error={!!errors.cidade}
+                        helperText={errors.cidade?.message}
+                      />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                      <TextField fullWidth label='Bairro*' placeholder='Ex: Parque São José' />
+                      <TextField
+                        fullWidth
+                        label='Bairro*'
+                        placeholder='Ex: Parque São José'
+                        {...register('bairro')}
+                        error={!!errors.bairro}
+                        helperText={errors.bairro?.message}
+                      />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                      <TextField fullWidth label='Logradouro*' placeholder='Ex: Viela 16' />
+                      <TextField
+                        fullWidth
+                        label='Logradouro*'
+                        placeholder='Ex: Viela 16'
+                        {...register('logradouro')}
+                        error={!!errors.logradouro}
+                        helperText={errors.logradouro?.message}
+                      />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                      <TextField fullWidth label='Número*' placeholder='Ex: 123' />
+                      <TextField
+                        fullWidth
+                        label='Número*'
+                        placeholder='Ex: 123'
+                        {...register('number')}
+                        error={!!errors.number}
+                        helperText={errors.number?.message}
+                      />
                     </Grid>
                     <Grid item xs={12}>
                       <TextField
                         fullWidth
                         label='Complemento*'
                         placeholder='Ex: Sobrado verde ao lado da sorveteria...'
+                        {...register('complemento')}
                       />
                     </Grid>
                   </Grid>
@@ -273,8 +419,14 @@ const VisualizacaoEsquerdaCliente = ({ userData }: VisualizacaoEsquerdaClientePr
                   pb: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(12.5)} !important`]
                 }}
               >
-                <Button variant='contained' sx={{ mr: 2 }} onClick={handleEditClose}>
-                  Enviar
+                <Button
+                  variant='contained'
+                  sx={{ mr: 2 }}
+                  type='submit'
+                  onClick={handleSubmit(handleSubmitEditDadosCliente)}
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? 'Enviando...' : 'Enviar'}
                 </Button>
                 <Button variant='outlined' color='secondary' onClick={handleEditClose}>
                   Cancelar

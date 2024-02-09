@@ -221,7 +221,7 @@ const FaturasCliente = () => {
         InputProps={{
           startAdornment: (
             <InputAdornment position='start'>
-              <Icon icon='mdi:bell-outline' />
+              <Icon icon='mdi:calendar-range' />
             </InputAdornment>
           ),
           endAdornment: (
