@@ -39,7 +39,8 @@ const TableHeader = ({
   return (
     <Box
       sx={{
-        p: !hasButton && !hasExport ? 0 : 5,
+        px: !hasButton && !hasExport ? 0 : 5,
+        py: 5,
         pb: 3,
         display: 'flex',
         flexWrap: 'wrap',
@@ -69,6 +70,7 @@ const TableHeader = ({
       )}
       <Box
         sx={{
+          width: (!hasButton && !hasExport) || !hasExport ? '100%' : 'auto',
           display: 'flex',
           flexWrap: 'wrap',
           alignItems: 'center',
@@ -80,20 +82,17 @@ const TableHeader = ({
       >
         <TextField
           size='small'
+          fullWidth={!hasButton && !hasExport}
           value={value}
           sx={{
             mr: {
               xs: 0,
-              sm: 4
+              sm: !hasButton && !hasExport ? 0 : 4
             },
             mb: 2,
             display: 'flex',
             alignItems: 'center',
-            gap: 5,
-            width: {
-              xs: '100%',
-              sm: 'auto'
-            }
+            gap: 5
           }}
           placeholder={placeholderSearch}
           onChange={e => handleFilter(e.target.value)}

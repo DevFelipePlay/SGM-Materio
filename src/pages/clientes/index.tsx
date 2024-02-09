@@ -31,6 +31,7 @@ import axios from 'axios'
 import { Avatar, Box } from '@mui/material'
 import { getInitials } from 'src/@core/utils/get-initials'
 import AdicionarClienteDrawer from 'src/views/clientes/AdicionarClienteDrawer'
+import AtivarLinhaDrawer from 'src/views/clientes/AtivarLinhaDrawer'
 
 const columns: GridColDef[] = [
   {
@@ -82,6 +83,7 @@ const Clientes = () => {
   const [users, setUsers] = useState([])
   const [loading, setLoading] = useState(true)
   const [addClienteOpen, setAddClienteOpen] = useState<boolean>(false)
+  const [ativarLinhaOpen, setAtivarLinhaOpen] = useState<boolean>(false)
 
   useEffect(() => {
     setLoading(true)
@@ -118,6 +120,7 @@ const Clientes = () => {
 
   // ** Drawer
   const toggleAddClienteDrawer = () => setAddClienteOpen(!addClienteOpen)
+  const toggleAtivarLinhaDrawer = () => setAtivarLinhaOpen(!ativarLinhaOpen)
 
   return (
     <Grid container spacing={6}>
@@ -200,11 +203,14 @@ const Clientes = () => {
             titleButton='Novo Cliente'
             loading={loading}
             toggle={toggleAddClienteDrawer}
+            seccondButtonTitle='Ativar Linha'
+            seccondButtonToggle={toggleAtivarLinhaDrawer}
           />
         </Card>
       </Grid>
 
       <AdicionarClienteDrawer open={addClienteOpen} toggle={toggleAddClienteDrawer} />
+      <AtivarLinhaDrawer open={ativarLinhaOpen} toggle={toggleAtivarLinhaDrawer} />
     </Grid>
   )
 }

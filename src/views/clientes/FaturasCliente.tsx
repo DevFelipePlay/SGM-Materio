@@ -297,6 +297,8 @@ const FaturasCliente = () => {
           <Divider />
 
           <CustomDataGrid
+            hasButton={false}
+            hasExport={false}
             columns={columns}
             rows={rows}
             filterFunction={filterFunction}
