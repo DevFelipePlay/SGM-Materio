@@ -30,6 +30,7 @@ import { maskCnpj, maskCpf } from 'src/utils/masks/masks'
 import axios from 'axios'
 import { Avatar, Box } from '@mui/material'
 import { getInitials } from 'src/@core/utils/get-initials'
+import AdicionarClienteDrawer from 'src/views/clientes/AdicionarClienteDrawer'
 
 const columns: GridColDef[] = [
   {
@@ -79,10 +80,16 @@ const columns: GridColDef[] = [
 
 const Clientes = () => {
   const [users, setUsers] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [addClienteOpen, setAddClienteOpen] = useState<boolean>(false)
+
   useEffect(() => {
-    axios.get('/users/list').then(response => setUsers(response.data))
+    setLoading(true)
+    axios.get('/users/list').then(response => {
+      setUsers(response.data)
+      setLoading(false)
+    })
   }, [])
-  console.log(users)
 
   // ** State
   const [role, setRole] = useState<string>('')
@@ -108,6 +115,9 @@ const Clientes = () => {
   )
 
   const router = useRouter()
+
+  // ** Drawer
+  const toggleAddClienteDrawer = () => setAddClienteOpen(!addClienteOpen)
 
   return (
     <Grid container spacing={6}>
@@ -188,9 +198,13 @@ const Clientes = () => {
             onCellClick={e => router.push(`clientes/detalhes/${e.row.cpf}`)}
             placeholderSearch='Buscar Cliente'
             titleButton='Novo Cliente'
+            loading={loading}
+            toggle={toggleAddClienteDrawer}
           />
         </Card>
       </Grid>
+
+      <AdicionarClienteDrawer open={addClienteOpen} toggle={toggleAddClienteDrawer} />
     </Grid>
   )
 }

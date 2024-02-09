@@ -18,19 +18,19 @@ type Props = {
 const columns: GridColDef[] = [
   {
     flex: 0.1,
-    minWidth: 100,
+    minWidth: 150,
     field: 'msisdn',
     headerName: 'MSISDN'
   },
   {
     flex: 0.1,
-    minWidth: 100,
+    minWidth: 200,
     field: 'iccid',
     headerName: 'ICCID'
   },
   {
     flex: 0.1,
-    minWidth: 100,
+    minWidth: 150,
     field: 'nomeDaLinha',
     headerName: 'Nome da Linha'
   }
