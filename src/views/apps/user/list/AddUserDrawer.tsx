@@ -34,7 +34,6 @@ import { RootState, AppDispatch } from 'src/store'
 import { UsersType } from 'src/types/apps/userTypes'
 
 interface SidebarAddUserType {
-  titleButton: string
   open: boolean
   toggle: () => void
 }
@@ -156,7 +155,7 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
       sx={{ '& .MuiDrawer-paper': { width: { xs: 300, sm: 400 } } }}
     >
       <Header>
-        <Typography variant='h6'>{props.titleButton}</Typography>
+        <Typography variant='h6'>Add User</Typography>
         <IconButton size='small' onClick={handleClose} sx={{ color: 'text.primary' }}>
           <Icon icon='mdi:close' fontSize={20} />
         </IconButton>

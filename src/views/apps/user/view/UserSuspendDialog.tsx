@@ -56,9 +56,9 @@ const UserSuspendDialog = (props: Props) => {
           >
             <Icon icon='mdi:alert-circle-outline' fontSize='5.5rem' />
             <Typography variant='h4' sx={{ mb: 5, color: 'text.secondary' }}>
-              Are you sure?
+              Tem certeza?
             </Typography>
-            <Typography>You won't be able to revert user!</Typography>
+            <Typography>Não será possível reverter esta ação!</Typography>
           </Box>
         </DialogContent>
         <DialogActions
@@ -69,10 +69,10 @@ const UserSuspendDialog = (props: Props) => {
           }}
         >
           <Button variant='contained' sx={{ mr: 2 }} onClick={() => handleConfirmation('yes')}>
-            Yes, Suspend user!
+            Sim, excluir linha!
           </Button>
           <Button variant='outlined' color='secondary' onClick={() => handleConfirmation('cancel')}>
-            Cancel
+            Cancelar
           </Button>
         </DialogActions>
       </Dialog>
@@ -89,7 +89,7 @@ const UserSuspendDialog = (props: Props) => {
               alignItems: 'center',
               flexDirection: 'column',
               '& svg': {
-                mb: 14,
+                mb: 10,
                 color: userInput === 'yes' ? 'success.main' : 'error.main'
               }
             }}
@@ -98,10 +98,10 @@ const UserSuspendDialog = (props: Props) => {
               fontSize='5.5rem'
               icon={userInput === 'yes' ? 'mdi:check-circle-outline' : 'mdi:close-circle-outline'}
             />
-            <Typography variant='h4' sx={{ mb: 8 }}>
-              {userInput === 'yes' ? 'Suspended!' : 'Cancelled'}
+            <Typography variant='h4' sx={{ mb: 4 }}>
+              {userInput === 'yes' ? 'Excluída!' : 'Cancelado'}
             </Typography>
-            <Typography>{userInput === 'yes' ? 'User has been suspended.' : 'Cancelled Suspension :)'}</Typography>
+            <Typography>{userInput === 'yes' ? 'A linha foi excluída com sucesso.' : 'Exclusão suspensa'}</Typography>
           </Box>
         </DialogContent>
         <DialogActions sx={{ justifyContent: 'center' }}>

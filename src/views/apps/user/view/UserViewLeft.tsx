@@ -31,14 +31,20 @@ import Icon from 'src/@core/components/icon'
 
 // ** Custom Components
 import CustomChip from 'src/@core/components/mui/chip'
+import CustomAvatar from 'src/@core/components/mui/avatar'
 import UserSuspendDialog from 'src/views/apps/user/view/UserSuspendDialog'
 import UserSubscriptionDialog from 'src/views/apps/user/view/UserSubscriptionDialog'
 
 // ** Types
+import { ThemeColor } from 'src/@core/layouts/types'
 import { UsersType } from 'src/types/apps/userTypes'
 
 // ** Utils Import
-import { Avatar } from '@mui/material'
+import { getInitials } from 'src/@core/utils/get-initials'
+
+interface ColorsType {
+  [key: string]: ThemeColor
+}
 
 const data: UsersType = {
   id: 1,
@@ -53,6 +59,14 @@ const data: UsersType = {
   fullName: 'Daisy Patterson',
   email: 'gslixby0@abc.net.au',
   avatar: '/images/avatars/4.png'
+}
+
+const roleColors: ColorsType = {
+  admin: 'error',
+  editor: 'info',
+  author: 'warning',
+  maintainer: 'success',
+  subscriber: 'primary'
 }
 
 // ** Styled <sup> component
@@ -70,11 +84,7 @@ const Sub = styled('sub')({
   alignSelf: 'flex-end'
 })
 
-interface UserViewLeftProps {
-  userData: any
-}
-
-const UserViewLeft = ({ userData }: UserViewLeftProps) => {
+const UserViewLeft = () => {
   // ** States
   const [openEdit, setOpenEdit] = useState<boolean>(false)
   const [openPlans, setOpenPlans] = useState<boolean>(false)
@@ -95,67 +105,107 @@ const UserViewLeft = ({ userData }: UserViewLeftProps) => {
         <Grid item xs={12}>
           <Card>
             <CardContent sx={{ pt: 15, display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
-              <Avatar src={userData.avatar} sx={{ width: '5rem', height: '5rem' }} />
-              <Typography variant='h6' sx={{ mb: 4, mt: 2 }}>
-                {userData.name}
+              {data.avatar ? (
+                <CustomAvatar
+                  src={data.avatar}
+                  variant='rounded'
+                  alt={data.fullName}
+                  sx={{ width: 120, height: 120, fontWeight: 600, mb: 4 }}
+                />
+              ) : (
+                <CustomAvatar
+                  skin='light'
+                  variant='rounded'
+                  color={data.avatarColor as ThemeColor}
+                  sx={{ width: 120, height: 120, fontWeight: 600, mb: 4, fontSize: '3rem' }}
+                >
+                  {getInitials(data.fullName)}
+                </CustomAvatar>
+              )}
+              <Typography variant='h6' sx={{ mb: 4 }}>
+                {data.fullName}
               </Typography>
+              <CustomChip
+                skin='light'
+                size='small'
+                label={data.role}
+                color={roleColors[data.role]}
+                sx={{ textTransform: 'capitalize' }}
+              />
+            </CardContent>
+
+            <CardContent sx={{ my: 1 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Box sx={{ mr: 8, display: 'flex', alignItems: 'center' }}>
+                  <CustomAvatar skin='light' variant='rounded' sx={{ mr: 4, width: 44, height: 44 }}>
+                    <Icon icon='mdi:check' />
+                  </CustomAvatar>
+                  <div>
+                    <Typography variant='h6'>1.23k</Typography>
+                    <Typography variant='body2'>Task Done</Typography>
+                  </div>
+                </Box>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <CustomAvatar skin='light' variant='rounded' sx={{ mr: 4, width: 44, height: 44 }}>
+                    <Icon icon='mdi:star-outline' />
+                  </CustomAvatar>
+                  <div>
+                    <Typography variant='h6'>568</Typography>
+                    <Typography variant='body2'>Project Done</Typography>
+                  </div>
+                </Box>
+              </Box>
             </CardContent>
 
             <CardContent>
-              <Typography variant='h6'>Dados Pessoais</Typography>
+              <Typography variant='h6'>Details</Typography>
               <Divider sx={{ my: theme => `${theme.spacing(4)} !important` }} />
               <Box sx={{ pb: 1 }}>
                 <Box sx={{ display: 'flex', mb: 2 }}>
-                  <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>CPF:</Typography>
-                  <Typography variant='body2'>{userData.cpf}</Typography>
+                  <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>Username:</Typography>
+                  <Typography variant='body2'>@{data.username}</Typography>
                 </Box>
                 <Box sx={{ display: 'flex', mb: 2 }}>
-                  <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>Data de Nascimento:</Typography>
+                  <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>Billing Email:</Typography>
+                  <Typography variant='body2'>{data.email}</Typography>
+                </Box>
+                <Box sx={{ display: 'flex', mb: 2 }}>
+                  <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>Status:</Typography>
                   <Typography variant='body2' sx={{ textTransform: 'capitalize' }}>
-                    09/01/2001
+                    {data.status}
                   </Typography>
                 </Box>
                 <Box sx={{ display: 'flex', mb: 2 }}>
-                  <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>Email:</Typography>
-                  <Typography variant='body2'>teste@teste.com</Typography>
+                  <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>Role:</Typography>
+                  <Typography variant='body2' sx={{ textTransform: 'capitalize' }}>
+                    {data.role}
+                  </Typography>
                 </Box>
                 <Box sx={{ display: 'flex', mb: 2 }}>
-                  <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>Celular:</Typography>
-                  <Typography variant='body2'>{userData.msisdn}</Typography>
+                  <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>Tax ID:</Typography>
+                  <Typography variant='body2'>Tax-8894</Typography>
                 </Box>
                 <Box sx={{ display: 'flex', mb: 2 }}>
-                  <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>WhatsApp:</Typography>
-                  <Typography variant='body2'>{userData.msisdn}</Typography>
+                  <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>Contact:</Typography>
+                  <Typography variant='body2'>+1 {data.contact}</Typography>
                 </Box>
                 <Box sx={{ display: 'flex', mb: 2 }}>
-                  <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>CEP:</Typography>
-                  <Typography variant='body2'>72870-265</Typography>
+                  <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>Language:</Typography>
+                  <Typography variant='body2'>English</Typography>
                 </Box>
-                <Box sx={{ display: 'flex', mb: 2 }}>
-                  <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>UF:</Typography>
-                  <Typography variant='body2'>DF</Typography>
-                </Box>
-                <Box sx={{ display: 'flex', mb: 2 }}>
-                  <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>Cidade:</Typography>
-                  <Typography variant='body2'>Brasília</Typography>
-                </Box>
-                <Box sx={{ display: 'flex', mb: 2 }}>
-                  <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>Bairro:</Typography>
-                  <Typography variant='body2'>Riacho Fundo</Typography>
-                </Box>
-                <Box sx={{ display: 'flex', mb: 2 }}>
-                  <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>Endereço:</Typography>
-                  <Typography variant='body2'>QN 8B 12 Casa 25</Typography>
+                <Box sx={{ display: 'flex' }}>
+                  <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>Country:</Typography>
+                  <Typography variant='body2'>{data.country}</Typography>
                 </Box>
               </Box>
             </CardContent>
 
             <CardActions sx={{ display: 'flex', justifyContent: 'center' }}>
               <Button variant='contained' sx={{ mr: 2 }} onClick={handleEditClickOpen}>
-                Editar
+                Edit
               </Button>
               <Button color='error' variant='outlined' onClick={() => setSuspendDialogOpen(true)}>
-                Excluir Linha
+                Suspend
               </Button>
             </CardActions>
 
@@ -292,24 +342,24 @@ const UserViewLeft = ({ userData }: UserViewLeftProps) => {
 
         <Grid item xs={12}>
           <Card sx={{ boxShadow: 'none', border: theme => `2px solid ${theme.palette.primary.main}` }}>
-            <CardContent sx={{ display: 'flex', flexWrap: 'wrap', pb: '0 !important', justifyContent: 'center' }}>
-              <CustomChip skin='light' size='small' color='primary' label='(Start) 6Gb + 100 Minutos + 60 sms' />
-              <Box
-                sx={{
-                  display: 'flex',
-                  position: 'relative'
-                }}
-              >
+            <CardContent
+              sx={{ display: 'flex', flexWrap: 'wrap', pb: '0 !important', justifyContent: 'space-between' }}
+            >
+              <CustomChip skin='light' size='small' color='primary' label='Standard' />
+              <Box sx={{ display: 'flex', position: 'relative' }}>
                 <Typography variant='h6' sx={{ color: 'primary.main', alignSelf: 'flex-end' }}>
-                  R$
+                  $
                 </Typography>
                 <Typography
-                  variant='h4'
+                  variant='h3'
                   sx={{
                     color: 'primary.main'
                   }}
                 >
-                  29,90
+                  99
+                </Typography>
+                <Typography variant='body2' sx={{ color: 'text.primary', alignSelf: 'flex-end' }}>
+                  / month
                 </Typography>
               </Box>
             </CardContent>
@@ -318,7 +368,7 @@ const UserViewLeft = ({ userData }: UserViewLeftProps) => {
               <Box sx={{ mt: 6, mb: 5 }}>
                 <Box sx={{ display: 'flex', mb: 3.5, alignItems: 'center', '& svg': { mr: 2, color: 'grey.300' } }}>
                   <Icon icon='mdi:circle' fontSize='0.5rem' />
-                  <Typography variant='body2'>6 GB</Typography>
+                  <Typography variant='body2'>10 Users</Typography>
                 </Box>
                 <Box
                   sx={{
@@ -329,7 +379,7 @@ const UserViewLeft = ({ userData }: UserViewLeftProps) => {
                   }}
                 >
                   <Icon icon='mdi:circle' fontSize='0.5rem' />
-                  <Typography variant='body2'>WhatsApp Grátis</Typography>
+                  <Typography variant='body2'>Up to 10GB storage</Typography>
                 </Box>
                 <Box
                   sx={{
@@ -339,27 +389,23 @@ const UserViewLeft = ({ userData }: UserViewLeftProps) => {
                   }}
                 >
                   <Icon icon='mdi:circle' fontSize='0.5rem' />
-                  <Typography variant='body2'>100 Minutos</Typography>
+                  <Typography variant='body2'>Basic Support</Typography>
                 </Box>
               </Box>
-              <Divider sx={{ width: '100%', mx: 'auto' }} />
-              <Typography variant='h6' sx={{ color: 'text.primary', fontWeight: 600, my: 2 }}>
-                Consumo
-              </Typography>
               <Box sx={{ display: 'flex', mb: 1.5, justifyContent: 'space-between' }}>
                 <Typography variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }}>
-                  Gasto: 3GB
+                  Days
                 </Typography>
                 <Typography variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }}>
-                  Total: 6GB
+                  26 of 30 Days
                 </Typography>
               </Box>
-              <LinearProgress value={50} variant='determinate' sx={{ height: 6, borderRadius: '5px' }} />
+              <LinearProgress value={86.66} variant='determinate' sx={{ height: 6, borderRadius: '5px' }} />
               <Typography variant='caption' sx={{ mt: 1.5, mb: 6, display: 'block' }}>
-                3GB restantes
+                4 days remaining
               </Typography>
               <Button variant='contained' sx={{ width: '100%' }} onClick={handlePlansClickOpen}>
-                Alterar Plano
+                Upgrade Plan
               </Button>
             </CardContent>
 

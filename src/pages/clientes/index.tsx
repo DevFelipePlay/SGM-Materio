@@ -24,24 +24,31 @@ import CardStatisticsHorizontal from 'src/@core/components/card-statistics/card-
 // ** Third Party Components
 
 // ** Custom Table Components Imports
-import AddUserDrawer from 'src/views/apps/user/list/AddUserDrawer'
 import CustomDataGrid from 'src/components/CustomDataGrid/CustomDataGrid'
 import { useRouter } from 'next/router'
 import { maskCnpj, maskCpf } from 'src/utils/masks/masks'
 import axios from 'axios'
 import { Avatar, Box } from '@mui/material'
 import { getInitials } from 'src/@core/utils/get-initials'
+import AdicionarClienteDrawer from 'src/views/clientes/AdicionarClienteDrawer'
+import AtivarLinhaDrawer from 'src/views/clientes/AtivarLinhaDrawer'
 
 const columns: GridColDef[] = [
   {
     flex: 0.1,
-    minWidth: 100,
+    minWidth: 200,
     field: 'name',
     headerName: 'Cliente',
     renderCell: ({ row }: any) => {
       return (
         <Box display='flex' alignItems='center' gap={4}>
-          {row.avatar === '' ? <Avatar>{getInitials(row.name)}</Avatar> : <Avatar src={row.avatar} />}
+          {row.avatar === '' ? (
+            <Avatar sx={{ color: '#fff', bgcolor: theme => theme.palette.primary.main }}>
+              {getInitials(row.name)}
+            </Avatar>
+          ) : (
+            <Avatar src={row.avatar} />
+          )}
           <p>{row.name}</p>
         </Box>
       )
@@ -49,7 +56,7 @@ const columns: GridColDef[] = [
   },
   {
     flex: 0.1,
-    minWidth: 100,
+    minWidth: 200,
     field: 'cpf',
     headerName: 'CPF / CNPJ',
     renderCell: ({ row }: any) => {
@@ -61,12 +68,12 @@ const columns: GridColDef[] = [
   {
     flex: 0.1,
     field: 'iccid',
-    minWidth: 100,
+    minWidth: 200,
     headerName: 'ICCID'
   },
   {
     flex: 0.1,
-    minWidth: 100,
+    minWidth: 200,
     field: 'msisdn',
     headerName: 'MSISDN'
   }
@@ -74,15 +81,21 @@ const columns: GridColDef[] = [
 
 const Clientes = () => {
   const [users, setUsers] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [addClienteOpen, setAddClienteOpen] = useState<boolean>(false)
+  const [ativarLinhaOpen, setAtivarLinhaOpen] = useState<boolean>(false)
+
   useEffect(() => {
-    axios.get('/users/list').then(response => setUsers(response.data))
+    setLoading(true)
+    axios.get('/users/list').then(response => {
+      setUsers(response.data)
+      setLoading(false)
+    })
   }, [])
-  console.log(users)
 
   // ** State
   const [role, setRole] = useState<string>('')
   const [plan, setPlan] = useState<string>('')
-  const [addUserOpen, setAddUserOpen] = useState<boolean>(false)
 
   const handleRoleChange = useCallback((e: SelectChangeEvent) => {
     setRole(e.target.value)
@@ -91,8 +104,6 @@ const Clientes = () => {
   const handlePlanChange = useCallback((e: SelectChangeEvent) => {
     setPlan(e.target.value)
   }, [])
-
-  const toggleAddUserDrawer = () => setAddUserOpen(!addUserOpen)
 
   // ** Função de filtro
   const filterFunction = useCallback(
@@ -106,6 +117,10 @@ const Clientes = () => {
   )
 
   const router = useRouter()
+
+  // ** Drawer
+  const toggleAddClienteDrawer = () => setAddClienteOpen(!addClienteOpen)
+  const toggleAtivarLinhaDrawer = () => setAtivarLinhaOpen(!ativarLinhaOpen)
 
   return (
     <Grid container spacing={6}>
@@ -186,11 +201,16 @@ const Clientes = () => {
             onCellClick={e => router.push(`clientes/detalhes/${e.row.cpf}`)}
             placeholderSearch='Buscar Cliente'
             titleButton='Novo Cliente'
+            loading={loading}
+            toggle={toggleAddClienteDrawer}
+            seccondButtonTitle='Ativar Linha'
+            seccondButtonToggle={toggleAtivarLinhaDrawer}
           />
         </Card>
       </Grid>
 
-      <AddUserDrawer open={addUserOpen} toggle={toggleAddUserDrawer} titleButton='Cadastrar Novo Parceiro' />
+      <AdicionarClienteDrawer open={addClienteOpen} toggle={toggleAddClienteDrawer} />
+      <AtivarLinhaDrawer open={ativarLinhaOpen} toggle={toggleAtivarLinhaDrawer} />
     </Grid>
   )
 }

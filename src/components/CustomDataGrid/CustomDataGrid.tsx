@@ -1,25 +1,53 @@
 import { useState } from 'react'
 import { DataGrid, GridCellParams, gridClasses, GridColDef } from '@mui/x-data-grid'
-import { Box, Divider, Pagination, Typography } from '@mui/material'
+import { Box, CircularProgress, Divider, Pagination, Typography } from '@mui/material'
 import TableHeader from 'src/views/apps/user/list/TableHeader'
 
 interface CustomDataGridProps {
+  // eslint-disable-next-line lines-around-comment
+
+  // Props Data Grid
+
   rows: any
   columns: GridColDef[]
-  filterFunction?: (row: any) => boolean
   onCellClick?: (params: GridCellParams, event: React.MouseEvent) => void
+  filterFunction?: (row: any) => boolean
+  checkboxSelection?: boolean
+  loading?: boolean
+
+  // Props Table header
+
   placeholderSearch?: string
   titleButton?: string
+  seccondButtonVariant?: 'contained' | 'outlined' | 'text'
+  seccondButtonColor?: 'error' | 'info' | 'inherit' | 'primary' | 'secondary' | 'success' | 'warning'
+  seccondButtonTitle?: string
+  hasButton?: boolean
+  hasExport?: boolean
   toggle?: () => void
+  seccondButtonToggle?: () => void
 }
 
 export default function CustomDataGrid({
   rows,
   columns,
-  placeholderSearch = 'Buscar',
-  titleButton = 'Adicionar',
+  loading,
+
   toggle,
   filterFunction,
+  seccondButtonToggle,
+
+  seccondButtonColor,
+  seccondButtonTitle,
+
+  hasExport,
+  hasButton,
+
+  seccondButtonVariant = 'outlined',
+  placeholderSearch = 'Buscar',
+  titleButton = 'Adicionar',
+  checkboxSelection = false,
+
   ...rest
 }: CustomDataGridProps) {
   // ** State
@@ -43,8 +71,21 @@ export default function CustomDataGrid({
         placeholderSearch={placeholderSearch}
         titleButton={titleButton}
         toggle={toggle}
+        seccondButtonVariant={seccondButtonVariant}
+        seccondButtonColor={seccondButtonColor}
+        seccondButtonTitle={seccondButtonTitle}
+        seccondButtonToggle={seccondButtonToggle}
+        hasButton={hasButton}
+        hasExport={hasExport}
       />
-      {filteredRows.length > 0 ? (
+      {loading ? (
+        <>
+          <Divider />
+          <Box width='100%' display='flex' justifyContent='center' py={20}>
+            <CircularProgress />
+          </Box>
+        </>
+      ) : filteredRows.length > 0 ? (
         <Box display='flex' flexDirection='column' mx='auto' pb={5}>
           <DataGrid
             autoHeight
@@ -55,6 +96,11 @@ export default function CustomDataGrid({
             paginationModel={paginationModel}
             onPaginationModelChange={setPaginationModel}
             hideFooterPagination
+            checkboxSelection={checkboxSelection}
+            loading={loading}
+            localeText={{
+              footerRowSelected: count => `${count} linha${count !== 1 ? 's' : ''} selecionada${count !== 1 ? 's' : ''}`
+            }}
             getRowSpacing={() => ({
               top: 5,
               bottom: 5
@@ -75,6 +121,9 @@ export default function CustomDataGrid({
               },
               [`& .${gridClasses.footerContainer}`]: {
                 mt: 1.5
+              },
+              [`& .${gridClasses.checkboxInput}.Mui-checked`]: {
+                color: theme => (theme.palette.mode === 'dark' ? '#f1f1f1' : '#404040')
               }
             }}
             {...rest}

@@ -8,9 +8,9 @@ import axios from 'axios'
 import { InvoiceType } from 'src/types/apps/invoiceTypes'
 
 // ** Demo Components Imports
-import UserViewPage from 'src/views/apps/user/view/UserViewPage'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+import VisualizacaoCliente from 'src/views/clientes/VisualizacaoCliente'
 
 const UserView = ({ tab, invoiceData, userID }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const { query } = useRouter()
@@ -33,7 +33,7 @@ const UserView = ({ tab, invoiceData, userID }: InferGetStaticPropsType<typeof g
     getUserByCPF(user)
   }, [user])
 
-  return <UserViewPage tab={tab} invoiceData={invoiceData} userID={userID} user={userData} />
+  return <VisualizacaoCliente tab={tab} invoiceData={invoiceData} userID={userID} user={userData} />
 }
 
 export const getStaticPaths: GetStaticPaths = () => {
