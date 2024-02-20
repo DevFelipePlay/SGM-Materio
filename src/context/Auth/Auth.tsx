@@ -60,7 +60,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         role: 'admin' // ou a role desejada
       }
       cookies.set('user', userWithRole, {
-        expires: new Date(jwtContent.exp * 1000)
+        expires: new Date(jwtContent.exp * 1000),
+        httpOnly: true
       })
       setuser(userWithRole)
 
