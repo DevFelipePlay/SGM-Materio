@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { DataGrid, GridCellParams, gridClasses, GridColDef } from '@mui/x-data-grid'
 import { Box, CircularProgress, Divider, Pagination, Typography } from '@mui/material'
 import TableHeader from 'src/views/apps/user/list/TableHeader'
+import PerfectScrollbar from 'react-perfect-scrollbar'
 
 interface CustomDataGridProps {
   // eslint-disable-next-line lines-around-comment
@@ -128,6 +129,7 @@ export default function CustomDataGrid({
             }}
             {...rest}
           />
+
           <Pagination
             count={Math.ceil(filteredRows.length / paginationModel.pageSize)}
             page={paginationModel.page + 1}
