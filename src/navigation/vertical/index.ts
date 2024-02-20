@@ -11,12 +11,10 @@ const navigation = (): VerticalNavItemsType => {
     {
       title: 'CRM',
       icon: 'mdi:monitor-dashboard',
-      badgeColor: 'success',
       children: [
         {
           title: 'Parceiros',
-          path: '/crm/parceiros',
-          badgeColor: 'success'
+          path: '/crm/parceiros'
         },
 
         {
@@ -47,6 +45,21 @@ const navigation = (): VerticalNavItemsType => {
       title: 'Clientes',
       path: '/clientes',
       icon: 'mdi:account-group'
+    },
+    {
+      title: 'Pós-Pago',
+      icon: 'mdi:credit-card-outline',
+      badgeColor: 'primary',
+      children: [
+        {
+          title: 'Recargas',
+          path: '/pos-pago/recargas'
+        },
+        {
+          title: 'Faturas',
+          path: '/pos-pago/faturas'
+        }
+      ]
     }
 
     // {
