@@ -224,9 +224,9 @@ mock.onGet('/parceiros/list').reply(config => {
 
 // Buscar usuário pelo cpf
 mock.onGet('/parceiros/search').reply(config => {
-  const { cnpj } = config.params
+  const { id } = config.params
 
-  const parceiro = data.parceiros.find(parceiro => parceiro.cpf === cnpj)
+  const parceiro = data.parceiros.find(parceiro => parceiro.cpf === id)
 
   return parceiro ? [200, parceiro] : [404, { message: 'Parceiro não encontrado' }]
 })

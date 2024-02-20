@@ -10,17 +10,17 @@ import axios from 'axios'
 // ** Demo Components Imports
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import VisualizacaoCliente from 'src/views/clientes/VisualizacaoCliente'
+import { Box } from '@mui/material'
 
-const UserView = ({ tab, invoiceData, userID }: InferGetStaticPropsType<typeof getStaticProps>) => {
+const PartnerView = ({ tab, partnerID }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const { query } = useRouter()
-  const user = query.userID
+  const partner = query.partnerID
 
   const [userData, setUserData] = useState([])
 
-  async function getUserByCPF(cpf: string) {
+  async function getUserByCPF(id: string) {
     try {
-      const response = await axios.get('/users/search', { params: { cpf } })
+      const response = await axios.get('/parceiros/search', { params: { id } })
 
       setUserData(response.data)
     } catch (error) {
@@ -30,10 +30,22 @@ const UserView = ({ tab, invoiceData, userID }: InferGetStaticPropsType<typeof g
 
   useEffect(() => {
     // @ts-ignore
-    getUserByCPF(user)
-  }, [user])
+    getUserByCPF(partner)
+  }, [partner])
 
-  return <VisualizacaoCliente tab={tab} invoiceData={invoiceData} userID={userID} user={userData} />
+  return (
+    <Box
+      sx={{
+        width: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100vh'
+      }}
+    >
+      {partner} {partnerID} {tab}
+    </Box>
+  )
 }
 
 export const getStaticPaths: GetStaticPaths = () => {
@@ -45,17 +57,16 @@ export const getStaticPaths: GetStaticPaths = () => {
 
 export const getStaticProps: GetStaticProps = async ({ params }: GetStaticPropsContext) => {
   // const res = await axios.get('/apps/invoice/invoices')
-
   // const invoiceData: InvoiceType[] = res.data.allData
-  const userID = params?.userID
+  const partnerID = params?.partnerID
 
   return {
     props: {
       // invoiceData,
       tab: params?.tab,
-      userID
+      partnerID
     }
   }
 }
 
-export default UserView
+export default PartnerView
