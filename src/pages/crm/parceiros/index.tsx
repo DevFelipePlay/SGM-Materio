@@ -25,57 +25,25 @@ import DialogContent from '@mui/material/DialogContent'
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 
-// ** Store Imports
-import { useDispatch, useSelector } from 'react-redux'
-
-// ** Custom Components Imports
-import CustomChip from 'src/@core/components/mui/chip'
+// ** Importação de Componentes
 import CustomAvatar from 'src/@core/components/mui/avatar'
 import CardStatisticsHorizontal from 'src/@core/components/card-statistics/card-stats-horizontal'
 
-// ** Utils Import
+// ** Importação de Utilidades
 import { getInitials } from 'src/@core/utils/get-initials'
 
-// ** Actions Imports
-import { fetchData } from 'src/store/apps/user'
-
-// ** Third Party Components
-
-// ** Types Imports
-import { RootState, AppDispatch } from 'src/store'
-import { ThemeColor } from 'src/@core/layouts/types'
-import { UsersType } from 'src/types/apps/userTypes'
+// ** Importação de tipos
 
 // ** Custom Table Components Imports
 import CadastroMVNO from 'src/components/CadastroMVNO'
 import CustomDataGrid from 'src/components/CustomDataGrid/CustomDataGrid'
 import { useRouter } from 'next/router'
-
-// interface UserRoleType {
-//   [key: string]: { icon: string; color: string }
-// }
-
-interface UserStatusType {
-  [key: string]: ThemeColor
-}
-
-// ** Vars
-// const userRoleObj: UserRoleType = {
-//   admin: { icon: 'mdi:laptop', color: 'error.main' },
-//   author: { icon: 'mdi:cog-outline', color: 'warning.main' },
-//   editor: { icon: 'mdi:pencil-outline', color: 'info.main' },
-//   maintainer: { icon: 'mdi:chart-donut', color: 'success.main' },
-//   subscriber: { icon: 'mdi:account-outline', color: 'primary.main' }
-// }
+import axios from 'axios'
+import { PartnersTypes } from 'src/types/apps/PartnersTypes'
+import { maskCnpj } from 'src/utils/masks/masks'
 
 interface CellType {
-  row: UsersType
-}
-
-const userStatusObj: UserStatusType = {
-  active: 'success',
-  pending: 'warning',
-  inactive: 'secondary'
+  row: PartnersTypes
 }
 
 const LinkStyled = styled(Link)(({ theme }) => ({
@@ -89,102 +57,37 @@ const LinkStyled = styled(Link)(({ theme }) => ({
   }
 }))
 
-// ** renders client column
-const renderClient = (row: UsersType) => {
-  if (row.avatar.length) {
-    return <CustomAvatar src={row.avatar} sx={{ mr: 3, width: 30, height: 30 }} />
+// ** Avatar com logo do parceiro
+const renderClient = (row: PartnersTypes) => {
+  if (row.logotipo.length) {
+    return <CustomAvatar src={row.logotipo} sx={{ mr: 3, width: 30, height: 30 }} />
   } else {
     return (
-      <CustomAvatar
-        skin='light'
-        color={row.avatarColor || 'primary'}
-        sx={{ mr: 3, width: 30, height: 30, fontSize: '.875rem' }}
-      >
-        {getInitials(row.fullName ? row.fullName : 'John Doe')}
+      <CustomAvatar skin='light' color={'primary'} sx={{ mr: 3, width: 30, height: 30, fontSize: '.875rem' }}>
+        {getInitials(row.companyname ? row.companyname : 'John Doe')}
       </CustomAvatar>
     )
   }
 }
 
-// const RowOptions = ({ id }: { id: number | string }) => {
-//   // ** Hooks
-//   const dispatch = useDispatch<AppDispatch>()
-
-//   // ** State
-//   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-
-//   const rowOptionsOpen = Boolean(anchorEl)
-
-//   const handleRowOptionsClick = (event: MouseEvent<HTMLElement>) => {
-//     setAnchorEl(event.currentTarget)
-//   }
-//   const handleRowOptionsClose = () => {
-//     setAnchorEl(null)
-//   }
-
-//   const handleDelete = () => {
-//     dispatch(deleteUser(id))
-//     handleRowOptionsClose()
-//   }
-
-//   return (
-//     <>
-//       <IconButton size='small' onClick={handleRowOptionsClick}>
-//         <Icon icon='mdi:dots-vertical' />
-//       </IconButton>
-//       <Menu
-//         keepMounted
-//         anchorEl={anchorEl}
-//         open={rowOptionsOpen}
-//         onClose={handleRowOptionsClose}
-//         anchorOrigin={{
-//           vertical: 'bottom',
-//           horizontal: 'right'
-//         }}
-//         transformOrigin={{
-//           vertical: 'top',
-//           horizontal: 'right'
-//         }}
-//         PaperProps={{ style: { minWidth: '8rem' } }}
-//       >
-//         <MenuItem
-//           component={Link}
-//           sx={{ '& svg': { mr: 2 } }}
-//           onClick={handleRowOptionsClose}
-//           href='/apps/user/view/overview/'
-//         >
-//           <Icon icon='mdi:eye-outline' fontSize={20} />
-//           View
-//         </MenuItem>
-//         <MenuItem onClick={handleRowOptionsClose} sx={{ '& svg': { mr: 2 } }}>
-//           <Icon icon='mdi:pencil-outline' fontSize={20} />
-//           Edit
-//         </MenuItem>
-//         <MenuItem onClick={handleDelete} sx={{ '& svg': { mr: 2 } }}>
-//           <Icon icon='mdi:delete-outline' fontSize={20} />
-//           Delete
-//         </MenuItem>
-//       </Menu>
-//     </>
-//   )
-// }
+// eslint-disable-next-line react-hooks/rules-of-hooks
 
 export const columns: GridColDef[] = [
   {
     flex: 0.2,
     minWidth: 230,
-    field: 'fullName',
+    field: 'companyname',
     headerName: 'Parceiro',
     renderCell: ({ row }: CellType) => {
-      const { fullName, username } = row
+      const { companyname, tradename } = row
 
       return (
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           {renderClient(row)}
           <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
-            <LinkStyled href='/apps/user/view/overview/'>{fullName}</LinkStyled>
+            <LinkStyled href='/apps/user/view/overview/'>{companyname}</LinkStyled>
             <Typography noWrap variant='caption'>
-              {`@${username}`}
+              {`@${tradename}`}
             </Typography>
           </Box>
         </Box>
@@ -194,7 +97,7 @@ export const columns: GridColDef[] = [
   {
     flex: 0.1,
     minWidth: 110,
-    field: 'id',
+    field: 'companyid',
     headerName: 'ID'
   },
 
@@ -202,55 +105,55 @@ export const columns: GridColDef[] = [
     flex: 0.15,
     minWidth: 120,
     headerName: 'CNPJ',
-    field: 'currentPlan',
+    field: 'cnpj',
     renderCell: ({ row }: CellType) => {
       return (
         <Typography noWrap sx={{ textTransform: 'capitalize' }}>
-          {row.currentPlan}
+          {maskCnpj(row.cnpj)}
         </Typography>
       )
     }
-  },
-  {
-    flex: 0.1,
-    minWidth: 110,
-    field: 'status',
-    headerName: 'Status',
-    renderCell: ({ row }: CellType) => {
-      return (
-        <CustomChip
-          skin='light'
-          size='small'
-          label={row.status}
-          color={userStatusObj[row.status]}
-          sx={{ textTransform: 'capitalize' }}
-        />
-      )
-    }
   }
+
+  // {
+  //   flex: 0.1,
+  //   minWidth: 110,
+  //   field: 'status',
+  //   headerName: 'Status',
+  //   renderCell: ({ row }: CellType) => {
+  //     return (
+  //       <CustomChip
+  //         skin='light'
+  //         size='small'
+  //         label={row.}
+  //         color={userStatusObj[row.status]}
+  //         sx={{ textTransform: 'capitalize' }}
+  //       />
+  //     )
+  //   }
+  // }
 ]
 
 const UserList = () => {
   // ** State
   const [role, setRole] = useState<string>('')
+  const [partners, setPartners] = useState([])
+  const [loading, setLoading] = useState(true)
   const [plan, setPlan] = useState<string>('')
   const [status, setStatus] = useState<string>('')
 
   // ** Hooks
-  const dispatch = useDispatch<AppDispatch>()
-  const store = useSelector((state: RootState) => state.user)
+
   const router = useRouter()
 
   useEffect(() => {
-    dispatch(
-      fetchData({
-        role,
-        status,
-        q: '',
-        currentPlan: plan
-      })
-    )
-  }, [dispatch, plan, role, status])
+    setLoading(true)
+    axios.get('/parceiros/list').then(response => {
+      setPartners(response.data)
+      setLoading(false)
+      console.log(response.data)
+    })
+  }, [])
 
   const handleRoleChange = useCallback((e: SelectChangeEvent) => {
     setRole(e.target.value)
@@ -396,19 +299,10 @@ const UserList = () => {
           </CardContent>
           <Divider />
 
-          {/* <DataGrid
-            autoHeight
-            rows={store.data}
-            columns={columns}
-            checkboxSelection
-            disableRowSelectionOnClick
-            pageSizeOptions={[10, 25, 50]}
-            paginationModel={paginationModel}
-            onPaginationModelChange={setPaginationModel}
-          /> */}
           <CustomDataGrid
             columns={columns}
-            rows={store.data}
+            rows={partners}
+            loading={loading}
             onCellClick={e => router.push(`parceiros/teste/${e.row.id}`)}
             filterFunction={filterFunction}
             toggle={() => toggleAddUserDrawer()}
