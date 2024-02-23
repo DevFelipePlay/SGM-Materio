@@ -1,7 +1,13 @@
 import mock from '../mock'
+import { FaturasClientesType } from '../types'
 
-const data: { faturas: any[] } = {
-  faturas: [
+interface DataFaturasProps {
+  iccid: string
+  faturas: FaturasClientesType[]
+}
+
+const data: { faturasClientes: DataFaturasProps[] } = {
+  faturasClientes: [
     {
       iccid: '8955170110337674541',
       faturas: [
@@ -349,7 +355,7 @@ const data: { faturas: any[] } = {
 mock.onGet('/api/fatura/consulta').reply(config => {
   const { iccid } = config.params
 
-  const user = data.faturas.find(user => user.iccid === iccid)
+  const fatura = data.faturasClientes.find(user => user.iccid === iccid)
 
-  return user ? [200, user] : [404, { message: 'Fatura não encontrada' }]
+  return fatura ? [200, fatura] : [404, { message: 'Fatura não encontrada' }]
 })

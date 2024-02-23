@@ -233,3 +233,28 @@ export type DetalhesClienteType = {
   smsrestante: string
   revendedor: string | null
 }
+
+export type FaturasClientesType = {
+  id: number
+  paymentid: number
+  msisdnid: number
+  paymenttypeid: number
+  paymentstatus: number
+  created: string
+  paymentasaasid: string
+  invoiceurl: string
+  paid: string
+  valuetopup: string
+  tipo: string
+  adicionalid: any
+  planid: string
+  invoicenumber: string | null
+  nossonumero: any
+  netvalue: any
+  bankslipurl: any
+  split: string | null
+  transactionreceipturl: any
+  atualizadoem: any
+  save: string
+  statussplitparceiro: string | null
+}

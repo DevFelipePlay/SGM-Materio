@@ -36,6 +36,15 @@ import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
 import { ptBR } from 'date-fns/locale'
 import axios from 'axios'
 
+interface FaturasProps {
+  created: string
+  paid: string
+  paymentasaasid: string
+  tipo: string
+  valuetopup: string
+  paymentstatus: number
+}
+
 interface PickerProps {
   start: Date | number
   end: Date | number
@@ -107,7 +116,7 @@ const FaturasCliente = ({ userData }: any) => {
   const [endDate, setEndDate] = useState<DateType>(null)
   const [startDate, setStartDate] = useState<DateType>(null)
   const [status, setStatus] = useState('')
-  const [faturas, setFaturas] = useState()
+  const [faturas, setFaturas] = useState<FaturasProps>()
 
   async function getFaturaByICCID(iccid: string) {
     try {
@@ -304,7 +313,8 @@ const FaturasCliente = ({ userData }: any) => {
             filterFunction={filterFunction}
             onCellClick={params => {
               if (params.field !== 'paymentasaasid' && params.field !== 'actions') {
-                alert('VISUALIZAR FATURA')
+                // window.location.href = `https://fatura.operadora.app.br/?payid=${params.row.paymentasaasid}`
+                window.open(`https://fatura.operadora.app.br/?payid=${params.row.paymentasaasid}`, '_blank')
               }
             }}
           />

@@ -131,7 +131,7 @@ const VisualizacaoDireitaCliente = ({ tab, invoiceData, userID, userData }: Prop
             </Box>
           }
         />
-        {userData.cpf.length !== 14 && (
+        {userData.cpf && userData.cpf.length !== 14 && (
           <Tab
             value='cobrancas'
             label={
@@ -187,7 +187,7 @@ const VisualizacaoDireitaCliente = ({ tab, invoiceData, userID, userData }: Prop
             <TabPanel sx={{ p: 0 }} value='portabilidade'>
               <PortabilidadeCliente />
             </TabPanel>
-            {userData.cpf.length !== 14 && (
+            {userData.cpf && userData.cpf.length !== 14 && (
               <TabPanel sx={{ p: 0 }} value='cobrancas'>
                 <FaturasCliente userData={userData} />
               </TabPanel>
