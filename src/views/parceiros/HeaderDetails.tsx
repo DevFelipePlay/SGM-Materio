@@ -21,14 +21,15 @@ const ProfilePicture = styled('img')(({ theme }) => ({
   border: `5px solid ${theme.palette.primary.main}`,
   [theme.breakpoints.down('md')]: {
     marginBottom: theme.spacing(4)
-  }
+  },
+  boxShadow: theme.shadows[10]
 }))
 
 const PartnerProfileHeader = () => {
   const designationIcon = 'mdi:briefcase-outline'
 
   return (
-    <Card>
+    <Card sx={{ mb: 6 }}>
       <CardMedia
         component='img'
         alt='profile-header'

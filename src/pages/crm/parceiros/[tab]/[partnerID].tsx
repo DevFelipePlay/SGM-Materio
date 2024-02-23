@@ -2,38 +2,40 @@
 import { GetStaticProps, GetStaticPaths, GetStaticPropsContext, InferGetStaticPropsType } from 'next/types'
 
 // ** Third Party Imports
-import axios from 'axios'
-
-// ** Types
-// import { InvoiceType } from 'src/types/apps/invoiceTypes'
 
 // ** Demo Components Imports
-import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
 import PartnerProfileHeader from 'src/views/parceiros/HeaderDetails'
+import TabDetails from 'src/views/parceiros/tabDetails'
 
-const PartnerView = ({ tab, partnerID }: InferGetStaticPropsType<typeof getStaticProps>) => {
-  const { query } = useRouter()
-  const partner = query.partnerID
+const PartnerView = ({}: InferGetStaticPropsType<typeof getStaticProps>) => {
+  //** Chamada de endpoint V */
+  // const { query } = useRouter()
 
-  const [userData, setUserData] = useState([])
+  // const partner = query.partnerID
 
-  async function getUserByCPF(id: string) {
-    try {
-      const response = await axios.get('/parceiros/search', { params: { id } })
+  // const [userData, setUserData] = useState([])
 
-      setUserData(response.data)
-    } catch (error) {
-      console.error(error)
-    }
-  }
+  // async function getUserByCPF(id: string) {
+  //   try {
+  //     const response = await axios.get('/parceiros/list', { params: { id } })
 
-  useEffect(() => {
-    // @ts-ignore
-    getUserByCPF(partner)
-  }, [partner])
+  //     setUserData(response.data)
+  //   } catch (error) {
+  //     console.error(error)
+  //   }
+  // }
 
-  return <PartnerProfileHeader />
+  // useEffect(() => {
+  //   // @ts-ignore
+  //   getUserByCPF(partner)
+  // }, [partner])
+
+  return (
+    <>
+      <PartnerProfileHeader />
+      <TabDetails tab={''} invoiceData={[]} userID={''} />
+    </>
+  )
 }
 
 export const getStaticPaths: GetStaticPaths = () => {
@@ -44,13 +46,10 @@ export const getStaticPaths: GetStaticPaths = () => {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }: GetStaticPropsContext) => {
-  // const res = await axios.get('/apps/invoice/invoices')
-  // const invoiceData: InvoiceType[] = res.data.allData
   const partnerID = params?.partnerID
 
   return {
     props: {
-      // invoiceData,
       tab: params?.tab,
       partnerID
     }
