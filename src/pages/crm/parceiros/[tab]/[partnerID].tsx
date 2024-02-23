@@ -10,7 +10,7 @@ import axios from 'axios'
 // ** Demo Components Imports
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { Box } from '@mui/material'
+import PartnerProfileHeader from 'src/views/parceiros/HeaderDetails'
 
 const PartnerView = ({ tab, partnerID }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const { query } = useRouter()
@@ -33,19 +33,7 @@ const PartnerView = ({ tab, partnerID }: InferGetStaticPropsType<typeof getStati
     getUserByCPF(partner)
   }, [partner])
 
-  return (
-    <Box
-      sx={{
-        width: '100%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '100vh'
-      }}
-    >
-      {partner} {partnerID} {tab}
-    </Box>
-  )
+  return <PartnerProfileHeader />
 }
 
 export const getStaticPaths: GetStaticPaths = () => {

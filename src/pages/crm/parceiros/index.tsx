@@ -74,6 +74,12 @@ const renderClient = (row: PartnersTypes) => {
 
 export const columns: GridColDef[] = [
   {
+    flex: 0.005,
+    minWidth: 80,
+    field: 'companyid',
+    headerName: 'ID'
+  },
+  {
     flex: 0.2,
     minWidth: 230,
     field: 'companyname',
@@ -94,12 +100,6 @@ export const columns: GridColDef[] = [
       )
     }
   },
-  {
-    flex: 0.1,
-    minWidth: 110,
-    field: 'companyid',
-    headerName: 'ID'
-  },
 
   {
     flex: 0.15,
@@ -114,24 +114,6 @@ export const columns: GridColDef[] = [
       )
     }
   }
-
-  // {
-  //   flex: 0.1,
-  //   minWidth: 110,
-  //   field: 'status',
-  //   headerName: 'Status',
-  //   renderCell: ({ row }: CellType) => {
-  //     return (
-  //       <CustomChip
-  //         skin='light'
-  //         size='small'
-  //         label={row.}
-  //         color={userStatusObj[row.status]}
-  //         sx={{ textTransform: 'capitalize' }}
-  //       />
-  //     )
-  //   }
-  // }
 ]
 
 const UserList = () => {

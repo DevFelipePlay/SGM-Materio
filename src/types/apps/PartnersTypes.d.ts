@@ -1,4 +1,5 @@
 export interface PartnersTypes {
+  id: string
   companyid: number
   companyname: string
   cnpj: string
