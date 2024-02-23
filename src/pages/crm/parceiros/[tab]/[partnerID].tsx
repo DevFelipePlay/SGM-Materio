@@ -5,7 +5,7 @@ import { GetStaticProps, GetStaticPaths, GetStaticPropsContext, InferGetStaticPr
 
 // ** Demo Components Imports
 import PartnerProfileHeader from 'src/views/parceiros/HeaderDetails'
-import TabDetails from 'src/views/parceiros/tabDetails'
+import TabDetails from 'src/views/parceiros/TabDetails'
 
 const PartnerView = ({}: InferGetStaticPropsType<typeof getStaticProps>) => {
   //** Chamada de endpoint V */

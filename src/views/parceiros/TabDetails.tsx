@@ -19,13 +19,13 @@ import Icon from 'src/@core/components/icon'
 
 // ** Types
 import { InvoiceType } from 'src/types/apps/invoiceTypes'
-import DetalhesCliente from '../clientes/DetalhesCliente'
 import ConsumoCliente from '../clientes/ConsumoCliente'
 import RecargaAdicionalCliente from '../clientes/RecargaAdicionalCliente'
 import PortabilidadeCliente from '../clientes/PortabilidadeCliente'
 import FaturasCliente from '../clientes/FaturasCliente'
 import BloqueioDeLinha from '../clientes/BloqueioDeLinha'
 import AdicionarProtocoloCliente from '../clientes/AdicionarProtocoloCliente'
+import Gerenciar from './Details/Gerenciar'
 
 interface Props {
   tab: string
@@ -122,6 +122,15 @@ const TabDatails = ({ tab, invoiceData, userID }: Props) => {
           }
         />
         <Tab
+          value='planos'
+          label={
+            <Box sx={{ display: 'flex', alignItems: 'center', '& svg': { mr: 2 } }}>
+              <Icon fontSize={20} icon='mdi:plus-circle' />
+              Pós-pago
+            </Box>
+          }
+        />
+        <Tab
           value='financeiro'
           label={
             <Box sx={{ display: 'flex', alignItems: 'center', '& svg': { mr: 2 } }}>
@@ -147,8 +156,8 @@ const TabDatails = ({ tab, invoiceData, userID }: Props) => {
           </Box>
         ) : (
           <>
-            <TabPanel sx={{ p: 0 }} value='detalhes'>
-              <DetalhesCliente />
+            <TabPanel sx={{ p: 0 }} value='gerenciar'>
+              <Gerenciar />
             </TabPanel>
             <TabPanel sx={{ p: 0 }} value='consumo'>
               <ConsumoCliente />
