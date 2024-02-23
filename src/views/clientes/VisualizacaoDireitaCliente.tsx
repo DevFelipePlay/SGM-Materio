@@ -31,6 +31,7 @@ interface Props {
   tab: string
   invoiceData: InvoiceType[]
   userID: string
+  userData: any
 }
 
 // ** Styled Tab component
@@ -54,7 +55,7 @@ const TabList = styled(MuiTabList)<TabListProps>(({ theme }) => ({
   }
 }))
 
-const VisualizacaoDireitaCliente = ({ tab, invoiceData, userID }: Props) => {
+const VisualizacaoDireitaCliente = ({ tab, invoiceData, userID, userData }: Props) => {
   // ** State
   const [activeTab, setActiveTab] = useState<string>('detalhes')
   const [isLoading, setIsLoading] = useState<boolean>(true)
@@ -130,14 +131,16 @@ const VisualizacaoDireitaCliente = ({ tab, invoiceData, userID }: Props) => {
             </Box>
           }
         />
-        <Tab
-          value='cobrancas'
-          label={
-            <Box sx={{ display: 'flex', alignItems: 'center', '& svg': { mr: 2 } }}>
-              <Icon fontSize={20} icon='material-symbols:paid' /> Cobranças
-            </Box>
-          }
-        />
+        {userData.cpf.length !== 14 && (
+          <Tab
+            value='cobrancas'
+            label={
+              <Box sx={{ display: 'flex', alignItems: 'center', '& svg': { mr: 2 } }}>
+                <Icon fontSize={20} icon='material-symbols:paid' /> Cobranças
+              </Box>
+            }
+          />
+        )}
         {/* <Tab
           value='recorrencia'
           label={
@@ -184,9 +187,11 @@ const VisualizacaoDireitaCliente = ({ tab, invoiceData, userID }: Props) => {
             <TabPanel sx={{ p: 0 }} value='portabilidade'>
               <PortabilidadeCliente />
             </TabPanel>
-            <TabPanel sx={{ p: 0 }} value='cobrancas'>
-              <FaturasCliente />
-            </TabPanel>
+            {userData.cpf.length !== 14 && (
+              <TabPanel sx={{ p: 0 }} value='cobrancas'>
+                <FaturasCliente userData={userData} />
+              </TabPanel>
+            )}
             {/* <TabPanel sx={{ p: 0 }} value='recorrencia'>
               <UserViewConnection />
             </TabPanel> */}

@@ -26,20 +26,33 @@ import CardStatisticsHorizontal from 'src/@core/components/card-statistics/card-
 // ** Custom Table Components Imports
 import CustomDataGrid from 'src/components/CustomDataGrid/CustomDataGrid'
 import { useRouter } from 'next/router'
-import { maskCnpj, maskCpf } from 'src/utils/masks/masks'
 import axios from 'axios'
-import { Avatar, Box } from '@mui/material'
+import { Avatar, Box, Typography } from '@mui/material'
 import { getInitials } from 'src/@core/utils/get-initials'
 import AdicionarClienteDrawer from 'src/views/clientes/AdicionarClienteDrawer'
 import AtivarLinhaDrawer from 'src/views/clientes/AtivarLinhaDrawer'
+import { maskCelular, maskCnpj, maskCpf } from 'src/utils/masks/masks'
+
+interface UserData {
+  name: string
+  avatar: string
+  cpf: string
+  iccid: string
+  msisdn: string
+  pospago: boolean
+}
+
+interface UsersRows {
+  row: UserData
+}
 
 const columns: GridColDef[] = [
   {
-    flex: 0.1,
+    flex: 0.175,
     minWidth: 200,
     field: 'name',
     headerName: 'Cliente',
-    renderCell: ({ row }: any) => {
+    renderCell: ({ row }: UsersRows) => {
       return (
         <Box display='flex' alignItems='center' gap={4}>
           {row.avatar === '' ? (
@@ -59,11 +72,9 @@ const columns: GridColDef[] = [
     minWidth: 200,
     field: 'cpf',
     headerName: 'CPF / CNPJ',
-    renderCell: ({ row }: any) => {
-      const { cpf } = row
-
-      return <p>{row.tipoCliente === 'pf' ? maskCpf(cpf) : maskCnpj(cpf)}</p>
-    }
+    renderCell: ({ row }: UsersRows) => (
+      <Typography variant='inherit'>{row.cpf.length === 14 ? maskCnpj(row.cpf) : maskCpf(row.cpf)}</Typography>
+    )
   },
   {
     flex: 0.1,
@@ -75,7 +86,8 @@ const columns: GridColDef[] = [
     flex: 0.1,
     minWidth: 200,
     field: 'msisdn',
-    headerName: 'MSISDN'
+    headerName: 'MSISDN',
+    renderCell: ({ row }: UsersRows) => <Typography variant='inherit'>{maskCelular(row.msisdn)}</Typography>
   }
 ]
 
@@ -94,26 +106,29 @@ const Clientes = () => {
   }, [])
 
   // ** State
-  const [role, setRole] = useState<string>('')
-  const [plan, setPlan] = useState<string>('')
+  const [tipoCliente, setTipoCliente] = useState<string>('')
+  const [tipoLinha, setTipoLinha] = useState<string>('')
 
-  const handleRoleChange = useCallback((e: SelectChangeEvent) => {
-    setRole(e.target.value)
+  const handleTipoClienteChange = useCallback((e: SelectChangeEvent) => {
+    setTipoCliente(e.target.value)
   }, [])
 
-  const handlePlanChange = useCallback((e: SelectChangeEvent) => {
-    setPlan(e.target.value)
+  const handleTipoLinhaChange = useCallback((e: SelectChangeEvent) => {
+    setTipoLinha(e.target.value)
   }, [])
 
   // ** Função de filtro
   const filterFunction = useCallback(
-    (row: any) => {
-      const matchesTipoCliente = role === '' || row.tipoCliente === role
-      const matchesTipoDeLinha = plan === '' || row.tipoDeLinha === plan
+    (row: UserData) => {
+      const isPj = row.cpf.length === 14 ? 'pj' : 'pf'
+      const isPosPago = row.pospago ? 'pospago' : 'prepago'
+      const matchesTipoCliente = tipoCliente === '' || isPj === tipoCliente
+
+      const matchesTipoDeLinha = tipoLinha === '' || isPosPago === tipoLinha
 
       return matchesTipoCliente && matchesTipoDeLinha
     },
-    [role, plan]
+    [tipoCliente, tipoLinha]
   )
 
   const router = useRouter()
@@ -159,11 +174,11 @@ const Clientes = () => {
                   <InputLabel id='tipo-client-select'>Tipo de Cliente</InputLabel>
                   <Select
                     fullWidth
-                    value={role}
+                    value={tipoCliente}
                     id='tipo-client-select'
                     label='Tipo de Cliente'
                     labelId='tipo-client-select'
-                    onChange={handleRoleChange}
+                    onChange={handleTipoClienteChange}
                     inputProps={{ placeholder: 'Selecione o Tipo de Cliente' }}
                   >
                     <MenuItem value=''>Todos</MenuItem>
@@ -177,11 +192,11 @@ const Clientes = () => {
                   <InputLabel id='tipo-linha-select'>Tipo de Linha</InputLabel>
                   <Select
                     fullWidth
-                    value={plan}
+                    value={tipoLinha}
                     id='tipo-linha-select'
                     label='Tipo de Linha'
                     labelId='tipo-linha-select'
-                    onChange={handlePlanChange}
+                    onChange={handleTipoLinhaChange}
                     inputProps={{ placeholder: 'Selecione o Tipo de Cliente' }}
                   >
                     <MenuItem value=''>Todos</MenuItem>

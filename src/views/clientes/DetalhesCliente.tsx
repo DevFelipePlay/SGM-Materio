@@ -4,14 +4,41 @@ import { Icon } from '@iconify/react'
 import { Box, Card, CardContent, Typography, styled } from '@mui/material'
 import Grid from '@mui/material/Grid'
 import MuiAvatar, { AvatarProps } from '@mui/material/Avatar'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
+import axios from 'axios'
+import { DetalhesClienteType } from 'src/@fake-db/types'
+import { maskCelular, maskCnpj, maskCpf } from 'src/utils/masks/masks'
+import { format } from 'date-fns'
+import { dadosFormatter } from 'src/utils/masks/dadosFormatter'
 
 const DetalhesCliente = () => {
+  const { query } = useRouter()
+  const user = query.userID
+
+  const [userDetails, setUserDetails] = useState<DetalhesClienteType | null>(null)
+
+  async function getUserByCPF(cpf: string) {
+    try {
+      const response = await (await axios.get('/api/detalhescliente', { params: { cpf } })).data
+
+      setUserDetails(response)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  useEffect(() => {
+    //@ts-ignore
+    getUserByCPF(user)
+  }, [user])
+
   return (
     <Grid container spacing={6}>
       <Grid item xs={12} sm={6}>
         <CustomCardOverview
           color='primary'
-          stats='Pré-Pago'
+          stats={userDetails?.tipoPlano}
           title='Tipo do Plano'
           icon={<Icon color='secondary' icon='mdi:credit-card-outline' />}
         />
@@ -19,15 +46,7 @@ const DetalhesCliente = () => {
       <Grid item xs={12} sm={6}>
         <CustomCardOverview
           color='primary'
-          stats='8955170110114501412'
-          title='ICCID'
-          icon={<Icon color='secondary' icon='mdi:barcode-scan' />}
-        />
-      </Grid>
-      <Grid item xs={12} sm={6}>
-        <CustomCardOverview
-          color='primary'
-          stats='PLAY MÓVEL'
+          stats={userDetails?.operadora}
           title='Operadora'
           icon={<Icon color='secondary' icon='mdi:web' />}
         />
@@ -35,7 +54,31 @@ const DetalhesCliente = () => {
       <Grid item xs={12} sm={6}>
         <CustomCardOverview
           color='primary'
-          stats='Portabilidade não ocorreu'
+          stats={userDetails?.cpf.length === 14 ? maskCnpj(userDetails?.cpf) : maskCpf(userDetails?.cpf)}
+          title={userDetails?.cpf.length === 14 ? 'CNPJ' : 'CPF'}
+          icon={<Icon color='secondary' icon='mdi:card-account-details-outline' />}
+        />
+      </Grid>
+      <Grid item xs={12} sm={6}>
+        <CustomCardOverview
+          color='primary'
+          stats={maskCelular(userDetails?.msisdn)}
+          title='MSISDN'
+          icon={<Icon color='secondary' icon='mdi:phone' />}
+        />
+      </Grid>
+      <Grid item xs={12} sm={6}>
+        <CustomCardOverview
+          color='primary'
+          stats={userDetails?.iccid}
+          title='ICCID'
+          icon={<Icon color='secondary' icon='mdi:barcode-scan' />}
+        />
+      </Grid>
+      <Grid item xs={12} sm={6}>
+        <CustomCardOverview
+          color='primary'
+          stats={userDetails?.portin}
           title='Portabilidade'
           icon={<Icon color='secondary' icon='mdi:swap-horizontal' />}
         />
@@ -43,7 +86,7 @@ const DetalhesCliente = () => {
       <Grid item xs={12} sm={6}>
         <CustomCardOverview
           color='primary'
-          stats='(Start) 6Gb + 100 Minutos + 60 sms'
+          stats={userDetails?.plano}
           title='Plano'
           icon={<Icon color='secondary' icon='mdi:cellphone' />}
         />
@@ -51,7 +94,7 @@ const DetalhesCliente = () => {
       <Grid item xs={12} sm={6}>
         <CustomCardOverview
           color='primary'
-          stats='ATIVO'
+          stats={userDetails?.statusplan}
           title='Status do Plano'
           icon={<Icon color='secondary' icon='mdi:magnify' />}
         />
@@ -59,7 +102,7 @@ const DetalhesCliente = () => {
       <Grid item xs={12} sm={6}>
         <CustomCardOverview
           color='primary'
-          stats='22/07/2023'
+          stats={userDetails?.criado && format(new Date(userDetails.criado), 'dd/MM/yyyy')}
           title='Ativação da Linha'
           icon={<Icon color='secondary' icon='mdi:calendar-start' />}
         />
@@ -67,7 +110,7 @@ const DetalhesCliente = () => {
       <Grid item xs={12} sm={6}>
         <CustomCardOverview
           color='primary'
-          stats='16/02/2024'
+          stats={userDetails?.fimplano && format(new Date(userDetails.fimplano), 'dd/MM/yyyy')}
           title='Vencimento do Plano'
           icon={<Icon color='secondary' icon='mdi:calendar-end' />}
         />
@@ -75,7 +118,7 @@ const DetalhesCliente = () => {
       <Grid item xs={12} sm={6}>
         <CustomCardOverview
           color='primary'
-          stats='5.84 GB'
+          stats={dadosFormatter(userDetails?.dados)}
           title='Dados'
           icon={<Icon color='secondary' icon='mdi:signal-cellular-3' />}
         />
@@ -83,20 +126,25 @@ const DetalhesCliente = () => {
       <Grid item xs={12} sm={6}>
         <CustomCardOverview
           color='primary'
-          stats='198'
+          stats={userDetails?.minutos}
           title='Minutos'
-          icon={<Icon color='secondary' icon='mdi:clock' />}
+          icon={<Icon color='secondary' icon='mdi:clock-outline' />}
         />
-      </Grid>
-      <Grid item xs={12} sm={6}>
-        <CustomCardOverview color='primary' stats='120' title='SMS' icon={<Icon color='secondary' icon='mdi:sms' />} />
       </Grid>
       <Grid item xs={12} sm={6}>
         <CustomCardOverview
           color='primary'
-          stats='Sem Revendedor'
+          stats={userDetails?.smsrestante}
+          title='SMS'
+          icon={<Icon color='secondary' icon='mdi:sms' />}
+        />
+      </Grid>
+      <Grid item xs={12} sm={6}>
+        <CustomCardOverview
+          color='primary'
+          stats={userDetails?.revendedor ? userDetails.revendedor : 'Sem Revendedor'}
           title='Revendedor'
-          icon={<Icon color='secondary' icon='mdi:account-circle' />}
+          icon={<Icon color='secondary' icon='mdi:account-circle-outline' />}
         />
       </Grid>
     </Grid>

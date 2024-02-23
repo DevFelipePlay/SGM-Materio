@@ -21,8 +21,9 @@ import {
 } from '@mui/material'
 import useClipboard from 'src/@core/hooks/useClipboard'
 import toast from 'react-hot-toast'
-import { MouseEvent, forwardRef, useCallback, useState } from 'react'
+import { MouseEvent, forwardRef, useCallback, useEffect, useState } from 'react'
 import { Icon } from '@iconify/react'
+
 import CustomChip from 'src/@core/components/mui/chip'
 import DatePicker from 'react-datepicker'
 
@@ -33,32 +34,12 @@ import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
 
 // ** Tradução Date Picker
 import { ptBR } from 'date-fns/locale'
+import axios from 'axios'
 
 interface PickerProps {
   start: Date | number
   end: Date | number
 }
-
-const rows = [
-  {
-    id: 1,
-    dataGeracao: '25/12/2022',
-    dataPagamento: '07/03/2023',
-    idPagamento: 'pay_8360313432649612',
-    tipoFatura: 'Alteração de Plano',
-    valor: 'R$ 29,90',
-    status: 'confirmado'
-  },
-  {
-    id: 2,
-    dataGeracao: '06/02/2024',
-    dataPagamento: 'Pendente',
-    idPagamento: 'pay_51gfvsz3714hksvg',
-    tipoFatura: 'Mensalidade',
-    valor: 'R$ 29,90',
-    status: 'pendente'
-  }
-]
 
 const RowOptions = () => {
   // ** State
@@ -110,22 +91,38 @@ const RowOptions = () => {
   )
 }
 
-const userStatusObj: any = {
-  confirmado: {
+const statusFaturasObj: any = {
+  1: {
     text: 'Confirmado',
     color: 'success'
   },
-  pendente: {
+  2: {
     text: 'Pendente',
     color: 'warning'
   }
 }
 
-const FaturasCliente = () => {
+const FaturasCliente = ({ userData }: any) => {
   // ** States
   const [endDate, setEndDate] = useState<DateType>(null)
   const [startDate, setStartDate] = useState<DateType>(null)
-  const [status, setStatus] = useState<string>('')
+  const [status, setStatus] = useState('')
+  const [faturas, setFaturas] = useState()
+
+  async function getFaturaByICCID(iccid: string) {
+    try {
+      const response = await (await axios.get('/api/fatura/consulta', { params: { iccid } })).data
+
+      setFaturas(response.faturas)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  useEffect(() => {
+    //@ts-ignore
+    getFaturaByICCID(userData.iccid)
+  }, [userData])
 
   // Hooks
   const { copy, target } = useClipboard({
@@ -145,18 +142,20 @@ const FaturasCliente = () => {
     {
       flex: 0.1,
       minWidth: 150,
-      field: 'dataGeracao',
-      headerName: 'Data de Geração'
+      field: 'created',
+      headerName: 'Data de Geração',
+      valueFormatter: params => format(new Date(params.value), 'dd/MM/yyyy')
     },
     {
       flex: 0.1,
       minWidth: 150,
-      field: 'dataPagamento',
-      headerName: 'Data de Pagamento'
+      field: 'paid',
+      headerName: 'Data de Pagamento',
+      valueFormatter: params => format(new Date(params.value), 'dd/MM/yyyy')
     },
     {
       flex: 0.125,
-      field: 'idPagamento',
+      field: 'paymentasaasid',
       minWidth: 200,
       headerName: 'Id do Pagamento',
       renderCell: row => (
@@ -170,27 +169,28 @@ const FaturasCliente = () => {
     {
       flex: 0.105,
       minWidth: 150,
-      field: 'tipoFatura',
+      field: 'tipo',
       headerName: 'Tipo de Fatura'
     },
     {
       flex: 0.05,
       minWidth: 100,
-      field: 'valor',
-      headerName: 'Valor'
+      field: 'valuetopup',
+      headerName: 'Valor',
+      valueFormatter: params => `R$ ${params.value.replace('.', ',')}`
     },
     {
       flex: 0.08,
       minWidth: 125,
-      field: 'status',
+      field: 'paymentstatus',
       headerName: 'Status',
       renderCell: ({ row }) => {
         return (
           <CustomChip
             skin='light'
             size='small'
-            label={userStatusObj[row.status].text}
-            color={userStatusObj[row.status].color}
+            label={statusFaturasObj[row.paymentstatus].text}
+            color={statusFaturasObj[row.paymentstatus].color}
             sx={{ textTransform: 'capitalize' }}
           />
         )
@@ -243,7 +243,7 @@ const FaturasCliente = () => {
   // ** Função de filtro
   const filterFunction = useCallback(
     (row: any) => {
-      const matchesStatusFatura = status === '' || row.status === status
+      const matchesStatusFatura = status === '' || row.paymentstatus === status
 
       return matchesStatusFatura
     },
@@ -270,8 +270,8 @@ const FaturasCliente = () => {
                     onChange={handleStatusChange}
                   >
                     <MenuItem value=''>Todos</MenuItem>
-                    <MenuItem value='pendente'>Pendente</MenuItem>
-                    <MenuItem value='confirmado'>Confirmado</MenuItem>
+                    <MenuItem value={2}>Pendente</MenuItem>
+                    <MenuItem value={1}>Confirmado</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
@@ -300,10 +300,10 @@ const FaturasCliente = () => {
             hasButton={false}
             hasExport={false}
             columns={columns}
-            rows={rows}
+            rows={faturas ? faturas : []}
             filterFunction={filterFunction}
             onCellClick={params => {
-              if (params.field !== 'idPagamento' && params.field !== 'actions') {
+              if (params.field !== 'paymentasaasid' && params.field !== 'actions') {
                 alert('VISUALIZAR FATURA')
               }
             }}

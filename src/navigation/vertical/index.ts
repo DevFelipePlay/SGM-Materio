@@ -60,6 +60,41 @@ const navigation = (): VerticalNavItemsType => {
           path: '/pos-pago/faturas'
         }
       ]
+    },
+    {
+      title: 'Ações',
+      icon: 'mdi:cursor-default-click-outline',
+      badgeColor: 'primary',
+      children: [
+        {
+          title: 'Consulta de ICCID',
+          path: '/acoes/consultar-iccid'
+        },
+        {
+          title: 'Inserir ICCID',
+          path: '/acoes/inserir-iccid'
+        },
+        {
+          title: 'Enviar WhatsApp',
+          path: '/acoes/enviar-whatsapp'
+        },
+        {
+          title: 'Enviar SMS',
+          path: '/acoes/enviar-sms'
+        },
+        {
+          title: 'Enviar Push',
+          path: '/acoes/enviar-push'
+        },
+        {
+          title: 'Simulador',
+          path: '/acoes/simulador'
+        },
+        {
+          title: 'Troca de Chip',
+          path: '/acoes/trocar-chip'
+        }
+      ]
     }
 
     // {

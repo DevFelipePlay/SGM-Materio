@@ -164,12 +164,14 @@ export type HelpCenterSubcategoryArticlesType = {
   title: string
   content: string
 }
+
 export type HelpCenterSubcategoriesType = {
   icon: string
   slug: string
   title: string
   articles: HelpCenterSubcategoryArticlesType[]
 }
+
 export type HelpCenterCategoriesType = {
   icon: string
   slug: string
@@ -177,9 +179,57 @@ export type HelpCenterCategoriesType = {
   avatarColor: ThemeColor
   subCategories: HelpCenterSubcategoriesType[]
 }
+
 export type HelpCenterArticlesOverviewType = {
   img: string
   slug: string
   title: string
   subtitle: string
+}
+
+// Clientes
+export type ClientsType = {
+  id: number
+  msisdn: string
+  iccid: string
+  parceiro: string
+  cnpj: string
+  cpf: string
+  name: string
+  companyid: number
+  pospago: boolean
+  avatar: string
+  email: string
+  birthdate: string
+  cellphone: string
+  whatsapp: string
+  cep: string
+  uf: string
+  city: string
+  district: string
+  street: string
+  number: string
+  plandescription: string
+  planvalue: string
+  complement?: string
+  rgie?: string
+  contafatura?: string
+}
+
+export type DetalhesClienteType = {
+  id: number
+  cpf: string
+  tipoPlano: string
+  operadora: string
+  msisdn: string
+  iccid: string
+  portin: string
+  plano: string
+  statusplan: string
+  criado: string
+  fimplano: string
+  dados: any
+  minutos: string
+  smsrestante: string
+  revendedor: string | null
 }

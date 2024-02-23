@@ -199,10 +199,10 @@ const AdicionarProtocoloCliente = () => {
                 <Grid item xs={12} sm={6}>
                   <FormControl fullWidth size='medium' error={!!errors.codigo}>
                     <InputLabel htmlFor={tipoProtocolo === 'surf' ? 'numero-spec' : 'numero-auvo'}>
-                      {tipoProtocolo === 'surf' ? 'Número Spec*' : 'Número Ticket'}
+                      {tipoProtocolo === 'surf' ? 'Número Spec*' : 'Número Ticket*'}
                     </InputLabel>
                     <OutlinedInput
-                      label={tipoProtocolo === 'surf' ? 'Número Spec*' : 'Número Ticket'}
+                      label={tipoProtocolo === 'surf' ? 'Número Spec*' : 'Número Ticket*'}
                       id={tipoProtocolo === 'surf' ? 'numero-spec' : 'numero-auvo'}
                       placeholder={tipoProtocolo === 'surf' ? 'Número do Spec da Surf' : 'Número do Ticket do Auvo'}
                       {...register('codigo')}

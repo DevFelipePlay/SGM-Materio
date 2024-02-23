@@ -34,8 +34,6 @@ const TableHeader = ({
   seccondButtonVariant = 'outlined',
   seccondButtonColor = 'primary'
 }: TableHeaderProps) => {
-  console.log(hasExport)
-
   return (
     <Box
       sx={{

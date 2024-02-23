@@ -43,6 +43,34 @@ import { Icon } from '@iconify/react'
 import * as z from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { format } from 'date-fns'
+
+interface DadosClienteProps {
+  cpf: string
+  name: string
+  avatar: string
+  email: string
+  birthdate: string
+  cellphone: string
+  whatsapp: string
+  cep: string
+  uf: string
+  city: string
+  district: string
+  street: string
+  number: string
+  pospago: boolean
+  msisdn: string
+  plandescription: string
+  planvalue: string
+  complement?: string
+  rgie?: string
+  contafatura?: string
+}
+
+interface VisualizacaoEsquerdaClienteProps {
+  userData: DadosClienteProps
+}
 
 const data: UsersType = {
   id: 1,
@@ -73,10 +101,6 @@ const Sub = styled('sub')({
   fontSize: '1rem',
   alignSelf: 'flex-end'
 })
-
-interface VisualizacaoEsquerdaClienteProps {
-  userData: any
-}
 
 // ** Zod
 const SchemaEditDadosClientForm = z.object({
@@ -128,7 +152,23 @@ const VisualizacaoEsquerdaCliente = ({ userData }: VisualizacaoEsquerdaClientePr
     setValue,
     formState: { isSubmitting, errors }
   } = useForm<EditDadosClienteFormData>({
-    resolver: zodResolver(SchemaEditDadosClientForm)
+    resolver: zodResolver(SchemaEditDadosClientForm),
+    defaultValues: {
+      bairro: userData.district,
+      cep: userData.cep,
+      cidade: userData.city,
+      cpf: userData.cpf,
+      complemento: userData.complement ? userData.complement : '',
+      email: userData.email,
+      logradouro: userData.street,
+      nascimento: userData.birthdate ? format(new Date(userData.birthdate), 'dd/MM/yyyy') : '',
+      nome: userData.name,
+      number: userData.number,
+      phone: userData.cellphone,
+      rgie: userData.rgie ? userData.rgie : '',
+      uf: userData.uf,
+      whats: userData.whatsapp
+    }
   })
 
   // ** Máscaração
@@ -177,7 +217,7 @@ const VisualizacaoEsquerdaCliente = ({ userData }: VisualizacaoEsquerdaClientePr
                 <Avatar sx={{ width: '7rem', height: '7rem' }} src={userData.avatar} />
               )}
               {/* <Avatar src={userData.avatar} sx={{ width: '7rem', height: '7rem' }} /> */}
-              <Typography variant='h6' sx={{ mb: 2, mt: 3 }}>
+              <Typography variant='h6' sx={{ mb: 2, mt: 3, textAlign: 'center' }}>
                 {userData.name}
               </Typography>
             </CardContent>
@@ -188,49 +228,63 @@ const VisualizacaoEsquerdaCliente = ({ userData }: VisualizacaoEsquerdaClientePr
               <Box sx={{ pb: 1 }}>
                 <Box sx={{ display: 'flex', mb: 2 }}>
                   <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>
-                    {userData.tipoCliente === 'pf' ? 'CPF:' : 'CNPJ:'}
+                    {userData && userData.cpf && userData.cpf.length === 14 ? 'CNPJ:' : 'CPF:'}
                   </Typography>
                   <Typography variant='body2'>
-                    {userData.tipoCliente === 'pf' ? maskCpf(userData.cpf) : maskCnpj(userData.cpf)}
+                    {userData && userData.cpf && userData.cpf.length === 14
+                      ? maskCnpj(userData.cpf)
+                      : maskCpf(userData.cpf)}
                   </Typography>
                 </Box>
+                {userData.rgie && (
+                  <Box sx={{ display: 'flex', mb: 2 }}>
+                    <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>RG:</Typography>
+                    <Typography variant='body2' sx={{ textTransform: 'capitalize' }}>
+                      {userData.rgie}
+                    </Typography>
+                  </Box>
+                )}
                 <Box sx={{ display: 'flex', mb: 2 }}>
                   <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>Data de Nascimento:</Typography>
                   <Typography variant='body2' sx={{ textTransform: 'capitalize' }}>
-                    09/01/2001
+                    {userData.birthdate && format(new Date(userData.birthdate), 'dd/MM/yyyy')}
                   </Typography>
                 </Box>
                 <Box sx={{ display: 'flex', mb: 2 }}>
                   <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>Email:</Typography>
-                  <Typography variant='body2'>teste@teste.com</Typography>
+                  <Typography variant='body2'>{userData.email}</Typography>
                 </Box>
                 <Box sx={{ display: 'flex', mb: 2 }}>
                   <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>Celular:</Typography>
-                  <Typography variant='body2'>{userData.msisdn}</Typography>
+                  <Typography variant='body2'>{maskCelular(userData.cellphone)}</Typography>
                 </Box>
                 <Box sx={{ display: 'flex', mb: 2 }}>
                   <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>WhatsApp:</Typography>
-                  <Typography variant='body2'>{userData.msisdn}</Typography>
+                  <Typography variant='body2'>{maskCelular(userData.whatsapp)}</Typography>
                 </Box>
                 <Box sx={{ display: 'flex', mb: 2 }}>
                   <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>CEP:</Typography>
-                  <Typography variant='body2'>72870-265</Typography>
+                  <Typography variant='body2'>{maskCep(userData.cep)}</Typography>
                 </Box>
                 <Box sx={{ display: 'flex', mb: 2 }}>
                   <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>UF:</Typography>
-                  <Typography variant='body2'>DF</Typography>
+                  <Typography variant='body2'>{userData.uf}</Typography>
                 </Box>
                 <Box sx={{ display: 'flex', mb: 2 }}>
                   <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>Cidade:</Typography>
-                  <Typography variant='body2'>Brasília</Typography>
+                  <Typography variant='body2'>{userData.city}</Typography>
                 </Box>
                 <Box sx={{ display: 'flex', mb: 2 }}>
                   <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>Bairro:</Typography>
-                  <Typography variant='body2'>Riacho Fundo</Typography>
+                  <Typography variant='body2'>{userData.district}</Typography>
                 </Box>
                 <Box sx={{ display: 'flex', mb: 2 }}>
-                  <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>Endereço:</Typography>
-                  <Typography variant='body2'>QN 8B 12 Casa 25</Typography>
+                  <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>
+                    Endereço:
+                    <Typography variant='body2' display='inline'>{`  ${userData.street} ${userData.number} ${
+                      userData.complement ? userData.complement : ''
+                    }`}</Typography>
+                  </Typography>
                 </Box>
               </Box>
             </CardContent>
@@ -439,7 +493,7 @@ const VisualizacaoEsquerdaCliente = ({ userData }: VisualizacaoEsquerdaClientePr
           </Card>
         </Grid>
 
-        {userData.tipoCliente === 'pj' && (
+        {userData.pospago && (
           <Grid item xs={12}>
             <Card>
               <CardHeader
@@ -460,7 +514,7 @@ const VisualizacaoEsquerdaCliente = ({ userData }: VisualizacaoEsquerdaClientePr
                 <Box sx={{ pb: 1 }}>
                   <Box sx={{ display: 'flex', mb: 2, alignItems: 'center' }}>
                     <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>MSISDN:</Typography>
-                    <Typography variant='body2'>{maskCpf(userData.cpf)}</Typography>
+                    <Typography variant='body2'>{maskCelular(userData.msisdn)}</Typography>
                   </Box>
                   <Box sx={{ display: 'flex', mb: 2, alignItems: 'center' }}>
                     <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>Nome da Linha:</Typography>
@@ -470,12 +524,12 @@ const VisualizacaoEsquerdaCliente = ({ userData }: VisualizacaoEsquerdaClientePr
                   </Box>
                   <Box sx={{ display: 'flex', mb: 2, alignItems: 'center' }}>
                     <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>Conta Fatura:</Typography>
-                    <Typography variant='body2'>Play3303060</Typography>
+                    <Typography variant='body2'>{userData.contafatura}</Typography>
                   </Box>
                   <Box sx={{ display: 'flex', mb: 2, alignItems: 'center' }}>
                     <Typography sx={{ mr: 2, fontWeight: 500, fontSize: '0.875rem' }}>Total de Linhas:</Typography>
                     <Box display='flex' alignItems='center' gap={1}>
-                      <Typography variant='body2'>7</Typography>
+                      <Typography variant='body2'>2</Typography>
                       <Tooltip title='Visualizar'>
                         <IconButton
                           sx={{ alignSelf: 'start' }}
@@ -509,12 +563,15 @@ const VisualizacaoEsquerdaCliente = ({ userData }: VisualizacaoEsquerdaClientePr
 
         <Grid item xs={12}>
           <Card sx={{ boxShadow: 'none', border: theme => `2px solid ${theme.palette.primary.main}` }}>
-            <CardContent sx={{ display: 'flex', flexWrap: 'wrap', pb: '0 !important', justifyContent: 'center' }}>
-              <CustomChip skin='light' size='small' color='primary' label='(Start) 6Gb + 100 Minutos + 60 sms' />
+            <CardContent
+              sx={{ display: 'flex', flexWrap: 'wrap', pb: '0 !important', justifyContent: 'center', gap: 2 }}
+            >
+              <CustomChip skin='light' size='small' color='primary' label={userData.plandescription} />
               <Box
                 sx={{
                   display: 'flex',
-                  position: 'relative'
+                  position: 'relative',
+                  gap: 1
                 }}
               >
                 <Typography variant='h6' sx={{ color: 'primary.main', alignSelf: 'flex-end' }}>
@@ -526,7 +583,7 @@ const VisualizacaoEsquerdaCliente = ({ userData }: VisualizacaoEsquerdaClientePr
                     color: 'primary.main'
                   }}
                 >
-                  29,90
+                  {userData.planvalue && userData.planvalue.replace('.', ',')}
                 </Typography>
               </Box>
             </CardContent>
@@ -657,7 +714,7 @@ const VisualizacaoEsquerdaCliente = ({ userData }: VisualizacaoEsquerdaClientePr
                 >
                   O plano atual do usuário é:
                   <Typography variant='inherit' fontWeight={700} sx={{ color: theme => theme.palette.primary.main }}>
-                    PLAY 6Gb + 100 Minutos + 60 sms
+                    {userData.plandescription}
                   </Typography>
                 </Typography>
                 <Box
