@@ -95,7 +95,7 @@ const Clientes = () => {
   // Hooks
   const { copy, target } = useClipboard({
     onSuccess: () => {
-      toast.success('ID do Pagamento copiado!')
+      toast.success('ICCD Copiado!')
     },
     onError: () => {
       toast.error('Erro ao copiar ID do Pagamento')

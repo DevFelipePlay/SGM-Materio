@@ -23,7 +23,7 @@ import toast from 'react-hot-toast'
 import { CustomRadioIconsData } from 'src/@core/components/custom-radio/types'
 import CustomRadioIcons from 'src/@core/components/custom-radio/icons'
 import DropzoneWrapper from 'src/@core/styles/libs/react-dropzone'
-import FileUploaderRestrictions from '../FileUploader/FileUploaderRestrictions'
+import FileUploaderRestrictions from '../Components/FileUploader/FileUploaderRestrictions'
 
 // Schema Zod
 const SchemaFormCadastroUsuario = z.object({

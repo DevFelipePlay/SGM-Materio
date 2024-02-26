@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
-import FileUploaderRestrictions from '../FileUploader/FileUploaderRestrictions'
+import FileUploaderRestrictions from '../Components/FileUploader/FileUploaderRestrictions'
 
 // ** Styled Component
 import DropzoneWrapper from 'src/@core/styles/libs/react-dropzone'
