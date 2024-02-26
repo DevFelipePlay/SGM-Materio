@@ -9,7 +9,25 @@ import MuiAvatar, { AvatarProps } from '@mui/material/Avatar'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
-import { Box, Grid } from '@mui/material'
+import { Box, CircularProgress, Grid } from '@mui/material'
+import { useForm } from 'react-hook-form'
+import { useCallback, useEffect, useState } from 'react'
+import axios from 'axios'
+import toast from 'react-hot-toast'
+import { maskCnpj, maskCpf } from 'src/utils/masks/masks'
+
+interface SearchICCIDFormData {
+  iccid: string
+}
+
+interface SearchedUserICCID {
+  iccid: string
+  operadora: string
+  msisdn: string
+  name: string
+  cpf: string
+  plano: string
+}
 
 // Styled Card component
 const Card = styled(MuiCard)<CardProps>(({ theme }) => ({
@@ -31,6 +49,47 @@ const TextField = styled(MuiTextField)<TextFieldProps>(({ theme }) => ({
 }))
 
 const ConsultarICCID = () => {
+  // ** Hook Form
+  const { register, watch, handleSubmit } = useForm<SearchICCIDFormData>({
+    defaultValues: {
+      iccid: ''
+    }
+  })
+
+  const iccidValue = watch('iccid')
+
+  // ** State
+  const [searchedICCID, setSearchedICCID] = useState<string>('')
+  const [searchedUser, setSearchedUser] = useState<SearchedUserICCID | null>(null)
+  const [loading, setLoading] = useState<boolean>(false)
+
+  // ** Functions
+
+  async function getUserByICCID(iccid: string) {
+    setLoading(true)
+    try {
+      const response = await (await axios.get('/api/consultaiccid', { params: { iccid } })).data
+
+      setSearchedUser(response)
+      setLoading(false)
+    } catch (error) {
+      console.error(error)
+      toast.error('Usuário não encontrado')
+      setLoading(false)
+    }
+  }
+
+  const handleSubmitSearchICCID = useCallback((data: SearchICCIDFormData) => {
+    setSearchedICCID(data.iccid)
+    getUserByICCID(data.iccid)
+  }, [])
+
+  // ** Use Effect
+
+  useEffect(() => {
+    if (iccidValue.length === 19) handleSubmit(handleSubmitSearchICCID)()
+  }, [iccidValue, handleSubmitSearchICCID, handleSubmit])
+
   return (
     <Grid container spacing={6}>
       <Grid item xs={12}>
@@ -49,60 +108,70 @@ const ConsultarICCID = () => {
                   <InputAdornment position='start'>
                     <Icon icon='mdi:magnify' />
                   </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position='end'>
+                    {loading && <CircularProgress sx={{ mr: 1 }} size={25} color='primary' />}
+                  </InputAdornment>
                 )
               }}
+              {...register('iccid')}
             />
           </CardContent>
         </Card>
       </Grid>
-      <Grid item xs={12} sm={6}>
-        <CustomCardOverview
-          color='primary'
-          stats='8955170110114501412'
-          title='ICCID'
-          icon={<Icon color='secondary' icon='mdi:barcode-scan' />}
-        />
-      </Grid>
-      <Grid item xs={12} sm={6}>
-        <CustomCardOverview
-          color='primary'
-          stats='8955170110114501412'
-          title='ICCID'
-          icon={<Icon color='secondary' icon='mdi:barcode-scan' />}
-        />
-      </Grid>
-      <Grid item xs={12} sm={6}>
-        <CustomCardOverview
-          color='primary'
-          stats='PLAY MÓVEL'
-          title='Operadora'
-          icon={<Icon color='secondary' icon='mdi:web' />}
-        />
-      </Grid>
-      <Grid item xs={12} sm={6}>
-        <CustomCardOverview
-          color='primary'
-          stats='PLAY MÓVEL'
-          title='Operadora'
-          icon={<Icon color='secondary' icon='mdi:web' />}
-        />
-      </Grid>
-      <Grid item xs={12} sm={6}>
-        <CustomCardOverview
-          color='primary'
-          stats='PLAY MÓVEL'
-          title='Operadora'
-          icon={<Icon color='secondary' icon='mdi:web' />}
-        />
-      </Grid>
-      <Grid item xs={12} sm={6}>
-        <CustomCardOverview
-          color='primary'
-          stats='(Start) 6Gb + 100 Minutos + 60 sms'
-          title='Plano'
-          icon={<Icon color='secondary' icon='mdi:cellphone' />}
-        />
-      </Grid>
+      {searchedUser && searchedICCID && (
+        <>
+          <Grid item xs={12} sm={6}>
+            <CustomCardOverview
+              color='primary'
+              stats={searchedUser?.iccid}
+              title='ICCID'
+              icon={<Icon color='secondary' icon='mdi:barcode-scan' />}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <CustomCardOverview
+              color='primary'
+              stats={searchedUser?.operadora}
+              title='MVNO'
+              icon={<Icon color='secondary' icon='mdi:web' />}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <CustomCardOverview
+              color='primary'
+              stats={searchedUser?.msisdn}
+              title='MSISDN'
+              icon={<Icon color='secondary' icon='mdi:phone' />}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <CustomCardOverview
+              color='primary'
+              stats={searchedUser?.name}
+              title='Cliente'
+              icon={<Icon color='secondary' icon='mdi:account-circle' />}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <CustomCardOverview
+              color='primary'
+              stats={searchedUser.cpf.length === 14 ? maskCnpj(searchedUser?.cpf) : maskCpf(searchedUser?.cpf)}
+              title='CPF/CNPJ'
+              icon={<Icon color='secondary' icon='mdi:card-account-details' />}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <CustomCardOverview
+              color='primary'
+              stats={searchedUser?.plano}
+              title='Plano'
+              icon={<Icon color='secondary' icon='bi:collection-fill' />}
+            />
+          </Grid>
+        </>
+      )}
     </Grid>
   )
 }

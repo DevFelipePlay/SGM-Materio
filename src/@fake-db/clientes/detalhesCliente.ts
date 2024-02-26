@@ -5,6 +5,7 @@ const data: { users: DetalhesClienteType[] } = {
   users: [
     {
       id: 12718,
+      name: 'Play Tecnologia E Telefonia Celular Ltda',
       cpf: '33093462000150',
       tipoPlano: 'Pós-Pago',
       operadora: 'PLAY MÓVEL',
@@ -22,6 +23,7 @@ const data: { users: DetalhesClienteType[] } = {
     },
     {
       id: 26355,
+      name: 'Joeldes José Da Silva Martins',
       cpf: '35426806802',
       tipoPlano: 'Pós-Pago',
       msisdn: '(11) 99600-1604',
@@ -39,6 +41,7 @@ const data: { users: DetalhesClienteType[] } = {
     },
     {
       id: 26384,
+      name: 'João Vitor Santoro Costa',
       cpf: '15349641778',
       msisdn: '(24) 93300-5611',
       iccid: '8955170110322137546',
@@ -56,6 +59,7 @@ const data: { users: DetalhesClienteType[] } = {
     },
     {
       id: 26030,
+      name: 'Dayane Rocha Santos',
       cpf: '37322479882',
       msisdn: '(11) 92018-4896',
       iccid: '8955170110322144245',
@@ -73,6 +77,7 @@ const data: { users: DetalhesClienteType[] } = {
     },
     {
       id: 12329,
+      name: 'Nicholas Pablo Pereira',
       cpf: '09409402999',
       msisdn: '(47) 99258-4506',
       iccid: '8955170110322140516',
@@ -98,4 +103,17 @@ mock.onGet('/api/detalhescliente').reply(config => {
   const user = data.users.find(user => user.cpf === cpf)
 
   return user ? [200, user] : [404, { message: 'Usuário não encontrado' }]
+})
+
+// Buscar usuário pelo iccid
+mock.onGet('/api/consultaiccid').reply(config => {
+  const { iccid } = config.params
+
+  const user = data.users.find(user => user.iccid === iccid)
+
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve(user ? [200, user] : [404, { message: 'Usuário não encontrado' }])
+    }, 2000) // Delay de 2 segundos
+  })
 })

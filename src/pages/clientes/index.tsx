@@ -27,11 +27,13 @@ import CardStatisticsHorizontal from 'src/@core/components/card-statistics/card-
 import CustomDataGrid from 'src/components/CustomDataGrid/CustomDataGrid'
 import { useRouter } from 'next/router'
 import axios from 'axios'
-import { Avatar, Box, Typography } from '@mui/material'
+import { Avatar, Box, Tooltip, Typography } from '@mui/material'
 import { getInitials } from 'src/@core/utils/get-initials'
 import AdicionarClienteDrawer from 'src/views/clientes/AdicionarClienteDrawer'
 import AtivarLinhaDrawer from 'src/views/clientes/AtivarLinhaDrawer'
 import { maskCelular, maskCnpj, maskCpf } from 'src/utils/masks/masks'
+import toast from 'react-hot-toast'
+import useClipboard from 'src/@core/hooks/useClipboard'
 
 interface UserData {
   name: string
@@ -45,51 +47,6 @@ interface UserData {
 interface UsersRows {
   row: UserData
 }
-
-const columns: GridColDef[] = [
-  {
-    flex: 0.175,
-    minWidth: 200,
-    field: 'name',
-    headerName: 'Cliente',
-    renderCell: ({ row }: UsersRows) => {
-      return (
-        <Box display='flex' alignItems='center' gap={4}>
-          {row.avatar === '' ? (
-            <Avatar sx={{ color: '#fff', bgcolor: theme => theme.palette.primary.main }}>
-              {getInitials(row.name)}
-            </Avatar>
-          ) : (
-            <Avatar src={row.avatar} />
-          )}
-          <p>{row.name}</p>
-        </Box>
-      )
-    }
-  },
-  {
-    flex: 0.1,
-    minWidth: 200,
-    field: 'cpf',
-    headerName: 'CPF / CNPJ',
-    renderCell: ({ row }: UsersRows) => (
-      <Typography variant='inherit'>{row.cpf.length === 14 ? maskCnpj(row.cpf) : maskCpf(row.cpf)}</Typography>
-    )
-  },
-  {
-    flex: 0.1,
-    field: 'iccid',
-    minWidth: 200,
-    headerName: 'ICCID'
-  },
-  {
-    flex: 0.1,
-    minWidth: 200,
-    field: 'msisdn',
-    headerName: 'MSISDN',
-    renderCell: ({ row }: UsersRows) => <Typography variant='inherit'>{maskCelular(row.msisdn)}</Typography>
-  }
-]
 
 const Clientes = () => {
   const [users, setUsers] = useState([])
@@ -131,11 +88,77 @@ const Clientes = () => {
     [tipoCliente, tipoLinha]
   )
 
+  // ** Hooks
+
   const router = useRouter()
+
+  // Hooks
+  const { copy, target } = useClipboard({
+    onSuccess: () => {
+      toast.success('ID do Pagamento copiado!')
+    },
+    onError: () => {
+      toast.error('Erro ao copiar ID do Pagamento')
+    }
+  })
 
   // ** Drawer
   const toggleAddClienteDrawer = () => setAddClienteOpen(!addClienteOpen)
   const toggleAtivarLinhaDrawer = () => setAtivarLinhaOpen(!ativarLinhaOpen)
+
+  // ** Colunas
+
+  const columns: GridColDef[] = [
+    {
+      flex: 0.175,
+      minWidth: 200,
+      field: 'name',
+      headerName: 'Cliente',
+      renderCell: ({ row }: UsersRows) => {
+        return (
+          <Box display='flex' alignItems='center' gap={4}>
+            {row.avatar === '' ? (
+              <Avatar sx={{ color: '#fff', bgcolor: theme => theme.palette.primary.main }}>
+                {getInitials(row.name)}
+              </Avatar>
+            ) : (
+              <Avatar src={row.avatar} />
+            )}
+            <p>{row.name}</p>
+          </Box>
+        )
+      }
+    },
+    {
+      flex: 0.1,
+      minWidth: 200,
+      field: 'cpf',
+      headerName: 'CPF / CNPJ',
+      renderCell: ({ row }: UsersRows) => (
+        <Typography variant='inherit'>{row.cpf.length === 14 ? maskCnpj(row.cpf) : maskCpf(row.cpf)}</Typography>
+      )
+    },
+    {
+      flex: 0.1,
+      field: 'iccid',
+      minWidth: 200,
+      headerName: 'ICCID',
+      renderCell: row => (
+        <Tooltip title={'Clique para copiar'}>
+          <Typography variant='inherit' ref={target} onClick={() => copy(row.value)}>
+            {row.value}
+          </Typography>
+        </Tooltip>
+      )
+    },
+    {
+      flex: 0.1,
+      minWidth: 200,
+      field: 'msisdn',
+      headerName: 'MSISDN',
+      renderCell: ({ row }: UsersRows) => <Typography variant='inherit'>{maskCelular(row.msisdn)}</Typography>
+    }
+  ]
 
   return (
     <Grid container spacing={6}>
@@ -213,13 +236,17 @@ const Clientes = () => {
             columns={columns}
             rows={users}
             filterFunction={filterFunction}
-            onCellClick={e => router.push(`clientes/detalhes/${e.row.cpf}`)}
             placeholderSearch='Buscar Cliente'
             titleButton='Novo Cliente'
             loading={loading}
             toggle={toggleAddClienteDrawer}
             seccondButtonTitle='Ativar Linha'
             seccondButtonToggle={toggleAtivarLinhaDrawer}
+            onCellClick={params => {
+              if (params.field !== 'iccid') {
+                router.push(`clientes/detalhes/${params.row.cpf}`)
+              }
+            }}
           />
         </Card>
       </Grid>
@@ -228,11 +255,6 @@ const Clientes = () => {
       <AtivarLinhaDrawer open={ativarLinhaOpen} toggle={toggleAtivarLinhaDrawer} />
     </Grid>
   )
-}
-
-Clientes.acl = {
-  action: 'read',
-  subject: 'parceiros'
 }
 
 export default Clientes

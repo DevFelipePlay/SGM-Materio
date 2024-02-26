@@ -218,6 +218,7 @@ export type ClientsType = {
 
 export type DetalhesClienteType = {
   id: number
+  name: string
   cpf: string
   tipoPlano: string
   operadora: string
