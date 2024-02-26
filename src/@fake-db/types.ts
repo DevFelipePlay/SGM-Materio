@@ -183,3 +183,32 @@ export type HelpCenterArticlesOverviewType = {
   title: string
   subtitle: string
 }
+
+// Clientes
+export type ClientsType = {
+  id: number
+  msisdn: string
+  iccid: string
+  parceiro: string
+  cnpj: string
+  cpf: string
+  name: string
+  companyid: number
+  pospago: boolean
+  avatar: string
+  email: string
+  birthdate: string
+  cellphone: string
+  whatsapp: string
+  cep: string
+  uf: string
+  city: string
+  district: string
+  street: string
+  number: string
+  plandescription: string
+  planvalue: string
+  complement?: string
+  rgie?: string
+  contafatura?: string
+}

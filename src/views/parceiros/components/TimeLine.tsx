@@ -10,7 +10,6 @@ import { Button } from '@mui/material'
 import Avatar from '@mui/material/Avatar'
 import TimelineDot from '@mui/lab/TimelineDot'
 import TimelineItem from '@mui/lab/TimelineItem'
-import CardHeader from '@mui/material/CardHeader'
 import TimelineContent from '@mui/lab/TimelineContent'
 import TimelineSeparator from '@mui/lab/TimelineSeparator'
 import TimelineConnector from '@mui/lab/TimelineConnector'
@@ -114,8 +113,8 @@ function TimelinePartner() {
 
   return (
     <Card>
-      <CardHeader title='Atividades' />
       <CardContent>
+        <Typography sx={{ mb: 6.5, fontWeight: 600 }}>Atividades</Typography>
         <Box sx={{ width: '100%', display: 'flex', justifyContent: 'end' }}>
           <Button variant='contained' onClick={() => handleOpen()}>
             Adicionar atividade
