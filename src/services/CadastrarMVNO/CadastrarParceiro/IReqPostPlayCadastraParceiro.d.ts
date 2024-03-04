@@ -13,7 +13,6 @@ export interface IReqPostPlayCadastraParceiro {
   bairro: string
   inscricaomunicipal: string
   inscricaoestadual: string
-  walletid: string
   consultor: string
   logo: File[]
 }

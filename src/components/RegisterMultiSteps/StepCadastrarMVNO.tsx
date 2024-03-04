@@ -18,31 +18,40 @@ import { IReqPostPlayCadastraParceiro } from 'src/services/CadastrarMVNO/Cadastr
 // Utils
 import { postPlayCadastraParceiro } from 'src/services/CadastrarMVNO/CadastrarParceiro/postPlayCadastraParceiro'
 import toast from 'react-hot-toast'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { maskCelular, maskCep, maskCnpj, maskTelefone } from 'src/utils/masks/masks'
 import { unmask } from 'remask'
+import apiCep from 'src/services/apiCep'
 
 // Schema Zod
 const SchemaFormCadastroMVNO = z.object({
   companyname: z.string().min(1, 'Razão Social é obrigatório'),
-  cnpj: z.string().min(1, 'CNPJ é obrigatório'),
+  cnpj: z.string().min(18, 'CNPJ é obrigatório'),
   tradename: z.string().min(1, 'Nome da MVNO é obrigatório'),
   nomeparceiro: z.string().min(1, 'Nome Fantasia é obrigatório'),
   email: z.string().email('Email é obrigatório'),
-  celular: z.string().min(1, 'Celular é obrigatório'),
-  telefone: z.string().min(1, 'Telefone é obrigatório'),
-  cep: z.string().min(1, 'CEP é obrigatório'),
+  celular: z
+    .string()
+    .min(16, 'Celular é obrigatório')
+    .max(16, 'Celular é obrigatório')
+    .refine(value => {
+      const unmaskedValue = unmask(value)
+
+      return !['00000000000', '11111111111'].includes(unmaskedValue)
+    }, 'Número inválido'),
+
+  telefone: z.string().min(14, 'Telefone é obrigatório'),
+  cep: z.string().min(9, 'CEP é obrigatório'),
   endereco: z.string().min(1, 'Endereço é obrigatório'),
   numeroendereco: z.string().min(1, 'Número é obrigatório'),
   complemento: z.string(),
   bairro: z.string().min(1, 'Bairro é obrigatório'),
-  inscricaomunicipal: z.string().min(1, 'Inscrição Municipal é obrigatório'),
+  inscricaomunicipal: z.string(),
   inscricaoestadual: z.string().min(1, 'Inscrição Estadual é obrigatório'),
-  walletid: z.string().min(1, 'Wallet ID é obrigatório'),
-  consultor: z.string(),
+  consultor: z.string().min(3, 'Nome do Consultor é obrigatório'),
   logo: z.any()
 })
 
@@ -51,12 +60,16 @@ const SchemaFormCadastroMVNO = z.object({
 type FormCadastroMVNOProps = z.infer<typeof SchemaFormCadastroMVNO>
 
 const StepCadastrarMVNO = ({ handleNext, handlePrev }: { [key: string]: () => void }) => {
+  // States
+  const [isSubmittingCEP, setIsSubmittingCEP] = useState<boolean>(false)
+
   // React Hook Form
   const {
     register,
     handleSubmit,
     watch,
     setValue,
+    trigger,
     formState: { errors, isSubmitting },
     control
   } = useForm<FormCadastroMVNOProps>({
@@ -85,7 +98,6 @@ const StepCadastrarMVNO = ({ handleNext, handlePrev }: { [key: string]: () => vo
       numeroendereco,
       telefone,
       tradename,
-      walletid,
       logo
     } = data
 
@@ -104,7 +116,6 @@ const StepCadastrarMVNO = ({ handleNext, handlePrev }: { [key: string]: () => vo
       bairro,
       inscricaomunicipal,
       inscricaoestadual,
-      walletid,
       consultor,
       logo: logo[0]
     }
@@ -141,6 +152,34 @@ const StepCadastrarMVNO = ({ handleNext, handlePrev }: { [key: string]: () => vo
     setValue('cep', maskCep(cepValue))
   }, [setValue, cpnjValue, celularValue, telefoneValue, cepValue])
 
+  // Buscar CEP via API
+
+  async function getCepInfo() {
+    const formatedCep = unmask(cepValue)
+    setIsSubmittingCEP(true)
+    try {
+      const data = (await apiCep.get('/' + formatedCep + '/json')).data
+
+      // Caso retorne como undefined os campos
+      if (!data || !data.localidade || !data.logradouro || !data.bairro) return
+
+      const enderecoApi = `${data.localidade}, ${data.logradouro}`
+      setValue('bairro', data.bairro)
+      setValue('endereco', enderecoApi)
+      trigger(['bairro', 'endereco'])
+    } catch (error: any) {
+      toast.error('CEP Inválido')
+    } finally {
+      setIsSubmittingCEP(false)
+    }
+  }
+
+  useEffect(() => {
+    if (cepValue && unmask(cepValue).length >= 8) {
+      getCepInfo()
+    }
+  }, [cepValue])
+
   return (
     <>
       <Box sx={{ mb: 4 }}>
@@ -159,7 +198,7 @@ const StepCadastrarMVNO = ({ handleNext, handlePrev }: { [key: string]: () => vo
           <TextField
             fullWidth
             placeholder='00.000.000/0000-00'
-            label='CNPJ'
+            label='CNPJ*'
             {...register('cnpj')}
             error={!!errors.cnpj}
             helperText={errors.cnpj?.message}
@@ -169,7 +208,7 @@ const StepCadastrarMVNO = ({ handleNext, handlePrev }: { [key: string]: () => vo
         <Grid item xs={12} sm={6}>
           <TextField
             fullWidth
-            label='Razão Social'
+            label='Razão Social*'
             placeholder='Razão Social como consta no CNPJ'
             {...register('companyname')}
             error={!!errors.companyname}
@@ -181,7 +220,7 @@ const StepCadastrarMVNO = ({ handleNext, handlePrev }: { [key: string]: () => vo
           <TextField
             fullWidth
             placeholder='Nome da rede no sistema'
-            label='Nome da MVNO'
+            label='Nome da MVNO*'
             {...register('tradename')}
             error={!!errors.tradename}
             helperText={errors.tradename?.message}
@@ -191,7 +230,7 @@ const StepCadastrarMVNO = ({ handleNext, handlePrev }: { [key: string]: () => vo
         <Grid item xs={12} sm={6}>
           <TextField
             fullWidth
-            label='Nome Fantasia'
+            label='Nome Fantasia*'
             {...register('nomeparceiro')}
             error={!!errors.nomeparceiro}
             helperText={errors.nomeparceiro?.message}
@@ -202,7 +241,7 @@ const StepCadastrarMVNO = ({ handleNext, handlePrev }: { [key: string]: () => vo
           <TextField
             fullWidth
             placeholder='(00) 00000-0000'
-            label='Celular'
+            label='Celular*'
             {...register('celular')}
             error={!!errors.celular}
             helperText={errors.celular?.message}
@@ -212,7 +251,7 @@ const StepCadastrarMVNO = ({ handleNext, handlePrev }: { [key: string]: () => vo
         <Grid item xs={12} sm={6}>
           <TextField
             fullWidth
-            label='Telefone (Somente Fixo)'
+            label='Telefone (Somente Fixo)*'
             placeholder='(00) 0000-0000'
             {...register('telefone')}
             error={!!errors.telefone}
@@ -224,7 +263,7 @@ const StepCadastrarMVNO = ({ handleNext, handlePrev }: { [key: string]: () => vo
           <TextField
             fullWidth
             placeholder='empresa@email.com'
-            label='Email'
+            label='Email*'
             {...register('email')}
             error={!!errors.email}
             helperText={errors.email?.message}
@@ -234,7 +273,7 @@ const StepCadastrarMVNO = ({ handleNext, handlePrev }: { [key: string]: () => vo
         <Grid item xs={12} sm={6}>
           <TextField
             fullWidth
-            label='CEP'
+            label='CEP*'
             placeholder='00000-000'
             {...register('cep')}
             error={!!errors.cep}
@@ -243,31 +282,47 @@ const StepCadastrarMVNO = ({ handleNext, handlePrev }: { [key: string]: () => vo
         </Grid>
 
         <Grid item xs={12} sm={6}>
-          <TextField
-            fullWidth
-            label='Bairro'
-            placeholder='Ex: Parque São José'
-            {...register('bairro')}
-            error={!!errors.bairro}
-            helperText={errors.bairro?.message}
+          <Controller
+            name='bairro'
+            control={control}
+            defaultValue=''
+            render={({ field }) => (
+              <TextField
+                {...field}
+                fullWidth
+                label='Bairro*'
+                placeholder=''
+                error={!!errors.bairro}
+                helperText={errors.bairro?.message}
+                disabled={isSubmittingCEP}
+              />
+            )}
+          />
+        </Grid>
+
+        <Grid item xs={12} sm={6}>
+          <Controller
+            name='endereco'
+            control={control}
+            defaultValue=''
+            render={({ field }) => (
+              <TextField
+                {...field}
+                fullWidth
+                label='Endereço*'
+                placeholder=''
+                error={!!errors.endereco}
+                helperText={errors.endereco?.message}
+                disabled={isSubmittingCEP}
+              />
+            )}
           />
         </Grid>
 
         <Grid item xs={12} sm={6}>
           <TextField
             fullWidth
-            label='Endereço'
-            placeholder='Ex: QNN 26 Conj A'
-            {...register('endereco')}
-            error={!!errors.endereco}
-            helperText={errors.endereco?.message}
-          />
-        </Grid>
-
-        <Grid item xs={12} sm={6}>
-          <TextField
-            fullWidth
-            label='Número'
+            label='Número*'
             placeholder='Ex: 123'
             {...register('numeroendereco')}
             error={!!errors.numeroendereco}
@@ -289,7 +344,7 @@ const StepCadastrarMVNO = ({ handleNext, handlePrev }: { [key: string]: () => vo
         <Grid item xs={12} sm={6}>
           <TextField
             fullWidth
-            label='Inscrição Estadual'
+            label='Inscrição Estadual*'
             placeholder='0000000000000'
             {...register('inscricaoestadual')}
             error={!!errors.inscricaoestadual}
@@ -308,24 +363,14 @@ const StepCadastrarMVNO = ({ handleNext, handlePrev }: { [key: string]: () => vo
           />
         </Grid>
 
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12}>
           <TextField
             fullWidth
-            label='Nome do Consultor'
+            label='Nome do Consultor*'
             placeholder=''
             {...register('consultor')}
             error={!!errors.consultor}
             helperText={errors.consultor?.message}
-          />
-        </Grid>
-
-        <Grid item xs={12} sm={6}>
-          <TextField
-            fullWidth
-            label='Wallet ID'
-            {...register('walletid')}
-            error={!!errors.walletid}
-            helperText={errors.walletid?.message}
           />
         </Grid>
 
